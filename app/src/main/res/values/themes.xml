@@ -4,6 +4,10 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="android:background">@color/yp_white</item>
+        <item name="mainMenuBackgroundColor">@color/yp_blue</item>
+        <item name="blackAndWhiteColor">@color/yp_black</item>
+        <item name="greyAndBlackColor">@color/yp_grey</item>
+        <item name="greyAndWhiteColor">@color/yp_grey</item>
     </style>
 
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />
