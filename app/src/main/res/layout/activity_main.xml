@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,18 +21,18 @@
         android:id="@+id/searchBtn"
         android:text="@string/search"
         app:icon="@drawable/ic_search"
-        style="@style/MainMenuButtonStyle"/>
+        style="@style/ButtonStyle.MainMenuButtonStyle"/>
 
     <Button
         android:id="@+id/libraryBtn"
         android:text="@string/library"
         app:icon="@drawable/ic_library"
-        style="@style/MainMenuButtonStyle" />
+        style="@style/ButtonStyle.MainMenuButtonStyle" />
 
     <Button
         android:id="@+id/settingsBtn"
         android:text="@string/settings"
         app:icon="@drawable/ic_settings"
-        style="@style/MainMenuButtonStyle"/>
+        style="@style/ButtonStyle.MainMenuButtonStyle"/>
 
 </LinearLayout>

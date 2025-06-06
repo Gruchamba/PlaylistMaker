@@ -7,21 +7,17 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Switch
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_settings)
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-//            insets
-//        }
 
         val backBtn = findViewById<ImageView>(R.id.backBtn)
+        backBtn.setOnClickListener {
+            startActivity(Intent(this@SettingsActivity, MainActivity::class.java))
+        }
         val darkThemeSwitch = findViewById<Switch>(R.id.darkThemeSwitch)
 
         val shareAppBtn = findViewById<ImageView>(R.id.shareAppBtn)
@@ -31,13 +27,12 @@ class SettingsActivity : AppCompatActivity() {
             shareIntent.setType("text/plain")
             startActivity(shareIntent)
 
-            // Создаем диалог выбора мессенджера
             val chooserIntent = Intent.createChooser(shareIntent, null)
 
             try {
                 startActivity(chooserIntent)
             } catch (e: ActivityNotFoundException) {
-                Toast.makeText(this, "Нет доступных приложений для sharing", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.share_app_toast_message), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -45,7 +40,7 @@ class SettingsActivity : AppCompatActivity() {
         mailToSupportBtn.setOnClickListener {
             val shareIntent = Intent(Intent.ACTION_SENDTO)
             shareIntent.data = Uri.parse("mailto:")
-            shareIntent.putExtra(Intent.EXTRA_EMAIL, getString(R.string.default_email))
+            shareIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.default_email)))
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.title_mail_for_support))
             shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.text_mail_for_support))
             startActivity(shareIntent)

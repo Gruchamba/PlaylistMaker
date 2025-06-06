@@ -1,6 +1,7 @@
 package org.guru.playlistmaker
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,13 +13,18 @@ import androidx.appcompat.app.AppCompatActivity
 
 class SearchActivity : AppCompatActivity() {
 
-    lateinit var clearBtn: ImageView
-    lateinit var searchEditTxt: EditText
+    private lateinit var clearBtn: ImageView
+    private lateinit var searchEditTxt: EditText
     private var searchQuery = SEARCH_QUERY_DEF
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+
+        val backBtn = findViewById<ImageView>(R.id.backBtn)
+        backBtn.setOnClickListener {
+            startActivity(Intent(this@SearchActivity, MainActivity::class.java))
+        }
 
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -57,7 +63,7 @@ class SearchActivity : AppCompatActivity() {
         searchEditTxt.setText(savedInstanceState.getString(SEARCH_QUERY))
     }
 
-    companion object {
+    private companion object {
         const val SEARCH_QUERY = "SEARCH_QUERY"
         const val SEARCH_QUERY_DEF = ""
     }

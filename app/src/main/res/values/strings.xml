@@ -13,4 +13,5 @@
     <string name="uri_to_user_agreement" translatable="false">https://yandex.ru/legal/practicum_offer/</string>
     <string name="uri_to_course" translatable="false">https://practicum.yandex.ru/profile/android-developer-plus/</string>
     <string name="default_email" translatable="false">Gruchamba@yandex.ru</string>
+    <string name="share_app_toast_message">Нет доступных приложений</string>
 </resources>
