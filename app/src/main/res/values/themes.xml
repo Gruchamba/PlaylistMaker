@@ -9,6 +9,9 @@
         <item name="greyAndBlackColor">@color/yp_grey</item>
         <item name="greyAndWhiteColor">@color/yp_grey</item>
         <item name="lightGreyAndWhiteColor">@color/yp_light_grey</item>
+
+        <item name="android:textViewStyle">@style/RegularText</item>
+
     </style>
 
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />

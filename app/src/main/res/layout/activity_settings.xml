@@ -21,8 +21,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/settings"
-            style="@style/MediumText"
-            android:layout_marginStart="20dp" />
+            android:layout_marginStart="20dp"
+            style="@style/MediumText"/>
 
     </LinearLayout>
 
@@ -34,8 +34,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/dark_theme"
-            style="@style/RegularText" />
+            android:text="@string/dark_theme" />
 
         <Switch
             android:id="@+id/darkThemeSwitch"
@@ -53,8 +52,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/share"
-            style="@style/RegularText" />
+            android:text="@string/share"/>
 
         <ImageView
             android:id="@+id/shareAppBtn"
@@ -74,8 +72,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/support"
-            style="@style/RegularText" />
+            android:text="@string/support" />
 
         <ImageView
             android:id="@+id/mailToSupportBtn"
@@ -94,8 +91,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/user_agreement"
-            style="@style/RegularText" />
+            android:text="@string/user_agreement" />
 
         <ImageView
             android:id="@+id/userAgreementBtn"

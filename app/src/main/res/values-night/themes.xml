@@ -9,5 +9,8 @@
         <item name="greyAndBlackColor">@color/black</item>
         <item name="greyAndWhiteColor">@color/yp_white</item>
         <item name="lightGreyAndWhiteColor">@color/yp_white</item>
+
+        <item name="android:textViewStyle">@style/RegularText</item>
+
     </style>
 </resources>
