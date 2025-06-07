@@ -4,4 +4,5 @@
     <attr name="blackAndWhiteColor" format="reference|color" />
     <attr name="greyAndBlackColor" format="reference|color" />
     <attr name="greyAndWhiteColor" format="reference|color" />
+    <attr name="lightGreyAndWhiteColor" format="reference|color" />
 </resources>

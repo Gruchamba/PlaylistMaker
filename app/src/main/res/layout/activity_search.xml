@@ -28,17 +28,19 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:orientation="horizontal">
 
         <EditText
             android:id="@+id/searchEditTxt"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:inputType="text"
             android:maxLines="1"
             android:hint="@string/search"
-            android:background="@drawable/background_edit_text"
+            android:textColorHint="?attr/greyAndBlackColor"
+            android:textColor="@color/yp_black"
+            android:background="@drawable/rounded_background"
             android:drawableStart ="@drawable/ic_search"
             android:drawablePadding="10dp"
             android:paddingStart="10dp"
@@ -46,9 +48,11 @@
 
         <ImageView
             android:id="@+id/cleatBtn"
+            android:background="@drawable/rounded_background"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="end"
+            android:paddingEnd="5dp"
             android:src="@drawable/ic_clear" />
 
     </FrameLayout>

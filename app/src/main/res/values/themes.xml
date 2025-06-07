@@ -8,6 +8,7 @@
         <item name="blackAndWhiteColor">@color/yp_black</item>
         <item name="greyAndBlackColor">@color/yp_grey</item>
         <item name="greyAndWhiteColor">@color/yp_grey</item>
+        <item name="lightGreyAndWhiteColor">@color/yp_light_grey</item>
     </style>
 
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />
