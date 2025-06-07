@@ -3,5 +3,14 @@
     <style name="Base.Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="android:background">@color/yp_black</item>
+        <item name="mainMenuBackgroundColor">@color/yp_black</item>
+        <item name="blackAndWhiteColor">@color/yp_white</item>
+        <item name="greyAndBlackColor">@color/black</item>
+        <item name="greyAndWhiteColor">@color/yp_white</item>
+        <item name="lightGreyAndWhiteColor">@color/yp_white</item>
+
+        <item name="android:textViewStyle">@style/RegularText</item>
+
     </style>
 </resources>

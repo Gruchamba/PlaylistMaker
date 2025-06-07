@@ -4,11 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         val searchBtn = findViewById<Button>(R.id.searchBtn)
         val searchBtnClickListener: View.OnClickListener = object : View.OnClickListener {
             override fun onClick(v: View?) {
-                startActivity(Intent(this@MainActivity, ActivityFind::class.java))
+                startActivity(Intent(this@MainActivity, SearchActivity::class.java))
             }
         }
 
@@ -26,12 +22,12 @@ class MainActivity : AppCompatActivity() {
 
         val libraryBtn = findViewById<Button>(R.id.libraryBtn)
         libraryBtn.setOnClickListener{
-            startActivity(Intent(this@MainActivity, ActivityMediaLibrary::class.java))
+            startActivity(Intent(this@MainActivity, MediaLibraryActivity::class.java))
         }
 
         val settingsBtn = findViewById<Button>(R.id.settingsBtn)
         settingsBtn.setOnClickListener{
-            startActivity(Intent(this@MainActivity, ActivitySettings::class.java))
+            startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
         }
     }
 }
