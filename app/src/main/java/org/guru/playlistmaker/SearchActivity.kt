@@ -75,7 +75,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun getMocTracks() : List<Track> {
-        return arrayListOf(
+        return listOf(
             Track(
                 "Smells Like Teen Spirit",
                 "Nirvana",
