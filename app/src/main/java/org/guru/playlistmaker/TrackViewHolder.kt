@@ -29,7 +29,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         Glide.with(itemView)
             .load(track.artworkUrl100)
             .placeholder(R.drawable.ic_track_def_img)
-            .transform(RoundedCorners(dpToPx(10f, itemView.context)))
+            .transform(RoundedCorners(dpToPx(2f, itemView.context)))
             .centerCrop()
             .into(trackImage)
 
