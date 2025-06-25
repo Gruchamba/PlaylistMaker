@@ -21,6 +21,8 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val artistNameView: TextView
     private val durationView: TextView
 
+    private val TAG = "TrackViewHolder"
+
     init {
         trackImage = itemView.findViewById(R.id.trackImage)
         trackNameView = itemView.findViewById(R.id.trackSongName)
@@ -30,7 +32,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(track: Track) {
 
-        Log.i("TAG", track.toString())
+        Log.d(TAG, "Create view for track: $track")
 
         Glide.with(itemView)
             .load(track.artworkUrl100)

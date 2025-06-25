@@ -15,16 +15,13 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import org.guru.playlistmaker.api.ItunesApiService
+import org.guru.playlistmaker.api.ItunesService
 import org.guru.playlistmaker.data.Track
 import org.guru.playlistmaker.data.TrackResponse
 import org.guru.playlistmaker.trackAdapter.TrackAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import java.util.Collections
 
 class SearchActivity : AppCompatActivity() {
@@ -38,15 +35,9 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var updateBtn: Button
     private var searchQuery = SEARCH_QUERY_DEF
 
-    private val searchBaseUrl = "https://itunes.apple.com/"
+    private val itunesService = ItunesService()
+
     private val TAG = "SEARCH"
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(searchBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val itunesApiService = retrofit.create<ItunesApiService>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +55,11 @@ class SearchActivity : AppCompatActivity() {
 
             override fun afterTextChanged(p0: Editable?) {
                 searchQuery = p0.toString()
-                clearBtn.visibility = if (searchQuery.isEmpty()) View.GONE else View.VISIBLE
+                val searchIsEmpty = searchQuery.isEmpty()
+                clearBtn.visibility = if (searchIsEmpty) View.GONE else View.VISIBLE
+
+                if (searchIsEmpty)
+                    setDefaultState()
             }
 
         }
@@ -75,7 +70,7 @@ class SearchActivity : AppCompatActivity() {
             searchEditTxt.setText("")
             val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(clearBtn.windowToken, 0)
-            onSearchSuccessful(Collections.emptyList())
+            setDefaultState()
         }
 
         searchEditTxt = findViewById(R.id.searchEditTxt)
@@ -112,7 +107,7 @@ class SearchActivity : AppCompatActivity() {
     private fun onSearchResponse() {
         val text = searchEditTxt.text
         if (text.isNotEmpty()) {
-            itunesApiService.search(text.toString()).enqueue(object : Callback<TrackResponse> {
+            itunesService.search(text.toString(), object : Callback<TrackResponse> {
 
                 override fun onResponse(
                     call: Call<TrackResponse>,
@@ -146,6 +141,13 @@ class SearchActivity : AppCompatActivity() {
             })
         }
 
+    }
+
+    private fun setDefaultState() {
+        tracksAdapter.tracks = Collections.emptyList()
+        trackRecyclerView.visibility = View.GONE
+        trackNotFoundLayout.visibility = View.GONE
+        notConnectionLayout.visibility = View.GONE
     }
 
     @SuppressLint("NotifyDataSetChanged")
