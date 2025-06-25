@@ -14,11 +14,15 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
+        val app = applicationContext as App
+
         val backBtn = findViewById<ImageView>(R.id.backBtn)
         backBtn.setOnClickListener {
             startActivity(Intent(this@SettingsActivity, MainActivity::class.java))
         }
-        val darkThemeSwitch = findViewById<Switch>(R.id.darkThemeSwitch)
+        val themeSwitcher = findViewById<Switch>(R.id.themeSwitcher)
+        themeSwitcher.isChecked = app.darkTheme
+        themeSwitcher.setOnCheckedChangeListener { _, checked -> app.switchTheme(checked) }
 
         val shareAppBtn = findViewById<ImageView>(R.id.shareAppBtn)
         shareAppBtn.setOnClickListener {

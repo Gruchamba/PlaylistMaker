@@ -30,8 +30,6 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(track: Track) {
 
-        Log.i("TAG", track.toString())
-
         Glide.with(itemView)
             .load(track.artworkUrl100)
             .placeholder(R.drawable.ic_track_def_img)
