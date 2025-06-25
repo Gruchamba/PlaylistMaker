@@ -15,9 +15,7 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
 
         val backBtn = findViewById<ImageView>(R.id.backBtn)
-        backBtn.setOnClickListener {
-            startActivity(Intent(this@SettingsActivity, MainActivity::class.java))
-        }
+        backBtn.setOnClickListener { finish() }
         val darkThemeSwitch = findViewById<Switch>(R.id.darkThemeSwitch)
 
         val shareAppBtn = findViewById<ImageView>(R.id.shareAppBtn)
