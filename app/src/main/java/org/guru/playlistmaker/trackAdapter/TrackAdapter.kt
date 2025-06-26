@@ -1,12 +1,13 @@
-package org.guru.playlistmaker
+package org.guru.playlistmaker.trackAdapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import org.guru.playlistmaker.entities.Track
+import org.guru.playlistmaker.R
+import org.guru.playlistmaker.data.Track
 
 class TrackAdapter(
-    private val tracks: List<Track>
+    var tracks: List<Track>
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {

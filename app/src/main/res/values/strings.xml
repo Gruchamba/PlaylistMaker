@@ -14,4 +14,8 @@
     <string name="uri_to_course" translatable="false">https://practicum.yandex.ru/profile/android-developer-plus/</string>
     <string name="default_email" translatable="false">Gruchamba@yandex.ru</string>
     <string name="share_app_toast_message">Нет доступных приложений</string>
+    <string name="track_not_found">Ничего не нашлось</string>
+    <string name="error_not_connection">Проблемы со связью</string>
+    <string name="error_not_connection_description">Загрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="update">Обновить</string>
 </resources>

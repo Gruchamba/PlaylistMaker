@@ -9,7 +9,7 @@
         <item name="android:fontFamily">@font/ys_display_regular</item>
     </style>
 
-    <style name="MediumText">
+    <style name="MediumText_26sp">
         <item name="android:textAlignment">textStart</item>
         <item name="android:textColor">@color/yp_black</item>
         <item name="android:textSize">26sp</item>
@@ -19,29 +19,44 @@
         <item name="android:fontFamily">@font/ys_display_medium</item>
     </style>
 
+    <style name="MediumText_19sp">
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:textColor">@color/yp_black</item>
+        <item name="android:textSize">19sp</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+    </style>
+
     <style name="ButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingLeft">24dp</item>
-        <item name="android:paddingRight">24dp</item>
-        <item name="android:paddingTop">16dp</item>
-        <item name="android:paddingBottom">16dp</item>
         <item name="android:gravity">center</item>
-        <item name="android:backgroundTint">@color/yp_white</item>
-        <item name="android:textColor">@color/yp_black</item>
-        <item name="android:textSize">26sp</item>
+        <item name="android:backgroundTint">@color/yp_black</item>
+        <item name="android:textColor">@color/yp_white</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:letterSpacing">0</item>
         <item name="iconGravity">textStart</item>
         <item name="iconPadding">8dp</item>
-        <item name="cornerRadius">12dp</item>
-        <item name="iconTint">@color/yp_black</item>
+        <item name="cornerRadius">54dp</item>
+        <item name="iconTint">@color/yp_white</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textFontWeight">500</item>
     </style>
+
     <style name="ButtonStyle.MainMenuButtonStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_weight">1</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:backgroundTint">@color/yp_white</item>
+        <item name="android:textColor">@color/yp_black</item>
+        <item name="iconTint">@color/yp_black</item>
+        <item name="cornerRadius">12dp</item>
+    </style>
+
+    <style name="ButtonStyle.DefaultStyle">
+        <item name="android:textSize">14sp</item>
     </style>
 
 </resources>
