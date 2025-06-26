@@ -9,6 +9,7 @@
         <item name="greyAndBlackColor">@color/black</item>
         <item name="greyAndWhiteColor">@color/yp_white</item>
         <item name="lightGreyAndWhiteColor">@color/yp_white</item>
+        <item name="whiteAndBlackColor">@color/yp_black</item>
 
         <item name="android:textViewStyle">@style/RegularText</item>
 

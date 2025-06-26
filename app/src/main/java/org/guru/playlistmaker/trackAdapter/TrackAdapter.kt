@@ -1,5 +1,6 @@
 package org.guru.playlistmaker.trackAdapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -7,7 +8,8 @@ import org.guru.playlistmaker.R
 import org.guru.playlistmaker.data.Track
 
 class TrackAdapter(
-    var tracks: List<Track>
+    var tracks: List<Track>,
+    private val onClick: (Track) -> Unit
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
@@ -16,7 +18,9 @@ class TrackAdapter(
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(tracks[position])
+        val track = tracks[position]
+        holder.bind(track)
+        holder.itemView.setOnClickListener { onClick(track) }
     }
 
     override fun getItemCount() = tracks.size

@@ -23,7 +23,6 @@ class SettingsActivity : AppCompatActivity() {
         themeSwitcher.isChecked = app.darkTheme
         themeSwitcher.setOnCheckedChangeListener { _, checked -> app.switchTheme(checked) }
 
-
         val shareAppBtn = findViewById<ImageView>(R.id.shareAppBtn)
         shareAppBtn.setOnClickListener {
             val shareIntent = Intent(Intent.ACTION_SEND)
