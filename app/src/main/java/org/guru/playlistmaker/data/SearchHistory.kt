@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import com.google.gson.Gson
 
-class SearchHistory(val sharedPreferences: SharedPreferences) {
+class SearchHistory(private val sharedPreferences: SharedPreferences) {
 
     private val TAG = SearchHistory::class.java.name
 
@@ -31,7 +31,7 @@ class SearchHistory(val sharedPreferences: SharedPreferences) {
             .apply()
     }
 
-    fun read() : ArrayList<Track> {
+    fun read() : List<Track> {
         val json = sharedPreferences.getString(SEARCH_HISTORY_KEY, null) ?: return ArrayList(MAX_HISTORY_SIZE )
         val tracksList = ArrayList(Gson().fromJson(json, Array<Track>::class.java).toList())
         Log.d(TAG, "read from sharedPreferences: ${tracksList.size}")
