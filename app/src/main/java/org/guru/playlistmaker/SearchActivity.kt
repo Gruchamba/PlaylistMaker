@@ -13,9 +13,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import org.guru.playlistmaker.api.ItunesService
+import org.guru.playlistmaker.data.SearchHistory
 import org.guru.playlistmaker.data.Track
 import org.guru.playlistmaker.data.TrackResponse
 import org.guru.playlistmaker.trackAdapter.TrackAdapter
@@ -33,15 +35,20 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var trackNotFoundLayout: LinearLayout
     private lateinit var notConnectionLayout: LinearLayout
     private lateinit var updateBtn: Button
-    private var searchQuery = SEARCH_QUERY_DEF
+    private lateinit var yourSearchTxtView: TextView
+    private lateinit var clearHistoryBtn: Button
 
     private val itunesService = ItunesService()
+    private lateinit var searchHistory: SearchHistory
 
+    private var searchQuery = SEARCH_QUERY_DEF
     private val TAG = "SEARCH"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+
+        val app = applicationContext as App
 
         val backBtn = findViewById<ImageView>(R.id.backBtn)
         backBtn.setOnClickListener { finish() }
@@ -51,15 +58,14 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                val searchHintVisibility = searchEditTxt.hasFocus() && p0?.isEmpty() == true
+                onSearchHistory(if(searchHintVisibility) View.VISIBLE else View.GONE)
             }
 
             override fun afterTextChanged(p0: Editable?) {
                 searchQuery = p0.toString()
                 val searchIsEmpty = searchQuery.isEmpty()
                 clearBtn.visibility = if (searchIsEmpty) View.GONE else View.VISIBLE
-
-                if (searchIsEmpty)
-                    setDefaultState()
             }
 
         }
@@ -75,6 +81,11 @@ class SearchActivity : AppCompatActivity() {
 
         searchEditTxt = findViewById(R.id.searchEditTxt)
         searchEditTxt.addTextChangedListener(simpleTextWatcher)
+        searchEditTxt.setOnFocusChangeListener { view, hasFocus ->
+            val visibility = if (hasFocus && searchEditTxt.text.isEmpty()) View.VISIBLE else View.GONE
+            onSearchHistory(visibility)
+
+        }
         searchEditTxt.setOnEditorActionListener{ _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 onSearchResponse()
@@ -84,7 +95,10 @@ class SearchActivity : AppCompatActivity() {
         }
 
         trackRecyclerView = findViewById(R.id.trackRecyclerView)
-        tracksAdapter = TrackAdapter(Collections.emptyList())
+        tracksAdapter = TrackAdapter(
+            Collections.emptyList(),
+            onClick = {searchHistory.addTrack(it)}
+        )
         trackRecyclerView.adapter = tracksAdapter
 
         trackNotFoundLayout = findViewById(R.id.track_not_found_layout)
@@ -92,6 +106,14 @@ class SearchActivity : AppCompatActivity() {
         updateBtn = findViewById(R.id.updateBtn)
         updateBtn.setOnClickListener { onSearchResponse() }
 
+        yourSearchTxtView = findViewById(R.id.yourSearchTxtView)
+        clearHistoryBtn = findViewById(R.id.clearHistoryBtn)
+        clearHistoryBtn.setOnClickListener{
+            setDefaultState()
+            searchHistory.clearHistory()
+        }
+
+        searchHistory = SearchHistory(app.sharedPrefs)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -145,6 +167,9 @@ class SearchActivity : AppCompatActivity() {
 
     private fun setDefaultState() {
         tracksAdapter.tracks = Collections.emptyList()
+        searchEditTxt.clearFocus()
+        yourSearchTxtView.visibility =  View.GONE
+        clearHistoryBtn.visibility =  View.GONE
         trackRecyclerView.visibility = View.GONE
         trackNotFoundLayout.visibility = View.GONE
         notConnectionLayout.visibility = View.GONE
@@ -170,6 +195,24 @@ class SearchActivity : AppCompatActivity() {
         trackRecyclerView.visibility = View.GONE
         trackNotFoundLayout.visibility = View.GONE
         notConnectionLayout.visibility = View.VISIBLE
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun onSearchHistory(visible: Int) {
+        if (yourSearchTxtView.visibility == visible)
+            return
+
+        val tracks = searchHistory.read()
+
+        if (visible == View.VISIBLE && tracks.isEmpty())
+            return
+
+        yourSearchTxtView.visibility =  visible
+        clearHistoryBtn.visibility =  visible
+        trackRecyclerView.visibility = visible
+
+        tracksAdapter.tracks = tracks
+        tracksAdapter.notifyDataSetChanged()
     }
 
     private companion object {
