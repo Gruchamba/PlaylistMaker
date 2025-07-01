@@ -11,7 +11,7 @@
         <item name="lightGreyAndWhiteColor">@color/yp_white</item>
         <item name="whiteAndBlackColor">@color/yp_black</item>
 
-        <item name="android:textViewStyle">@style/RegularText</item>
+        <item name="android:textViewStyle">@style/RegularText_19sp</item>
 
     </style>
 </resources>

@@ -45,10 +45,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         } ?: "-"
 
         artistNameView.text = track.artistName
-
-        track.trackTime?.let {
-            durationView.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTime.toLong())
-        } ?: "-"
+        durationView.text = track.getFormatTrackTime()
 
     }
 
