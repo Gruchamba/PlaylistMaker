@@ -1,7 +1,6 @@
 package org.guru.playlistmaker.trackAdapter
 
 import android.content.Context
-import android.icu.text.SimpleDateFormat
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
@@ -12,7 +11,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import org.guru.playlistmaker.R
 import org.guru.playlistmaker.data.Track
-import java.util.Locale
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -35,7 +33,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         
         Glide.with(itemView)
             .load(track.artworkUrl100)
-            .placeholder(R.drawable.ic_track_def_img)
+            .placeholder(R.drawable.ic_def_track_img)
             .transform(RoundedCorners(dpToPx(2f, itemView.context)))
             .centerCrop()
             .into(trackImage)

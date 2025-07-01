@@ -5,5 +5,7 @@
     <attr name="greyAndBlackColor" format="reference|color" />
     <attr name="greyAndWhiteColor" format="reference|color" />
     <attr name="lightGreyAndWhiteColor" format="reference|color" />
+    <attr name="blackAndWhite25" format="reference|color" />
+    <attr name="whiteAndBlack25" format="reference|color" />
     <attr name="whiteAndBlackColor" format="reference|color" />
 </resources>
