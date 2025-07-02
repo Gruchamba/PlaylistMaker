@@ -35,7 +35,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_audio_player)
 
-        val track = intent.getSerializableExtra(TRACK_KEY) as Track
+        val track = intent.getParcelableExtra<Track>(TRACK_KEY) as Track
         Log.d(TAG, "create audio player: $track")
 
         track.let {
