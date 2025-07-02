@@ -6,7 +6,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import org.guru.playlistmaker.data.Track
+import org.guru.playlistmaker.util.dpToPx
 import java.time.Instant
 import java.time.ZoneId
 
@@ -43,7 +45,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             Glide.with(this)
                 .load(track.getCoverArtwork())
                 .placeholder(R.drawable.ic_def_album_img)
-                .centerCrop()
+                .transform(RoundedCorners(dpToPx(8f, this)))
                 .into(albumPlaceholder)
 
             track.trackName.let { trackName.text = it }

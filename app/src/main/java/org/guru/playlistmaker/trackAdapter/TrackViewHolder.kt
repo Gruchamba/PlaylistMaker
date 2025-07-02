@@ -1,8 +1,6 @@
 package org.guru.playlistmaker.trackAdapter
 
-import android.content.Context
 import android.util.Log
-import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -11,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import org.guru.playlistmaker.R
 import org.guru.playlistmaker.data.Track
+import org.guru.playlistmaker.util.dpToPx
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -34,8 +33,8 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         Glide.with(itemView)
             .load(track.artworkUrl100)
             .placeholder(R.drawable.ic_def_track_img)
-            .transform(RoundedCorners(dpToPx(2f, itemView.context)))
             .centerCrop()
+            .transform(RoundedCorners(dpToPx(2f, itemView.context)))
             .into(trackImage)
 
         track.trackName?.let {
@@ -47,10 +46,4 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     }
 
-    private fun dpToPx(dp: Float, context: Context): Int {
-        return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            dp,
-            context.resources.displayMetrics).toInt()
-    }
 }
