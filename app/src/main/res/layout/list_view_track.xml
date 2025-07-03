@@ -11,7 +11,7 @@
         android:id="@+id/trackImage"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        tools:src="@drawable/ic_track_def_img" />
+        tools:src="@drawable/ic_def_track_img" />
 
     <LinearLayout
         android:layout_width="0dp"

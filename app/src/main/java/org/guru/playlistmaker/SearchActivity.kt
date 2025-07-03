@@ -2,6 +2,7 @@ package org.guru.playlistmaker
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -16,6 +17,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import org.guru.playlistmaker.AudioPlayerActivity.Companion.TRACK_KEY
 import org.guru.playlistmaker.api.ItunesService
 import org.guru.playlistmaker.data.SearchHistory
 import org.guru.playlistmaker.data.Track
@@ -28,16 +30,16 @@ import java.util.Collections
 
 class SearchActivity : AppCompatActivity() {
 
-    private lateinit var clearBtn: ImageView
-    private lateinit var searchEditTxt: EditText
-    private lateinit var trackRecyclerView: RecyclerView
-    private lateinit var tracksAdapter: TrackAdapter
-    private lateinit var trackNotFoundLayout: LinearLayout
-    private lateinit var notConnectionLayout: LinearLayout
-    private lateinit var updateBtn: Button
-    private lateinit var yourSearchTxtView: TextView
-    private lateinit var clearHistoryBtn: Button
+    private val clearBtn: ImageView by lazy { findViewById(R.id.cleatBtn) }
+    private val searchEditTxt: EditText by lazy { findViewById(R.id.searchEditTxt) }
+    private val trackRecyclerView: RecyclerView by lazy { findViewById(R.id.trackRecyclerView) }
+    private val trackNotFoundLayout: LinearLayout by lazy { findViewById(R.id.trackNotFoundLayout) }
+    private val notConnectionLayout: LinearLayout by lazy { findViewById(R.id.notConnectionLayout) }
+    private val updateBtn: Button by lazy { findViewById(R.id.updateBtn) }
+    private val yourSearchTxtView: TextView by lazy { findViewById(R.id.yourSearchTxtView) }
+    private val clearHistoryBtn: Button by lazy { findViewById(R.id.clearHistoryBtn) }
 
+    private lateinit var tracksAdapter: TrackAdapter
     private val itunesService = ItunesService()
     private lateinit var searchHistory: SearchHistory
 
@@ -70,7 +72,6 @@ class SearchActivity : AppCompatActivity() {
 
         }
 
-        clearBtn = findViewById(R.id.cleatBtn)
         clearBtn.visibility = View.GONE
         clearBtn.setOnClickListener {
             searchEditTxt.setText("")
@@ -79,7 +80,6 @@ class SearchActivity : AppCompatActivity() {
             setDefaultState()
         }
 
-        searchEditTxt = findViewById(R.id.searchEditTxt)
         searchEditTxt.addTextChangedListener(simpleTextWatcher)
         searchEditTxt.setOnFocusChangeListener { view, hasFocus ->
             val visibility = if (hasFocus && searchEditTxt.text.isEmpty()) View.VISIBLE else View.GONE
@@ -94,20 +94,19 @@ class SearchActivity : AppCompatActivity() {
             false
         }
 
-        trackRecyclerView = findViewById(R.id.trackRecyclerView)
         tracksAdapter = TrackAdapter(
             Collections.emptyList(),
-            onClick = {searchHistory.addTrack(it)}
+            onClick = {
+                searchHistory.addTrack(it)
+                val intent = Intent(this@SearchActivity,AudioPlayerActivity::class.java)
+                intent.putExtra(TRACK_KEY, it)
+                startActivity(intent)
+            }
         )
         trackRecyclerView.adapter = tracksAdapter
 
-        trackNotFoundLayout = findViewById(R.id.track_not_found_layout)
-        notConnectionLayout = findViewById(R.id.not_connection_layout)
-        updateBtn = findViewById(R.id.updateBtn)
         updateBtn.setOnClickListener { onSearchResponse() }
 
-        yourSearchTxtView = findViewById(R.id.yourSearchTxtView)
-        clearHistoryBtn = findViewById(R.id.clearHistoryBtn)
         clearHistoryBtn.setOnClickListener{
             setDefaultState()
             searchHistory.clearHistory()
