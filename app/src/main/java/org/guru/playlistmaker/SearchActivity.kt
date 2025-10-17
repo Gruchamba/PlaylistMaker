@@ -48,6 +48,7 @@ class SearchActivity : AppCompatActivity() {
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
 
+    private val searchRunnable = Runnable { onSearchResponse() }
     private var searchQuery = SEARCH_QUERY_DEF
     private val TAG = "SEARCH"
 
@@ -67,6 +68,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 val searchHintVisibility = searchEditTxt.hasFocus() && p0?.isEmpty() == true
                 onSearchHistory(if(searchHintVisibility) View.VISIBLE else View.GONE)
+                if (!p0.isNullOrEmpty()) searchDebounce()
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -230,10 +232,16 @@ class SearchActivity : AppCompatActivity() {
         return current
     }
 
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
     private companion object {
         const val SEARCH_QUERY = "SEARCH_QUERY"
         const val SEARCH_QUERY_DEF = ""
         const val CLICK_DEBOUNCE_DELAY = 1000L
+        const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
 }
