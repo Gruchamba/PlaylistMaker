@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -42,6 +44,9 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var tracksAdapter: TrackAdapter
     private val itunesService = ItunesService()
     private lateinit var searchHistory: SearchHistory
+
+    private var isClickAllowed = true
+    private val handler = Handler(Looper.getMainLooper())
 
     private var searchQuery = SEARCH_QUERY_DEF
     private val TAG = "SEARCH"
@@ -97,10 +102,12 @@ class SearchActivity : AppCompatActivity() {
         tracksAdapter = TrackAdapter(
             Collections.emptyList(),
             onClick = {
-                searchHistory.addTrack(it)
-                val intent = Intent(this@SearchActivity,AudioPlayerActivity::class.java)
-                intent.putExtra(TRACK_KEY, it)
-                startActivity(intent)
+                if (clickDebounce() && !it.trackId.isNullOrEmpty()) {
+                    searchHistory.addTrack(it)
+                    val intent = Intent(this@SearchActivity,AudioPlayerActivity::class.java)
+                    intent.putExtra(TRACK_KEY, it)
+                    startActivity(intent)
+                }
             }
         )
         trackRecyclerView.adapter = tracksAdapter
@@ -214,9 +221,19 @@ class SearchActivity : AppCompatActivity() {
         tracksAdapter.notifyDataSetChanged()
     }
 
+    private fun clickDebounce() : Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
     private companion object {
         const val SEARCH_QUERY = "SEARCH_QUERY"
         const val SEARCH_QUERY_DEF = ""
+        const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
 }
