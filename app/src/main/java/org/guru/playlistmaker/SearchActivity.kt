@@ -16,6 +16,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -40,6 +41,7 @@ class SearchActivity : AppCompatActivity() {
     private val updateBtn: Button by lazy { findViewById(R.id.updateBtn) }
     private val yourSearchTxtView: TextView by lazy { findViewById(R.id.yourSearchTxtView) }
     private val clearHistoryBtn: Button by lazy { findViewById(R.id.clearHistoryBtn) }
+    private val progressBar: ProgressBar by lazy { findViewById(R.id.progressBar) }
 
     private lateinit var tracksAdapter: TrackAdapter
     private val itunesService = ItunesService()
@@ -135,6 +137,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun onSearchResponse() {
+        onSearchStart()
         val text = searchEditTxt.text
         if (text.isNotEmpty()) {
             itunesService.search(text.toString(), object : Callback<TrackResponse> {
@@ -181,6 +184,7 @@ class SearchActivity : AppCompatActivity() {
         trackRecyclerView.visibility = View.GONE
         trackNotFoundLayout.visibility = View.GONE
         notConnectionLayout.visibility = View.GONE
+        progressBar.visibility = View.GONE
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -191,18 +195,28 @@ class SearchActivity : AppCompatActivity() {
         trackRecyclerView.visibility = View.VISIBLE
         trackNotFoundLayout.visibility = View.GONE
         notConnectionLayout.visibility = View.GONE
+        progressBar.visibility = View.GONE
     }
 
     private fun onTracksNotFound() {
         trackRecyclerView.visibility = View.GONE
         trackNotFoundLayout.visibility = View.VISIBLE
         notConnectionLayout.visibility = View.GONE
+        progressBar.visibility = View.GONE
     }
 
     private fun onNotConnection() {
         trackRecyclerView.visibility = View.GONE
         trackNotFoundLayout.visibility = View.GONE
+        progressBar.visibility = View.GONE
         notConnectionLayout.visibility = View.VISIBLE
+    }
+
+    private fun onSearchStart() {
+        progressBar.visibility = View.VISIBLE
+        trackRecyclerView.visibility = View.GONE
+        trackNotFoundLayout.visibility = View.GONE
+        notConnectionLayout.visibility = View.GONE
     }
 
     @SuppressLint("NotifyDataSetChanged")
