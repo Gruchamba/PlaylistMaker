@@ -35,6 +35,8 @@ class AudioPlayerActivity : AppCompatActivity() {
     private val primaryGenreName: TextView by lazy { findViewById(R.id.primaryGenreName) }
     private val country: TextView by lazy { findViewById(R.id.trackCountry) }
 
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
+
     private var mediaPlayer = MediaPlayer()
     private var playerState = STATE_DEFAULT
 
@@ -45,9 +47,12 @@ class AudioPlayerActivity : AppCompatActivity() {
     private val timeUpdate = object : Runnable {
         override fun run() {
             if (playerState == STATE_PLAYING) {
-                trackProgress.text =
-                    SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
-                mainThreadHandler?.postDelayed(this, 300)
+
+                Log.d(TAG, "Current player position: ${mediaPlayer.currentPosition} ->" +
+                        " ${dateFormat.format(mediaPlayer.currentPosition)}")
+
+                trackProgress.text = dateFormat.format(mediaPlayer.currentPosition)
+                mainThreadHandler?.postDelayed(this, DELAY)
             }
         }
 
@@ -99,9 +104,7 @@ class AudioPlayerActivity : AppCompatActivity() {
     private fun preparePlayer(url: String) {
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            playerState = STATE_PREPARED
-        }
+        mediaPlayer.setOnPreparedListener { playerState = STATE_PREPARED }
         mediaPlayer.setOnCompletionListener {
             playerState = STATE_PREPARED
             playButton.setImageResource(R.drawable.ic_play_btn)
@@ -113,7 +116,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         mediaPlayer.start()
         playButton.setImageResource(R.drawable.ic_stop_btn)
         playerState = STATE_PLAYING
-        mainThreadHandler?.post(timeUpdate)
+        mainThreadHandler?.postDelayed(timeUpdate, DELAY)
     }
 
     private fun pausePlayer() {
@@ -154,5 +157,6 @@ class AudioPlayerActivity : AppCompatActivity() {
         private const val STATE_PAUSED = 3
 
         const val TRACK_KEY = "track"
+        const val DELAY = 300L
     }
 }
