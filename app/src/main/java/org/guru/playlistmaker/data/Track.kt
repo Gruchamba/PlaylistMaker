@@ -16,7 +16,8 @@ data class Track(
     val primaryGenreName: String,
     val country: String,
     @SerializedName("trackTimeMillis") val trackTime: String?,
-    val artworkUrl100: String
+    val artworkUrl100: String,
+    val previewUrl: String
 ) : Parcelable {
 
     fun getCoverArtwork() = artworkUrl100.replaceAfterLast('/',"312x312bb.jpg")

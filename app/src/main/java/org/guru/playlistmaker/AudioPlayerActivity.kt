@@ -1,6 +1,9 @@
 package org.guru.playlistmaker
 
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
@@ -9,8 +12,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import org.guru.playlistmaker.data.Track
 import org.guru.playlistmaker.util.dpToPx
+import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZoneId
+import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
 
@@ -30,12 +35,29 @@ class AudioPlayerActivity : AppCompatActivity() {
     private val primaryGenreName: TextView by lazy { findViewById(R.id.primaryGenreName) }
     private val country: TextView by lazy { findViewById(R.id.trackCountry) }
 
-    private var isPlay = false
+    private var mediaPlayer = MediaPlayer()
+    private var playerState = STATE_DEFAULT
+
+    private var mainThreadHandler: Handler? = null
+
     private var isLike = false
+
+    private val timeUpdate = object : Runnable {
+        override fun run() {
+            if (playerState == STATE_PLAYING) {
+                trackProgress.text =
+                    SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+                mainThreadHandler?.postDelayed(this, 300)
+            }
+        }
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_audio_player)
+
+        mainThreadHandler = Handler(Looper.getMainLooper())
 
         val track = intent.getParcelableExtra<Track>(TRACK_KEY) as Track
         Log.d(TAG, "create audio player: $track")
@@ -59,16 +81,11 @@ class AudioPlayerActivity : AppCompatActivity() {
             }
             track.primaryGenreName.let { primaryGenreName.text = it }
             track.country.let { country.text = it }
+            preparePlayer(track.previewUrl)
         }
 
         backBtn.setOnClickListener { finish() }
-
-        playButton.setOnClickListener {
-            isPlay = !isPlay
-            playButton.setImageResource(
-                if (isPlay) R.drawable.ic_stop_btn else R.drawable.ic_play_btn
-            )
-        }
+        playButton.setOnClickListener { playbackControl() }
 
         likeButton.setOnClickListener {
             isLike = !isLike
@@ -79,7 +96,63 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     }
 
+    private fun preparePlayer(url: String) {
+        mediaPlayer.setDataSource(url)
+        mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener {
+            playerState = STATE_PREPARED
+        }
+        mediaPlayer.setOnCompletionListener {
+            playerState = STATE_PREPARED
+            playButton.setImageResource(R.drawable.ic_play_btn)
+            trackProgress.text = getString(R.string.def_track_progress)
+        }
+    }
+
+    private fun startPlayer() {
+        mediaPlayer.start()
+        playButton.setImageResource(R.drawable.ic_stop_btn)
+        playerState = STATE_PLAYING
+        mainThreadHandler?.post(timeUpdate)
+    }
+
+    private fun pausePlayer() {
+        mediaPlayer.pause()
+        playButton.setImageResource(R.drawable.ic_play_btn)
+        playerState = STATE_PAUSED
+        mainThreadHandler?.removeCallbacks(timeUpdate)
+    }
+
+    private fun playbackControl() {
+        when(playerState) {
+            STATE_PLAYING -> {
+                pausePlayer()
+            }
+            STATE_PREPARED, STATE_PAUSED -> {
+                startPlayer()
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pausePlayer()
+        mainThreadHandler?.removeCallbacks(timeUpdate)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
+        mainThreadHandler?.removeCallbacksAndMessages(null)
+    }
+
     companion object {
+
+        private const val STATE_DEFAULT = 0
+        private const val STATE_PREPARED = 1
+        private const val STATE_PLAYING = 2
+        private const val STATE_PAUSED = 3
+
         const val TRACK_KEY = "track"
     }
 }
