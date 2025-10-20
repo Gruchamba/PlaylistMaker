@@ -137,9 +137,9 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun onSearchResponse() {
-        onSearchStart()
         val text = searchEditTxt.text
         if (text.isNotEmpty()) {
+            onSearchStart()
             itunesService.search(text.toString(), object : Callback<TrackResponse> {
 
                 override fun onResponse(
