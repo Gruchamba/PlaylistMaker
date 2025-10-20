@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -14,6 +16,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -38,11 +41,16 @@ class SearchActivity : AppCompatActivity() {
     private val updateBtn: Button by lazy { findViewById(R.id.updateBtn) }
     private val yourSearchTxtView: TextView by lazy { findViewById(R.id.yourSearchTxtView) }
     private val clearHistoryBtn: Button by lazy { findViewById(R.id.clearHistoryBtn) }
+    private val progressBar: ProgressBar by lazy { findViewById(R.id.progressBar) }
 
     private lateinit var tracksAdapter: TrackAdapter
     private val itunesService = ItunesService()
     private lateinit var searchHistory: SearchHistory
 
+    private var isClickAllowed = true
+    private val handler = Handler(Looper.getMainLooper())
+
+    private val searchRunnable = Runnable { onSearchResponse() }
     private var searchQuery = SEARCH_QUERY_DEF
     private val TAG = "SEARCH"
 
@@ -62,6 +70,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 val searchHintVisibility = searchEditTxt.hasFocus() && p0?.isEmpty() == true
                 onSearchHistory(if(searchHintVisibility) View.VISIBLE else View.GONE)
+                if (!p0.isNullOrEmpty()) searchDebounce()
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -97,10 +106,12 @@ class SearchActivity : AppCompatActivity() {
         tracksAdapter = TrackAdapter(
             Collections.emptyList(),
             onClick = {
-                searchHistory.addTrack(it)
-                val intent = Intent(this@SearchActivity,AudioPlayerActivity::class.java)
-                intent.putExtra(TRACK_KEY, it)
-                startActivity(intent)
+                if (clickDebounce() && !it.trackId.isNullOrEmpty()) {
+                    searchHistory.addTrack(it)
+                    val intent = Intent(this@SearchActivity,AudioPlayerActivity::class.java)
+                    intent.putExtra(TRACK_KEY, it)
+                    startActivity(intent)
+                }
             }
         )
         trackRecyclerView.adapter = tracksAdapter
@@ -113,6 +124,11 @@ class SearchActivity : AppCompatActivity() {
         }
 
         searchHistory = SearchHistory(app.sharedPrefs)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacks(searchRunnable)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -128,6 +144,7 @@ class SearchActivity : AppCompatActivity() {
     private fun onSearchResponse() {
         val text = searchEditTxt.text
         if (text.isNotEmpty()) {
+            onSearchStart()
             itunesService.search(text.toString(), object : Callback<TrackResponse> {
 
                 override fun onResponse(
@@ -172,6 +189,7 @@ class SearchActivity : AppCompatActivity() {
         trackRecyclerView.visibility = View.GONE
         trackNotFoundLayout.visibility = View.GONE
         notConnectionLayout.visibility = View.GONE
+        progressBar.visibility = View.GONE
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -182,18 +200,28 @@ class SearchActivity : AppCompatActivity() {
         trackRecyclerView.visibility = View.VISIBLE
         trackNotFoundLayout.visibility = View.GONE
         notConnectionLayout.visibility = View.GONE
+        progressBar.visibility = View.GONE
     }
 
     private fun onTracksNotFound() {
         trackRecyclerView.visibility = View.GONE
         trackNotFoundLayout.visibility = View.VISIBLE
         notConnectionLayout.visibility = View.GONE
+        progressBar.visibility = View.GONE
     }
 
     private fun onNotConnection() {
         trackRecyclerView.visibility = View.GONE
         trackNotFoundLayout.visibility = View.GONE
+        progressBar.visibility = View.GONE
         notConnectionLayout.visibility = View.VISIBLE
+    }
+
+    private fun onSearchStart() {
+        progressBar.visibility = View.VISIBLE
+        trackRecyclerView.visibility = View.GONE
+        trackNotFoundLayout.visibility = View.GONE
+        notConnectionLayout.visibility = View.GONE
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -214,9 +242,25 @@ class SearchActivity : AppCompatActivity() {
         tracksAdapter.notifyDataSetChanged()
     }
 
+    private fun clickDebounce() : Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
     private companion object {
         const val SEARCH_QUERY = "SEARCH_QUERY"
         const val SEARCH_QUERY_DEF = ""
+        const val CLICK_DEBOUNCE_DELAY = 1000L
+        const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
 }
