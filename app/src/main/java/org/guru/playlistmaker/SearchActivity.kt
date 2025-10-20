@@ -126,6 +126,11 @@ class SearchActivity : AppCompatActivity() {
         searchHistory = SearchHistory(app.sharedPrefs)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacks(searchRunnable)
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(SEARCH_QUERY, searchQuery)
