@@ -1,14 +1,11 @@
-package org.guru.playlistmaker.data
+package org.guru.playlistmaker.data.dto
 
 import android.icu.text.SimpleDateFormat
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
 import java.util.Locale
 
-@Parcelize
-data class Track(
-    val trackId: String,
+class TrackDto(
+    val trackId: String?,
     val trackName: String?,
     val artistName: String,
     val collectionName: String?,
@@ -18,9 +15,7 @@ data class Track(
     @SerializedName("trackTimeMillis") val trackTime: String?,
     val artworkUrl100: String,
     val previewUrl: String
-) : Parcelable {
-
-    fun getCoverArtwork() = artworkUrl100.replaceAfterLast('/',"312x312bb.jpg")
+) {
 
     fun getFormatTrackTime(): String {
         return trackTime?.let {

@@ -1,4 +1,4 @@
-package org.guru.playlistmaker.data
+package org.guru.playlistmaker.domain.models
 
 import android.content.SharedPreferences
 import android.util.Log

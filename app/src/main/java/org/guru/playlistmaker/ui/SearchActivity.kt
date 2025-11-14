@@ -1,4 +1,4 @@
-package org.guru.playlistmaker
+package org.guru.playlistmaker.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -20,15 +20,13 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import org.guru.playlistmaker.AudioPlayerActivity.Companion.TRACK_KEY
-import org.guru.playlistmaker.api.ItunesService
-import org.guru.playlistmaker.data.SearchHistory
-import org.guru.playlistmaker.data.Track
-import org.guru.playlistmaker.data.TrackResponse
-import org.guru.playlistmaker.trackAdapter.TrackAdapter
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import org.guru.playlistmaker.Creator
+import org.guru.playlistmaker.R
+import org.guru.playlistmaker.domain.api.TrackInteractor
+import org.guru.playlistmaker.domain.models.SearchHistory
+import org.guru.playlistmaker.domain.models.Track
+import org.guru.playlistmaker.ui.AudioPlayerActivity.Companion.TRACK_KEY
+import org.guru.playlistmaker.ui.trackAdapter.TrackAdapter
 import java.util.Collections
 
 class SearchActivity : AppCompatActivity() {
@@ -43,8 +41,9 @@ class SearchActivity : AppCompatActivity() {
     private val clearHistoryBtn: Button by lazy { findViewById(R.id.clearHistoryBtn) }
     private val progressBar: ProgressBar by lazy { findViewById(R.id.progressBar) }
 
+    private val trackInteractor: TrackInteractor by lazy { Creator.provideMoviesInteractor() }
+
     private lateinit var tracksAdapter: TrackAdapter
-    private val itunesService = ItunesService()
     private lateinit var searchHistory: SearchHistory
 
     private var isClickAllowed = true
@@ -108,7 +107,7 @@ class SearchActivity : AppCompatActivity() {
             onClick = {
                 if (clickDebounce() && !it.trackId.isNullOrEmpty()) {
                     searchHistory.addTrack(it)
-                    val intent = Intent(this@SearchActivity,AudioPlayerActivity::class.java)
+                    val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
                     intent.putExtra(TRACK_KEY, it)
                     startActivity(intent)
                 }
@@ -145,38 +144,19 @@ class SearchActivity : AppCompatActivity() {
         val text = searchEditTxt.text
         if (text.isNotEmpty()) {
             onSearchStart()
-            itunesService.search(text.toString(), object : Callback<TrackResponse> {
 
-                override fun onResponse(
-                    call: Call<TrackResponse>,
-                    response: Response<TrackResponse>
-                ) {
-
-                    Log.i(TAG, "onResponse $response")
-                    if (response.isSuccessful) {
-
-                        response.body()?.let {
-                            if (it.resultCount.toInt() != 0) {
-                                val tracks = response.body()!!.results
-                                onSearchSuccessful(tracks)
-                            } else {
-                                onTracksNotFound()
-                            }
-
-                        } ?: onTracksNotFound()
-
-                    } else{
-                        onNotConnection()
+            trackInteractor.searchTracks(text.toString(), object: TrackInteractor.TrackConsumer {
+                override fun consume(foundTracks: List<Track>) {
+                    handler.post {
+                        if (foundTracks.isNotEmpty()) {
+                            onSearchSuccessful(foundTracks)
+                        } else {
+                            onTracksNotFound()
+                        }
                     }
-
                 }
-
-                override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                    onNotConnection()
-                    t.printStackTrace()
-                }
-
             })
+
         }
 
     }

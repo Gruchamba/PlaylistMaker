@@ -1,4 +1,4 @@
-package org.guru.playlistmaker
+package org.guru.playlistmaker.ui
 
 import android.app.Application
 import android.content.SharedPreferences

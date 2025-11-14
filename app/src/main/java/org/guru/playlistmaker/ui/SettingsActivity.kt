@@ -1,4 +1,4 @@
-package org.guru.playlistmaker
+package org.guru.playlistmaker.ui
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.Switch
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import org.guru.playlistmaker.R
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
