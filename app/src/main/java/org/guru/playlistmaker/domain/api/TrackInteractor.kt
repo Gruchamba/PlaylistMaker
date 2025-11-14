@@ -4,6 +4,12 @@ import org.guru.playlistmaker.domain.models.Track
 
 interface TrackInteractor {
 
+    fun addTrackToHistory(track: Track)
+
+    fun clearTracksHistory()
+
+    fun readTracksFromHistory() : List<Track>
+
     fun searchTracks(expression: String, consumer: TrackConsumer)
 
     interface TrackConsumer {

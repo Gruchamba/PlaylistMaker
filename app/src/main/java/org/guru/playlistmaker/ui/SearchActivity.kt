@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView
 import org.guru.playlistmaker.Creator
 import org.guru.playlistmaker.R
 import org.guru.playlistmaker.domain.api.TrackInteractor
-import org.guru.playlistmaker.domain.models.SearchHistory
 import org.guru.playlistmaker.domain.models.Track
 import org.guru.playlistmaker.ui.AudioPlayerActivity.Companion.TRACK_KEY
 import org.guru.playlistmaker.ui.trackAdapter.TrackAdapter
@@ -41,10 +40,9 @@ class SearchActivity : AppCompatActivity() {
     private val clearHistoryBtn: Button by lazy { findViewById(R.id.clearHistoryBtn) }
     private val progressBar: ProgressBar by lazy { findViewById(R.id.progressBar) }
 
-    private val trackInteractor: TrackInteractor by lazy { Creator.provideMoviesInteractor() }
+    private val trackInteractor: TrackInteractor by lazy { Creator.provideTracksInteractor(this@SearchActivity) }
 
     private lateinit var tracksAdapter: TrackAdapter
-    private lateinit var searchHistory: SearchHistory
 
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
@@ -106,7 +104,7 @@ class SearchActivity : AppCompatActivity() {
             Collections.emptyList(),
             onClick = {
                 if (clickDebounce() && !it.trackId.isNullOrEmpty()) {
-                    searchHistory.addTrack(it)
+                    trackInteractor.addTrackToHistory(it)
                     val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
                     intent.putExtra(TRACK_KEY, it)
                     startActivity(intent)
@@ -119,10 +117,8 @@ class SearchActivity : AppCompatActivity() {
 
         clearHistoryBtn.setOnClickListener{
             setDefaultState()
-            searchHistory.clearHistory()
+            trackInteractor.clearTracksHistory()
         }
-
-        searchHistory = SearchHistory(app.sharedPrefs)
     }
 
     override fun onDestroy() {
@@ -209,7 +205,7 @@ class SearchActivity : AppCompatActivity() {
         if (yourSearchTxtView.visibility == visible)
             return
 
-        val tracks = searchHistory.read()
+        val tracks = trackInteractor.readTracksFromHistory()
 
         if (visible == View.VISIBLE && tracks.isEmpty())
             return

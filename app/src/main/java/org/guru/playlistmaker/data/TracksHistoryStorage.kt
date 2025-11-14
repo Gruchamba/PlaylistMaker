@@ -1,9 +1,8 @@
-package org.guru.playlistmaker.domain.api
+package org.guru.playlistmaker.data
 
 import org.guru.playlistmaker.domain.models.Track
 
-interface TrackRepository {
-    fun searchTracks(expression: String): List<Track>
+interface TracksHistoryStorage {
     fun addTrackToHistory(track: Track)
     fun clearTracksHistory()
     fun readTracksFromHistory() : List<Track>
