@@ -1,24 +1,20 @@
-package org.guru.playlistmaker.ui
+package org.guru.playlistmaker.data.configuration
 
-import android.app.Application
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
+import org.guru.playlistmaker.data.ConfigurationAppRepository
 
-class App : Application() {
+class ConfigurationAppRepositoryImpl(private val sharedPreferences: SharedPreferences) : ConfigurationAppRepository {
 
-    val sharedPrefs: SharedPreferences by lazy { getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE) }
-    var darkTheme = false
+    var darkTheme = sharedPreferences.getBoolean(DARK_THEME_KEY, false)
 
-    override fun onCreate() {
-        darkTheme = sharedPrefs.getBoolean(DARK_THEME_KEY, false)
-        switchTheme(darkTheme)
-        super.onCreate()
+    override fun isDarkTheme(): Boolean {
+        return darkTheme
     }
 
-    fun switchTheme(darkThemeEnabled: Boolean) {
-
+    override fun switchTheme(darkThemeEnabled: Boolean) {
         if (darkTheme != darkThemeEnabled)
-            sharedPrefs.edit()
+            sharedPreferences.edit()
                 .putBoolean(DARK_THEME_KEY, darkThemeEnabled)
                 .apply()
 
