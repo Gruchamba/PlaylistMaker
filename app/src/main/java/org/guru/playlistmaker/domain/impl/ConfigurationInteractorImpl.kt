@@ -10,7 +10,7 @@ class ConfigurationInteractorImpl(val configurationAppRepository: ConfigurationA
     }
 
     override fun switchTheme(darkThemeEnabled: Boolean) {
-        configurationAppRepository.switchTheme(darkThemeEnabled)
+        configurationAppRepository.saveTheme(darkThemeEnabled)
     }
 
 }

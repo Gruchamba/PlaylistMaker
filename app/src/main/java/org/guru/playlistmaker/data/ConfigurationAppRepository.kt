@@ -4,5 +4,5 @@ interface ConfigurationAppRepository {
 
     fun isDarkTheme() : Boolean
 
-    fun switchTheme(darkThemeEnabled: Boolean)
+    fun saveTheme(darkThemeEnabled: Boolean)
 }
