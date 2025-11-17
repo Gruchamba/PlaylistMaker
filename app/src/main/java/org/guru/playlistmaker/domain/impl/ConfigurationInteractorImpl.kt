@@ -1,16 +1,16 @@
 package org.guru.playlistmaker.domain.impl
 
-import org.guru.playlistmaker.data.ConfigurationAppRepository
+import org.guru.playlistmaker.domain.api.ConfigurationAppRepository
 import org.guru.playlistmaker.domain.api.ConfigurationInteractor
 
-class ConfigurationInteractorImpl(val configurationAppRepository: ConfigurationAppRepository) : ConfigurationInteractor {
+class ConfigurationInteractorImpl(private val configurationAppRepository: ConfigurationAppRepository) : ConfigurationInteractor {
 
     override fun isDarkTheme(): Boolean {
         return configurationAppRepository.isDarkTheme()
     }
 
     override fun switchTheme(darkThemeEnabled: Boolean) {
-        configurationAppRepository.saveTheme(darkThemeEnabled)
+        configurationAppRepository.switchTheme(darkThemeEnabled)
     }
 
 }

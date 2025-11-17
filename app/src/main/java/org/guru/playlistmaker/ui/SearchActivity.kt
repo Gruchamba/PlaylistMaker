@@ -41,9 +41,7 @@ class SearchActivity : AppCompatActivity() {
     private val clearHistoryBtn: Button by lazy { findViewById(R.id.clearHistoryBtn) }
     private val progressBar: ProgressBar by lazy { findViewById(R.id.progressBar) }
 
-    private val trackInteractor: TrackInteractor by lazy {
-        Creator.provideTracksInteractor(getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE))
-    }
+    private val trackInteractor: TrackInteractor by lazy { Creator.provideTracksInteractor() }
 
     private lateinit var tracksAdapter: TrackAdapter
 

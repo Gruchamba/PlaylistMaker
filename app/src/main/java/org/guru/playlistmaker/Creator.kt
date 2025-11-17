@@ -1,10 +1,13 @@
 package org.guru.playlistmaker
 
+import android.content.Context
 import android.content.SharedPreferences
-import org.guru.playlistmaker.data.ConfigurationAppRepository
+import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
+import org.guru.playlistmaker.domain.api.ConfigurationAppRepository
 import org.guru.playlistmaker.data.TrackRepositoryImpl
 import org.guru.playlistmaker.data.TracksHistoryStorage
 import org.guru.playlistmaker.data.configuration.ConfigurationAppRepositoryImpl
+import org.guru.playlistmaker.data.configuration.ConfigurationAppRepositoryImpl.Companion.APP_PREFERENCES
 import org.guru.playlistmaker.data.network.RetrofitNetworkClient
 import org.guru.playlistmaker.data.storage.TracksHistoryStorageImpl
 import org.guru.playlistmaker.domain.api.ConfigurationInteractor
@@ -15,24 +18,31 @@ import org.guru.playlistmaker.domain.impl.TrackInteractorImpl
 
 object Creator {
 
-    private fun getTracksRepository(sharedPreferences: SharedPreferences): TrackRepository {
-        return TrackRepositoryImpl(getTracksHistoryStorage(sharedPreferences), RetrofitNetworkClient())
+    private lateinit var preferences: SharedPreferences
+
+    fun initialize(appContext: Context) {
+        preferences = appContext.getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE)
+        getConfigurationAppRepository().initializeTheme()
     }
 
-    fun provideTracksInteractor(sharedPreferences: SharedPreferences): TrackInteractor {
-        return TrackInteractorImpl(getTracksRepository(sharedPreferences))
+    private fun getTracksRepository(): TrackRepository {
+        return TrackRepositoryImpl(getTracksHistoryStorage(), RetrofitNetworkClient())
     }
 
-    private fun getTracksHistoryStorage(sharedPreferences: SharedPreferences) : TracksHistoryStorage {
-        return TracksHistoryStorageImpl(sharedPreferences)
+    fun provideTracksInteractor(): TrackInteractor {
+        return TrackInteractorImpl(getTracksRepository())
     }
 
-    private fun getConfigurationAppRepository(sharedPreferences: SharedPreferences) : ConfigurationAppRepository {
-        return ConfigurationAppRepositoryImpl(sharedPreferences)
+    private fun getTracksHistoryStorage() : TracksHistoryStorage {
+        return TracksHistoryStorageImpl(preferences)
     }
 
-    fun getConfigurationAppInteractor(sharedPreferences: SharedPreferences) : ConfigurationInteractor {
-        return ConfigurationInteractorImpl(getConfigurationAppRepository(sharedPreferences))
+    private fun getConfigurationAppRepository() : ConfigurationAppRepository {
+        return ConfigurationAppRepositoryImpl(preferences)
+    }
+
+    fun getConfigurationAppInteractor() : ConfigurationInteractor {
+        return ConfigurationInteractorImpl(getConfigurationAppRepository())
     }
 
 }

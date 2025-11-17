@@ -10,31 +10,24 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import org.guru.playlistmaker.Creator
 import org.guru.playlistmaker.R
-import org.guru.playlistmaker.data.configuration.ConfigurationAppRepositoryImpl.Companion.APP_PREFERENCES
 import org.guru.playlistmaker.domain.api.ConfigurationInteractor
-import org.guru.playlistmaker.util.App
 
 class SettingsActivity : AppCompatActivity() {
 
     private val configurationInteractor: ConfigurationInteractor by lazy {
-        Creator.getConfigurationAppInteractor(getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE))
+        Creator.getConfigurationAppInteractor()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val app = applicationContext as App
-
         val backBtn = findViewById<ImageView>(R.id.backBtn)
         backBtn.setOnClickListener { finish() }
         
         val themeSwitcher = findViewById<Switch>(R.id.themeSwitcher)
         themeSwitcher.isChecked = configurationInteractor.isDarkTheme()
-        themeSwitcher.setOnCheckedChangeListener { _, checked ->
-            app.switchTheme(checked)
-            configurationInteractor.switchTheme(checked)
-        }
+        themeSwitcher.setOnCheckedChangeListener { _, checked -> configurationInteractor.switchTheme(checked) }
 
         val shareAppBtn = findViewById<ImageView>(R.id.shareAppBtn)
         shareAppBtn.setOnClickListener {
