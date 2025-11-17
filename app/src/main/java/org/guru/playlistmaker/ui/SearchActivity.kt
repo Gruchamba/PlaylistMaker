@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import org.guru.playlistmaker.Creator
 import org.guru.playlistmaker.R
+import org.guru.playlistmaker.data.configuration.ConfigurationAppRepositoryImpl.Companion.APP_PREFERENCES
 import org.guru.playlistmaker.domain.api.TrackInteractor
 import org.guru.playlistmaker.domain.models.Track
 import org.guru.playlistmaker.ui.AudioPlayerActivity.Companion.TRACK_KEY
@@ -40,7 +41,9 @@ class SearchActivity : AppCompatActivity() {
     private val clearHistoryBtn: Button by lazy { findViewById(R.id.clearHistoryBtn) }
     private val progressBar: ProgressBar by lazy { findViewById(R.id.progressBar) }
 
-    private val trackInteractor: TrackInteractor by lazy { Creator.provideTracksInteractor(this@SearchActivity) }
+    private val trackInteractor: TrackInteractor by lazy {
+        Creator.provideTracksInteractor(getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE))
+    }
 
     private lateinit var tracksAdapter: TrackAdapter
 

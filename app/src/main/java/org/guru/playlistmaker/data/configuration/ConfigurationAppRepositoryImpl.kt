@@ -1,7 +1,6 @@
 package org.guru.playlistmaker.data.configuration
 
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatDelegate
 import org.guru.playlistmaker.data.ConfigurationAppRepository
 
 class ConfigurationAppRepositoryImpl(private val sharedPreferences: SharedPreferences) : ConfigurationAppRepository {
