@@ -1,10 +1,10 @@
-package org.guru.playlistmaker.trackAdapter
+package org.guru.playlistmaker.ui.trackAdapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.guru.playlistmaker.R
-import org.guru.playlistmaker.data.Track
+import org.guru.playlistmaker.domain.models.Track
 
 class TrackAdapter(
     var tracks: List<Track>,

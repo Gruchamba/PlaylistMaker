@@ -1,29 +1,28 @@
-package org.guru.playlistmaker
+package org.guru.playlistmaker.data.configuration
 
-import android.app.Application
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
+import org.guru.playlistmaker.domain.api.ConfigurationAppRepository
 
-class App : Application() {
+class ConfigurationAppRepositoryImpl(private val sharedPreferences: SharedPreferences) :
+    ConfigurationAppRepository {
 
-    val sharedPrefs: SharedPreferences by lazy { getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE) }
-    var darkTheme = false
+    private var darkTheme = sharedPreferences.getBoolean(DARK_THEME_KEY, false)
 
-    override fun onCreate() {
-        darkTheme = sharedPrefs.getBoolean(DARK_THEME_KEY, false)
-        switchTheme(darkTheme)
-        super.onCreate()
+    override fun isDarkTheme(): Boolean {
+        return darkTheme
     }
 
-    fun switchTheme(darkThemeEnabled: Boolean) {
+    override fun initializeTheme() {
+        switchTheme(isDarkTheme())
+    }
 
+    override fun switchTheme(darkThemeEnabled: Boolean) {
         if (darkTheme != darkThemeEnabled)
-            sharedPrefs.edit()
+            sharedPreferences.edit()
                 .putBoolean(DARK_THEME_KEY, darkThemeEnabled)
                 .apply()
 
-
-        darkTheme = darkThemeEnabled
         AppCompatDelegate.setDefaultNightMode(
             if (darkThemeEnabled) {
                 AppCompatDelegate.MODE_NIGHT_YES
@@ -31,6 +30,8 @@ class App : Application() {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
+
+        darkTheme = darkThemeEnabled
     }
 
     companion object {

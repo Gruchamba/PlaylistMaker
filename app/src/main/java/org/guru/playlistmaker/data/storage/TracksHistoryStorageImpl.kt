@@ -1,17 +1,19 @@
-package org.guru.playlistmaker.data
+package org.guru.playlistmaker.data.storage
 
 import android.content.SharedPreferences
 import android.util.Log
 import com.google.gson.Gson
+import org.guru.playlistmaker.data.TracksHistoryStorage
+import org.guru.playlistmaker.domain.models.Track
 
-class SearchHistory(private val sharedPreferences: SharedPreferences) {
+class TracksHistoryStorageImpl(private val sharedPreferences: SharedPreferences) : TracksHistoryStorage {
 
-    private val TAG = SearchHistory::class.java.name
+    private val TAG = TracksHistoryStorageImpl::class.java.name
 
-    fun addTrack(track: Track) {
+    override fun addTrackToHistory(track: Track) {
         Log.d(TAG, "add track: $track")
 
-        val tracksFromSearchHistory = read().toMutableList()
+        val tracksFromSearchHistory = readTracksFromHistory().toMutableList()
         tracksFromSearchHistory.removeIf { it.trackId == track.trackId }
 
         if (tracksFromSearchHistory.size >= MAX_HISTORY_SIZE) {
@@ -24,14 +26,14 @@ class SearchHistory(private val sharedPreferences: SharedPreferences) {
             .apply()
     }
 
-    fun clearHistory() {
+    override fun clearTracksHistory() {
         Log.d(TAG, "clear history")
         sharedPreferences.edit()
             .remove(SEARCH_HISTORY_KEY)
             .apply()
     }
 
-    fun read() : List<Track> {
+    override fun readTracksFromHistory(): List<Track> {
         val json = sharedPreferences.getString(SEARCH_HISTORY_KEY, null) ?: return ArrayList(MAX_HISTORY_SIZE )
         val tracksList = ArrayList(Gson().fromJson(json, Array<Track>::class.java).toList())
         Log.d(TAG, "read from sharedPreferences: ${tracksList.size}")
@@ -42,5 +44,4 @@ class SearchHistory(private val sharedPreferences: SharedPreferences) {
         private const val SEARCH_HISTORY_KEY = "search_history"
         private const val MAX_HISTORY_SIZE = 10
     }
-
 }

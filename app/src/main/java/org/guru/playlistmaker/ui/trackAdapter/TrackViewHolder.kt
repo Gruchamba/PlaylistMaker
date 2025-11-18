@@ -1,4 +1,4 @@
-package org.guru.playlistmaker.trackAdapter
+package org.guru.playlistmaker.ui.trackAdapter
 
 import android.util.Log
 import android.view.View
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import org.guru.playlistmaker.R
-import org.guru.playlistmaker.data.Track
+import org.guru.playlistmaker.domain.models.Track
 import org.guru.playlistmaker.util.dpToPx
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -42,7 +42,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         } ?: "-"
 
         artistNameView.text = track.artistName
-        durationView.text = track.getFormatTrackTime()
+        track.trackTime?.let { durationView.text = track.trackTime }
 
     }
 
