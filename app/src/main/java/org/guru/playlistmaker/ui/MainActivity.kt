@@ -6,29 +6,31 @@ import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import org.guru.playlistmaker.R
+import org.guru.playlistmaker.databinding.ActivityMainBinding
+import org.guru.playlistmaker.databinding.ActivitySettingsBinding
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val searchBtn = findViewById<Button>(R.id.searchBtn)
-        val searchBtnClickListener: View.OnClickListener = object : View.OnClickListener {
-            override fun onClick(v: View?) {
+        binding.apply {
+            searchBtn.setOnClickListener {
                 startActivity(Intent(this@MainActivity, SearchActivity::class.java))
+            }
+
+            libraryBtn.setOnClickListener{
+                startActivity(Intent(this@MainActivity, MediaLibraryActivity::class.java))
+            }
+
+            settingsBtn.setOnClickListener{
+                startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
             }
         }
 
-        searchBtn.setOnClickListener(searchBtnClickListener)
-
-        val libraryBtn = findViewById<Button>(R.id.libraryBtn)
-        libraryBtn.setOnClickListener{
-            startActivity(Intent(this@MainActivity, MediaLibraryActivity::class.java))
-        }
-
-        val settingsBtn = findViewById<Button>(R.id.settingsBtn)
-        settingsBtn.setOnClickListener{
-            startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
-        }
     }
 }

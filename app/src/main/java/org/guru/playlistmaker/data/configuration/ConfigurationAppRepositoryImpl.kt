@@ -1,11 +1,15 @@
 package org.guru.playlistmaker.data.configuration
 
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import org.guru.playlistmaker.domain.api.ConfigurationAppRepository
+import org.guru.playlistmaker.ui.AudioPlayerActivity
 
 class ConfigurationAppRepositoryImpl(private val sharedPreferences: SharedPreferences) :
     ConfigurationAppRepository {
+
+    val TAG = ConfigurationAppRepositoryImpl::class.java.name
 
     private var darkTheme = sharedPreferences.getBoolean(DARK_THEME_KEY, false)
 
@@ -32,6 +36,7 @@ class ConfigurationAppRepositoryImpl(private val sharedPreferences: SharedPrefer
         )
 
         darkTheme = darkThemeEnabled
+        Log.i(TAG, "Change theme ${if (darkThemeEnabled) "dark" else "light"}")
     }
 
     companion object {
