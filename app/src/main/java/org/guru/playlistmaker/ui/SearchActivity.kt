@@ -12,17 +12,8 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
-import org.guru.playlistmaker.R
 import org.guru.playlistmaker.creator.Creator
-import org.guru.playlistmaker.databinding.ActivityMainBinding
 import org.guru.playlistmaker.databinding.ActivitySearchBinding
 import org.guru.playlistmaker.domain.api.TrackInteractor
 import org.guru.playlistmaker.domain.models.Track
