@@ -4,17 +4,23 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import org.guru.playlistmaker.R
 import org.guru.playlistmaker.creator.Creator
 import org.guru.playlistmaker.databinding.ActivitySettingsBinding
 import org.guru.playlistmaker.domain.api.ConfigurationInteractor
+import org.guru.playlistmaker.presentation.player.PlayerViewModel
+import org.guru.playlistmaker.presentation.settings.SettingsViewModel
 
 class SettingsActivity : AppCompatActivity() {
 
+    private val TAG = SettingsActivity::class.java.name
     private lateinit var binding: ActivitySettingsBinding
 
+    private lateinit var viewModel: SettingsViewModel
     private val configurationInteractor: ConfigurationInteractor by lazy {
         Creator.getConfigurationAppInteractor()
     }
@@ -24,16 +30,24 @@ class SettingsActivity : AppCompatActivity() {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        viewModel = ViewModelProvider(
+            this,
+            SettingsViewModel.getFactory()
+        )[SettingsViewModel::class.java]
+
         binding.apply {
             backBtn.setOnClickListener { finish() }
 
             themeSwitcher.apply {
-                isChecked = configurationInteractor.isDarkTheme()
-                setOnCheckedChangeListener { _, checked -> configurationInteractor.switchTheme(checked) }
+                setOnCheckedChangeListener { _, checked -> viewModel.switchTheme(checked) }
+            }
+
+            viewModel.observeDarkTheme().observe(this@SettingsActivity) {
+                themeSwitcher.isChecked = it
             }
 
             shareAppBtn.setOnClickListener {
-                val shareIntent = Intent(Intent.ACTION_SEND)
+                val shareIntent = Intent(Intent.ACTION_SEND).apply {  }
                 shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.uri_to_course))
                 shareIntent.setType("text/plain")
                 startActivity(shareIntent)
