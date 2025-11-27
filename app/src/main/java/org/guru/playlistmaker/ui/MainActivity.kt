@@ -2,12 +2,8 @@ package org.guru.playlistmaker.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import org.guru.playlistmaker.R
 import org.guru.playlistmaker.databinding.ActivityMainBinding
-import org.guru.playlistmaker.databinding.ActivitySettingsBinding
 
 class MainActivity : AppCompatActivity() {
 

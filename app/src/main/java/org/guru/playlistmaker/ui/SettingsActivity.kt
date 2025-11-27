@@ -4,26 +4,18 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import org.guru.playlistmaker.R
-import org.guru.playlistmaker.creator.Creator
 import org.guru.playlistmaker.databinding.ActivitySettingsBinding
-import org.guru.playlistmaker.domain.api.ConfigurationInteractor
-import org.guru.playlistmaker.presentation.player.PlayerViewModel
 import org.guru.playlistmaker.presentation.settings.SettingsViewModel
 
 class SettingsActivity : AppCompatActivity() {
 
     private val TAG = SettingsActivity::class.java.name
     private lateinit var binding: ActivitySettingsBinding
-
     private lateinit var viewModel: SettingsViewModel
-    private val configurationInteractor: ConfigurationInteractor by lazy {
-        Creator.getConfigurationAppInteractor()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

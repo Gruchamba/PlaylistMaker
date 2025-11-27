@@ -4,13 +4,15 @@ import org.guru.playlistmaker.data.dto.TrackSearchRequest
 import org.guru.playlistmaker.data.dto.TrackSearchResponse
 import org.guru.playlistmaker.domain.api.TrackRepository
 import org.guru.playlistmaker.domain.models.Track
+import org.guru.playlistmaker.util.Resource
 
 class TrackRepositoryImpl(private val tracksHistoryStorage: TracksHistoryStorage, private val networkClient: NetworkClient) : TrackRepository {
 
-    override fun searchTracks(expression: String): List<Track> {
+    override fun searchTracks(expression: String): Resource<List<Track>> {
         val response = networkClient.doRequest(TrackSearchRequest(expression))
-        if (response.resultCode == 200) {
-            return (response as TrackSearchResponse).results.map {
+        return when(response.resultCode) {
+            -1 -> Resource.Error("Проверьте подключение к интернету")
+            200 -> Resource.Success((response as TrackSearchResponse).results.map {
                 Track(
                     it.trackId,
                     it.trackName,
@@ -22,9 +24,8 @@ class TrackRepositoryImpl(private val tracksHistoryStorage: TracksHistoryStorage
                     it.getFormatTrackTime(),
                     it.artworkUrl100,
                     it.previewUrl)
-            }
-        } else {
-            return emptyList()
+            })
+            else -> Resource.Error("Ошибка сервера")
         }
     }
 

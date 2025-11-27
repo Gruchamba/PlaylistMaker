@@ -15,9 +15,10 @@ import java.util.Locale
 
 class PlayerViewModel(private val url: String) : ViewModel() {
 
-    val TAG = PlayerViewModel::class.java.name
+    private val TAG = PlayerViewModel::class.java.name
 
     companion object {
+
         const val STATE_DEFAULT = 0
         const val STATE_PREPARED = 1
         const val STATE_PLAYING = 2
@@ -92,7 +93,9 @@ class PlayerViewModel(private val url: String) : ViewModel() {
     }
 
     private fun startTimerUpdate() {
-        progressTimeLiveData.postValue(SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition))
+        progressTimeLiveData.postValue(
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+        )
         handler.postDelayed(timerRunnable, 200)
     }
 
