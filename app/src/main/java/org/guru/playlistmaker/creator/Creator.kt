@@ -3,18 +3,18 @@ package org.guru.playlistmaker.creator
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
-import org.guru.playlistmaker.domain.api.ConfigurationAppRepository
-import org.guru.playlistmaker.data.TrackRepositoryImpl
-import org.guru.playlistmaker.data.TracksHistoryStorage
-import org.guru.playlistmaker.data.configuration.ConfigurationAppRepositoryImpl
-import org.guru.playlistmaker.data.configuration.ConfigurationAppRepositoryImpl.Companion.APP_PREFERENCES
-import org.guru.playlistmaker.data.network.RetrofitNetworkClient
-import org.guru.playlistmaker.data.storage.TracksHistoryStorageImpl
-import org.guru.playlistmaker.domain.api.ConfigurationInteractor
-import org.guru.playlistmaker.domain.api.TrackInteractor
-import org.guru.playlistmaker.domain.api.TrackRepository
-import org.guru.playlistmaker.domain.impl.ConfigurationInteractorImpl
-import org.guru.playlistmaker.domain.impl.TrackInteractorImpl
+import org.guru.playlistmaker.domain.settings.SettingsRepository
+import org.guru.playlistmaker.data.search.impl.TrackRepositoryImpl
+import org.guru.playlistmaker.data.search.storage.TracksHistoryStorage
+import org.guru.playlistmaker.data.settings.impl.SettingsRepositoryImpl
+import org.guru.playlistmaker.data.settings.impl.SettingsRepositoryImpl.Companion.APP_PREFERENCES
+import org.guru.playlistmaker.data.search.RetrofitNetworkClient
+import org.guru.playlistmaker.data.storage.impl.TracksHistoryStorageImpl
+import org.guru.playlistmaker.domain.settings.SettingsInteractor
+import org.guru.playlistmaker.domain.search.TrackInteractor
+import org.guru.playlistmaker.domain.search.TrackRepository
+import org.guru.playlistmaker.domain.settings.impl.SettingsInteractorImpl
+import org.guru.playlistmaker.domain.search.impl.TrackInteractorImpl
 
 object Creator {
 
@@ -37,12 +37,12 @@ object Creator {
         return TracksHistoryStorageImpl(preferences)
     }
 
-    private fun getConfigurationAppRepository() : ConfigurationAppRepository {
-        return ConfigurationAppRepositoryImpl(preferences)
+    private fun getConfigurationAppRepository() : SettingsRepository {
+        return SettingsRepositoryImpl(preferences)
     }
 
-    fun getConfigurationAppInteractor() : ConfigurationInteractor {
-        return ConfigurationInteractorImpl(getConfigurationAppRepository())
+    fun getConfigurationAppInteractor() : SettingsInteractor {
+        return SettingsInteractorImpl(getConfigurationAppRepository())
     }
 
 }
