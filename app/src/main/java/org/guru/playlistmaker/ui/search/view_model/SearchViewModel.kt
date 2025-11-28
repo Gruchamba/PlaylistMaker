@@ -13,8 +13,8 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import org.guru.playlistmaker.creator.Creator
 import org.guru.playlistmaker.domain.search.TrackInteractor
 import org.guru.playlistmaker.domain.search.model.Track
-import org.guru.playlistmaker.domain.search.model.SearchViewState
-import org.guru.playlistmaker.util.SingleLiveEvent
+import org.guru.playlistmaker.ui.search.activity.SearchViewState
+import org.guru.playlistmaker.domain.SingleLiveEvent
 
 class SearchViewModel : ViewModel() {
 

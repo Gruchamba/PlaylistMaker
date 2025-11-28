@@ -18,7 +18,6 @@ import androidx.lifecycle.ViewModelProvider
 import org.guru.playlistmaker.databinding.ActivitySearchBinding
 import org.guru.playlistmaker.domain.search.model.Track
 import org.guru.playlistmaker.ui.search.view_model.SearchViewModel
-import org.guru.playlistmaker.domain.search.model.SearchViewState
 import org.guru.playlistmaker.ui.player.activity.AudioPlayerActivity
 import org.guru.playlistmaker.ui.player.activity.AudioPlayerActivity.Companion.TRACK_KEY
 import org.guru.playlistmaker.ui.search.trackAdapter.TrackAdapter

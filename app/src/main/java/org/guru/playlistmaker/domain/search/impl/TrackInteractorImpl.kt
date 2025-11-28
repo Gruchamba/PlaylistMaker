@@ -3,7 +3,7 @@ package org.guru.playlistmaker.domain.search.impl
 import org.guru.playlistmaker.domain.search.TrackInteractor
 import org.guru.playlistmaker.domain.search.TrackRepository
 import org.guru.playlistmaker.domain.search.model.Track
-import org.guru.playlistmaker.util.Resource
+import org.guru.playlistmaker.domain.search.Resource
 import java.util.concurrent.Executors
 
 class TrackInteractorImpl (private val repository: TrackRepository) : TrackInteractor {

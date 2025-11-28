@@ -1,7 +1,8 @@
-package org.guru.playlistmaker.domain.search.model
+package org.guru.playlistmaker.ui.search.activity
 
 import android.view.View
 import org.guru.playlistmaker.databinding.ActivitySearchBinding
+import org.guru.playlistmaker.domain.search.model.Track
 
 sealed class SearchViewState(val trackList: List<Track>? = null) {
 
