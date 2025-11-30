@@ -28,7 +28,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         binding = ActivityAudioPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val track = intent.getParcelableExtra<Track>(TRACK_KEY) as Track
+        val track = intent.getSerializableExtra(TRACK_KEY) as Track
 
         Glide.with(this)
             .load(track.getCoverArtwork())
