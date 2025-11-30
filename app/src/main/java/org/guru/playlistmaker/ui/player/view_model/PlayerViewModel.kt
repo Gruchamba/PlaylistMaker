@@ -3,7 +3,6 @@ package org.guru.playlistmaker.ui.player.view_model
 import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,8 +13,6 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerViewModel(private val url: String) : ViewModel() {
-
-    private val TAG = PlayerViewModel::class.java.name
 
     companion object {
 
@@ -58,7 +55,6 @@ class PlayerViewModel(private val url: String) : ViewModel() {
     }
 
     fun onPlayButtonClicked() {
-        Log.d(TAG, "onPlayButtonClicked ${playerStateLiveData.value}")
         when(playerStateLiveData.value) {
             STATE_PLAYING -> pausePlayer()
             STATE_PREPARED, STATE_PAUSED -> startPlayer()
@@ -66,7 +62,6 @@ class PlayerViewModel(private val url: String) : ViewModel() {
     }
 
     private fun preparePlayer() {
-        Log.d(TAG, "Prepare player")
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
@@ -79,14 +74,12 @@ class PlayerViewModel(private val url: String) : ViewModel() {
     }
 
     private fun startPlayer() {
-        Log.d(TAG, "Start player")
         mediaPlayer.start()
         playerStateLiveData.postValue(STATE_PLAYING)
         startTimerUpdate()
     }
 
     private fun pausePlayer() {
-        Log.i(TAG, "Pause player")
         pauseTimer()
         mediaPlayer.pause()
         playerStateLiveData.postValue(STATE_PAUSED)

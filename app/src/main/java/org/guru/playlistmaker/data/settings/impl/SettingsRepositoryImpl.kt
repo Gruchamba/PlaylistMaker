@@ -1,14 +1,12 @@
 package org.guru.playlistmaker.data.settings.impl
 
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import org.guru.playlistmaker.domain.settings.SettingsRepository
+import androidx.core.content.edit
 
 class SettingsRepositoryImpl(private val sharedPreferences: SharedPreferences) :
     SettingsRepository {
-
-    val TAG = SettingsRepositoryImpl::class.java.name
 
     private var darkTheme = sharedPreferences.getBoolean(DARK_THEME_KEY, false)
 
@@ -22,9 +20,9 @@ class SettingsRepositoryImpl(private val sharedPreferences: SharedPreferences) :
 
     override fun switchTheme(darkThemeEnabled: Boolean) {
         if (darkTheme != darkThemeEnabled)
-            sharedPreferences.edit()
-                .putBoolean(DARK_THEME_KEY, darkThemeEnabled)
-                .apply()
+            sharedPreferences.edit {
+                putBoolean(DARK_THEME_KEY, darkThemeEnabled)
+            }
 
         AppCompatDelegate.setDefaultNightMode(
             if (darkThemeEnabled) {
@@ -35,7 +33,6 @@ class SettingsRepositoryImpl(private val sharedPreferences: SharedPreferences) :
         )
 
         darkTheme = darkThemeEnabled
-        Log.i(TAG, "Change theme ${if (darkThemeEnabled) "dark" else "light"}")
     }
 
     companion object {

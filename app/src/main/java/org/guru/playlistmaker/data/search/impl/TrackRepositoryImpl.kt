@@ -1,12 +1,12 @@
 package org.guru.playlistmaker.data.search.impl
 
 import org.guru.playlistmaker.data.NetworkClient
-import org.guru.playlistmaker.data.search.storage.TracksHistoryStorage
 import org.guru.playlistmaker.data.search.dto.TrackSearchRequest
 import org.guru.playlistmaker.data.search.dto.TrackSearchResponse
+import org.guru.playlistmaker.data.search.storage.TracksHistoryStorage
+import org.guru.playlistmaker.domain.search.Resource
 import org.guru.playlistmaker.domain.search.TrackRepository
 import org.guru.playlistmaker.domain.search.model.Track
-import org.guru.playlistmaker.domain.search.Resource
 
 class TrackRepositoryImpl(private val tracksHistoryStorage: TracksHistoryStorage, private val networkClient: NetworkClient) :
     TrackRepository {

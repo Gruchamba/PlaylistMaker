@@ -17,15 +17,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import org.guru.playlistmaker.databinding.ActivitySearchBinding
 import org.guru.playlistmaker.domain.search.model.Track
-import org.guru.playlistmaker.ui.search.view_model.SearchViewModel
 import org.guru.playlistmaker.ui.player.activity.AudioPlayerActivity
 import org.guru.playlistmaker.ui.player.activity.AudioPlayerActivity.Companion.TRACK_KEY
 import org.guru.playlistmaker.ui.search.trackAdapter.TrackAdapter
+import org.guru.playlistmaker.ui.search.view_model.SearchViewModel
 import java.util.Collections
 
 class SearchActivity : AppCompatActivity() {
 
-    val TAG = SearchActivity::class.java.name
     private lateinit var binding: ActivitySearchBinding
     private lateinit var viewModel: SearchViewModel
     private lateinit var tracksAdapter: TrackAdapter
@@ -56,7 +55,6 @@ class SearchActivity : AppCompatActivity() {
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     val searchHintVisibility = searchEditTxt.hasFocus() && p0?.isEmpty() == true
-                    Log.i(TAG, "focus ${searchEditTxt.hasFocus()} p0 ${p0?.isEmpty()}")
                     if (searchHintVisibility) viewModel.readTracksFromHistory()
                     else if (!p0.isNullOrEmpty()) viewModel.searchDebounce(p0.toString())
                 }
@@ -135,7 +133,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun onSearchResponse() {
-        Log.i(TAG, "send search request: ${binding.searchEditTxt.text}")
         viewModel.searchRequest(binding.searchEditTxt.text.toString())
     }
 
@@ -152,24 +149,20 @@ class SearchActivity : AppCompatActivity() {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         binding.searchEditTxt.setText(savedInstanceState.getString(SEARCH_QUERY))
-        Log.i(TAG, "Restore instance state ${savedInstanceState.getString(SEARCH_QUERY)}")
     }
 
     private fun setDefaultState() {
-        Log.i(TAG, "set default state")
         tracksAdapter.tracks = Collections.emptyList()
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun onSearchSuccessful(list: List<Track>) {
-        Log.i(TAG, "Set new track list: ${list.size}")
         tracksAdapter.tracks = list
         tracksAdapter.notifyDataSetChanged()
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun onSearchHistory(list: List<Track>) {
-        Log.i(TAG, "on search history")
         tracksAdapter.tracks = list
         tracksAdapter.notifyDataSetChanged()
     }

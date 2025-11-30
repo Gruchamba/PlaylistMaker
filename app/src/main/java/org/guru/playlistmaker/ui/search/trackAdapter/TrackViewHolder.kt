@@ -1,6 +1,5 @@
 package org.guru.playlistmaker.ui.search.trackAdapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -13,10 +12,7 @@ import org.guru.playlistmaker.util.dpToPx
 
 class TrackViewHolder(private val binding: ListItemTrackViewBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    private val TAG = "TrackViewHolder"
-
     fun bind(track: Track) {
-        Log.d(TAG, "Create view for track: $track")
 
         binding.apply {
             Glide.with(itemView)

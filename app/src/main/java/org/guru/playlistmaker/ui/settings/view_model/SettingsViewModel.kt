@@ -11,8 +11,6 @@ import org.guru.playlistmaker.domain.settings.SettingsInteractor
 
 class SettingsViewModel : ViewModel() {
 
-    private val TAG = SettingsViewModel::class.java.name
-
     private val settingsInteractor: SettingsInteractor by lazy {
         Creator.getConfigurationAppInteractor()
     }

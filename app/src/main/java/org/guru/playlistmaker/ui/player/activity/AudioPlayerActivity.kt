@@ -1,7 +1,6 @@
 package org.guru.playlistmaker.ui.player.activity
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -19,8 +18,6 @@ import java.time.ZoneId
 
 class AudioPlayerActivity : AppCompatActivity() {
 
-    val TAG = AudioPlayerActivity::class.java.name
-
     private lateinit var binding: ActivityAudioPlayerBinding
     private lateinit var viewModel: PlayerViewModel
 
@@ -32,7 +29,6 @@ class AudioPlayerActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val track = intent.getParcelableExtra<Track>(TRACK_KEY) as Track
-        Log.d(TAG, "create audio player: $track")
 
         Glide.with(this)
             .load(track.getCoverArtwork())

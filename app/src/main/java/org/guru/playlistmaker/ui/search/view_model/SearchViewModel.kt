@@ -11,14 +11,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import org.guru.playlistmaker.creator.Creator
+import org.guru.playlistmaker.domain.SingleLiveEvent
 import org.guru.playlistmaker.domain.search.TrackInteractor
 import org.guru.playlistmaker.domain.search.model.Track
 import org.guru.playlistmaker.ui.search.activity.SearchViewState
-import org.guru.playlistmaker.domain.SingleLiveEvent
 
 class SearchViewModel : ViewModel() {
 
-    private val TAG = SearchViewModel::class.java.name
     private val trackInteractor: TrackInteractor by lazy { Creator.provideTracksInteractor() }
     private val handler = Handler(Looper.getMainLooper())
     private var latestSearchText: String? = null
@@ -38,7 +37,6 @@ class SearchViewModel : ViewModel() {
     }
 
     fun readTracksFromHistory() {
-        Log.i(TAG, "read track from history")
         renderState(
             SearchViewState.ShowSearchHistory(
                 trackInteractor.readTracksFromHistory()
@@ -47,7 +45,6 @@ class SearchViewModel : ViewModel() {
     }
 
     fun searchRequest(newSearchText: String) {
-        Log.i(TAG, "send search request: $newSearchText")
         if (newSearchText.isNotEmpty()) {
             renderState(SearchViewState.Loading())
 
@@ -76,7 +73,6 @@ class SearchViewModel : ViewModel() {
     }
 
     private fun renderState(state: SearchViewState) {
-        Log.i(TAG, "render post state: $state")
         searchViewState.postValue(state)
     }
 
@@ -85,7 +81,6 @@ class SearchViewModel : ViewModel() {
     }
 
     fun searchDebounce(changedText: String) {
-        Log.i(TAG, "search debounce: $changedText")
         if (latestSearchText == changedText)
             return
 

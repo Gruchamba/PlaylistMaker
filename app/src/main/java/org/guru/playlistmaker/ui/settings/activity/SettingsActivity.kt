@@ -10,10 +10,10 @@ import androidx.lifecycle.ViewModelProvider
 import org.guru.playlistmaker.R
 import org.guru.playlistmaker.databinding.ActivitySettingsBinding
 import org.guru.playlistmaker.ui.settings.view_model.SettingsViewModel
+import androidx.core.net.toUri
 
 class SettingsActivity : AppCompatActivity() {
 
-    private val TAG = SettingsActivity::class.java.name
     private lateinit var binding: ActivitySettingsBinding
     private lateinit var viewModel: SettingsViewModel
 
@@ -64,7 +64,7 @@ class SettingsActivity : AppCompatActivity() {
 
             userAgreementBtn.setOnClickListener {
                 startActivity(
-                    Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.uri_to_user_agreement)))
+                    Intent(Intent.ACTION_VIEW, getString(R.string.uri_to_user_agreement).toUri())
                 )
             }
         }
