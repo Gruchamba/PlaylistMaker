@@ -8,7 +8,6 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -17,8 +16,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import org.guru.playlistmaker.databinding.ActivitySearchBinding
 import org.guru.playlistmaker.domain.search.model.Track
-import org.guru.playlistmaker.ui.player.activity.AudioPlayerActivity
-import org.guru.playlistmaker.ui.player.activity.AudioPlayerActivity.Companion.TRACK_KEY
+import org.guru.playlistmaker.ui.player.activity.PlayerActivity
+import org.guru.playlistmaker.ui.player.activity.PlayerActivity.Companion.TRACK_KEY
 import org.guru.playlistmaker.ui.search.trackAdapter.TrackAdapter
 import org.guru.playlistmaker.ui.search.view_model.SearchViewModel
 import java.util.Collections
@@ -100,7 +99,7 @@ class SearchActivity : AppCompatActivity() {
                 onClick = {
                     if (clickDebounce() && !it.trackId.isNullOrEmpty()) {
                         viewModel.addTrackToHistory(it)
-                        val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
+                        val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
                         intent.putExtra(TRACK_KEY, it)
                         startActivity(intent)
                     }

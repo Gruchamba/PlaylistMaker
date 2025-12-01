@@ -1,31 +1,29 @@
 package org.guru.playlistmaker.ui.player.activity
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import org.guru.playlistmaker.R
-import org.guru.playlistmaker.databinding.ActivityAudioPlayerBinding
+import org.guru.playlistmaker.databinding.ActivityPlayerBinding
 import org.guru.playlistmaker.domain.search.model.Track
 import org.guru.playlistmaker.ui.player.view_model.PlayerViewModel
-import org.guru.playlistmaker.ui.player.view_model.PlayerViewModel.Companion.STATE_PAUSED
-import org.guru.playlistmaker.ui.player.view_model.PlayerViewModel.Companion.STATE_PLAYING
-import org.guru.playlistmaker.ui.player.view_model.PlayerViewModel.Companion.STATE_PREPARED
 import org.guru.playlistmaker.util.dpToPx
 import java.time.Instant
 import java.time.ZoneId
 
-class AudioPlayerActivity : AppCompatActivity() {
+class PlayerActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityAudioPlayerBinding
+    private lateinit var binding: ActivityPlayerBinding
     private lateinit var viewModel: PlayerViewModel
 
     private var isLike = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAudioPlayerBinding.inflate(layoutInflater)
+        binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val track = intent.getSerializableExtra(TRACK_KEY) as Track
@@ -54,15 +52,9 @@ class AudioPlayerActivity : AppCompatActivity() {
         )[PlayerViewModel::class.java]
 
         viewModel.observePlayerState().observe(this) {
-            when(it) {
-                STATE_PAUSED -> pausePlayer()
-                STATE_PLAYING -> startPlayer()
-                STATE_PREPARED -> preparePlayer()
-
-            }
+            Log.i(TRACK_KEY, "$it")
+            it.render(binding)
         }
-
-        viewModel.observeProgressTime().observe(this) { binding.trackProgress.text = it }
 
         binding.backBtn.setOnClickListener { finish() }
         binding.playButton.setOnClickListener { viewModel.onPlayButtonClicked() }
@@ -76,22 +68,9 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     }
 
-    private fun preparePlayer() {
-        binding.playButton.setImageResource(R.drawable.ic_play_btn)
-        binding.trackProgress.text = getString(R.string.def_track_progress)
-    }
-
-    private fun startPlayer() {
-        binding.playButton.setImageResource(R.drawable.ic_stop_btn)
-    }
-
-    private fun pausePlayer() {
-        binding.playButton.setImageResource(R.drawable.ic_play_btn)
-    }
-
     override fun onPause() {
         super.onPause()
-        pausePlayer()
+        viewModel.pausePlayer()
     }
 
     companion object {

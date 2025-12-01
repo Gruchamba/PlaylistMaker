@@ -1,25 +1,26 @@
 package org.guru.playlistmaker.ui.player.view_model
 
-import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import org.guru.playlistmaker.creator.Creator
+import org.guru.playlistmaker.data.player.PlayerClient.PlayerState
+import org.guru.playlistmaker.domain.player.PlayerInteractor
+import org.guru.playlistmaker.ui.player.activity.PlayerViewState
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerViewModel(private val url: String) : ViewModel() {
 
-    companion object {
+    val TAG = PlayerViewModel::class.java.name
 
-        const val STATE_DEFAULT = 0
-        const val STATE_PREPARED = 1
-        const val STATE_PLAYING = 2
-        const val STATE_PAUSED = 3
+    companion object {
 
         fun getFactory(trackUrl: String): ViewModelProvider.Factory = viewModelFactory {
             initializer {
@@ -28,19 +29,19 @@ class PlayerViewModel(private val url: String) : ViewModel() {
         }
     }
 
-    private val playerStateLiveData = MutableLiveData(STATE_DEFAULT)
-    fun observePlayerState(): LiveData<Int> = playerStateLiveData
+    private val playerStateLiveData = MutableLiveData<PlayerViewState>()
+    fun observePlayerState(): LiveData<PlayerViewState> = playerStateLiveData
 
-    private val progressTimeLiveData = MutableLiveData("00:00")
-    fun observeProgressTime(): LiveData<String> = progressTimeLiveData
+    private val playerInteractor: PlayerInteractor by lazy { Creator.providePlayerInteractor() }
 
-    private val mediaPlayer = MediaPlayer()
-
-    private val handler = Handler(Looper.getMainLooper())
+        private val handler = Handler(Looper.getMainLooper())
 
     private val timerRunnable = Runnable {
-        if (playerStateLiveData.value == STATE_PLAYING) {
+        if (playerInteractor.getPlayerState() == PlayerState.STATE_PLAYING) {
             startTimerUpdate()
+
+        } else if (playerInteractor.getPlayerState() == PlayerState.STATE_PREPARED) {
+            renderState(PlayerViewState.Prepare())
         }
     }
 
@@ -50,45 +51,42 @@ class PlayerViewModel(private val url: String) : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        mediaPlayer.release()
+        playerInteractor.release()
         resetTimer()
     }
 
     fun onPlayButtonClicked() {
-        when(playerStateLiveData.value) {
-            STATE_PLAYING -> pausePlayer()
-            STATE_PREPARED, STATE_PAUSED -> startPlayer()
+        when(playerInteractor.getPlayerState()) {
+            PlayerState.STATE_PLAYING -> pausePlayer()
+            PlayerState.STATE_PREPARED, PlayerState.STATE_PAUSED -> startPlayer()
+            else -> { Log.e(TAG, "error player state ${playerStateLiveData.value}") }
         }
+    }
+
+    private fun renderState(state: PlayerViewState) {
+        playerStateLiveData.postValue(state)
     }
 
     private fun preparePlayer() {
-        mediaPlayer.setDataSource(url)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            playerStateLiveData.postValue(STATE_PREPARED)
-        }
-        mediaPlayer.setOnCompletionListener {
-            playerStateLiveData.postValue(STATE_PREPARED)
-            resetTimer()
-        }
+        playerInteractor.preparePlayer(url)
+        renderState(PlayerViewState.Prepare())
     }
 
     private fun startPlayer() {
-        mediaPlayer.start()
-        playerStateLiveData.postValue(STATE_PLAYING)
+        Log.i(TAG, "start player")
+        renderState(PlayerViewState.Play())
+        playerInteractor.startPlayer()
         startTimerUpdate()
     }
 
-    private fun pausePlayer() {
+    fun pausePlayer() {
+        renderState(PlayerViewState.Pause(playerInteractor.getCurrentTimePosition()))
+        playerInteractor.pausePlayer()
         pauseTimer()
-        mediaPlayer.pause()
-        playerStateLiveData.postValue(STATE_PAUSED)
     }
 
     private fun startTimerUpdate() {
-        progressTimeLiveData.postValue(
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
-        )
+        renderState(PlayerViewState.Playing(playerInteractor.getCurrentTimePosition()))
         handler.postDelayed(timerRunnable, 200)
     }
 
@@ -98,6 +96,6 @@ class PlayerViewModel(private val url: String) : ViewModel() {
 
     private fun resetTimer() {
         handler.removeCallbacks(timerRunnable)
-        progressTimeLiveData.postValue("00:00")
+        renderState(PlayerViewState.Playing(0))
     }
 }
