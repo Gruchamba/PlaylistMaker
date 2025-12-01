@@ -3,7 +3,6 @@ package org.guru.playlistmaker.ui.search.view_model
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import org.guru.playlistmaker.creator.Creator
-import org.guru.playlistmaker.domain.SingleLiveEvent
 import org.guru.playlistmaker.domain.search.TrackInteractor
 import org.guru.playlistmaker.domain.search.model.Track
 import org.guru.playlistmaker.ui.search.activity.SearchViewState

@@ -1,4 +1,4 @@
-package org.guru.playlistmaker.domain
+package org.guru.playlistmaker.ui.search.view_model
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
