@@ -8,7 +8,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import org.guru.playlistmaker.R
 import org.guru.playlistmaker.databinding.ListItemTrackViewBinding
 import org.guru.playlistmaker.domain.search.model.Track
-import org.guru.playlistmaker.util.dpToPx
+import org.guru.playlistmaker.ui.util.dpToPx
 
 class TrackViewHolder(private val binding: ListItemTrackViewBinding) : RecyclerView.ViewHolder(binding.root) {
 

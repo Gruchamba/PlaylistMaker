@@ -10,7 +10,7 @@ import org.guru.playlistmaker.R
 import org.guru.playlistmaker.databinding.ActivityPlayerBinding
 import org.guru.playlistmaker.domain.search.model.Track
 import org.guru.playlistmaker.ui.player.view_model.PlayerViewModel
-import org.guru.playlistmaker.util.dpToPx
+import org.guru.playlistmaker.ui.util.dpToPx
 import java.time.Instant
 import java.time.ZoneId
 

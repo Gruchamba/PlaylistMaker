@@ -1,4 +1,4 @@
-package org.guru.playlistmaker.util
+package org.guru.playlistmaker.ui.util
 
 import android.content.Context
 import android.util.TypedValue
