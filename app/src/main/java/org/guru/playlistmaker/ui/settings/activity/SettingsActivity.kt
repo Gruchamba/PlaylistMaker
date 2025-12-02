@@ -4,37 +4,36 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.core.net.toUri
 import org.guru.playlistmaker.R
 import org.guru.playlistmaker.databinding.ActivitySettingsBinding
 import org.guru.playlistmaker.ui.settings.view_model.SettingsViewModel
-import androidx.core.net.toUri
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySettingsBinding
-    private lateinit var viewModel: SettingsViewModel
+    private val viewModel: SettingsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(
-            this,
-            SettingsViewModel.getFactory()
-        )[SettingsViewModel::class.java]
-
         binding.apply {
             backBtn.setOnClickListener { finish() }
 
             themeSwitcher.apply {
-                setOnCheckedChangeListener { _, checked -> viewModel.switchTheme(checked) }
+                setOnCheckedChangeListener { _, checked ->
+                    viewModel.switchTheme(checked)
+                }
             }
 
             viewModel.observeDarkTheme().observe(this@SettingsActivity) {
+                Log.i("THEME", "theme dark - $it")
                 themeSwitcher.isChecked = it
             }
 
