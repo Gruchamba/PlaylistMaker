@@ -6,17 +6,15 @@ import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import org.guru.playlistmaker.creator.Creator
 import org.guru.playlistmaker.domain.search.TrackInteractor
 import org.guru.playlistmaker.domain.search.model.Track
 import org.guru.playlistmaker.ui.search.activity.SearchViewState
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class SearchViewModel : ViewModel() {
+class SearchViewModel : ViewModel(), KoinComponent {
 
-    private val trackInteractor: TrackInteractor by lazy { Creator.provideTracksInteractor() }
+    private val trackInteractor: TrackInteractor by inject()
     private val handler = Handler(Looper.getMainLooper())
     private var latestSearchText: String? = null
 
@@ -98,14 +96,7 @@ class SearchViewModel : ViewModel() {
     }
 
     companion object {
-
         const val SEARCH_DEBOUNCE_DELAY = 2000L
         private val SEARCH_REQUEST_TOKEN = Any()
-
-        fun getFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SearchViewModel()
-            }
-        }
     }
 }

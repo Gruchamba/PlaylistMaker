@@ -13,19 +13,19 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import org.guru.playlistmaker.databinding.ActivitySearchBinding
 import org.guru.playlistmaker.domain.search.model.Track
 import org.guru.playlistmaker.ui.player.activity.PlayerActivity
 import org.guru.playlistmaker.ui.player.activity.PlayerActivity.Companion.TRACK_KEY
 import org.guru.playlistmaker.ui.search.trackAdapter.TrackAdapter
 import org.guru.playlistmaker.ui.search.view_model.SearchViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Collections
 
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel: SearchViewModel by viewModel()
     private lateinit var tracksAdapter: TrackAdapter
 
     private var isClickAllowed = true
@@ -37,11 +37,6 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        viewModel = ViewModelProvider(
-            this@SearchActivity,
-            SearchViewModel.getFactory()
-        )[SearchViewModel::class.java]
 
         viewModel.observeState().observe(this) { render(it) }
         viewModel.observeShowToast().observe(this) { showToast(it) }
