@@ -10,11 +10,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import org.guru.playlistmaker.creator.Creator
-import org.guru.playlistmaker.data.player.PlayerClient.PlayerState
 import org.guru.playlistmaker.domain.player.PlayerInteractor
+import org.guru.playlistmaker.domain.player.model.PlayerState.STATE_PAUSED
+import org.guru.playlistmaker.domain.player.model.PlayerState.STATE_PLAYING
+import org.guru.playlistmaker.domain.player.model.PlayerState.STATE_PREPARED
 import org.guru.playlistmaker.ui.player.activity.PlayerViewState
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class PlayerViewModel(private val url: String) : ViewModel() {
 
@@ -37,10 +37,10 @@ class PlayerViewModel(private val url: String) : ViewModel() {
         private val handler = Handler(Looper.getMainLooper())
 
     private val timerRunnable = Runnable {
-        if (playerInteractor.getPlayerState() == PlayerState.STATE_PLAYING) {
+        if (playerInteractor.getPlayerState() == STATE_PLAYING) {
             startTimerUpdate()
 
-        } else if (playerInteractor.getPlayerState() == PlayerState.STATE_PREPARED) {
+        } else if (playerInteractor.getPlayerState() == STATE_PREPARED) {
             renderState(PlayerViewState.Prepare())
         }
     }
@@ -57,8 +57,8 @@ class PlayerViewModel(private val url: String) : ViewModel() {
 
     fun onPlayButtonClicked() {
         when(playerInteractor.getPlayerState()) {
-            PlayerState.STATE_PLAYING -> pausePlayer()
-            PlayerState.STATE_PREPARED, PlayerState.STATE_PAUSED -> startPlayer()
+            STATE_PLAYING -> pausePlayer()
+            STATE_PREPARED, STATE_PAUSED -> startPlayer()
             else -> { Log.e(TAG, "error player state ${playerStateLiveData.value}") }
         }
     }

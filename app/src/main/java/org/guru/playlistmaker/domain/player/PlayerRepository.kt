@@ -1,6 +1,6 @@
 package org.guru.playlistmaker.domain.player
 
-import org.guru.playlistmaker.data.player.PlayerClient
+import org.guru.playlistmaker.domain.player.model.PlayerState
 
 interface PlayerRepository {
 
@@ -14,5 +14,5 @@ interface PlayerRepository {
 
     fun getCurrentTimePosition() : Int
 
-    fun getPlayerState() : PlayerClient.PlayerState
+    fun getPlayerState() : PlayerState
 }
