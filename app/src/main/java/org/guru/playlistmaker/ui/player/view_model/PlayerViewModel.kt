@@ -6,35 +6,22 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import org.guru.playlistmaker.creator.Creator
 import org.guru.playlistmaker.data.player.PlayerClient.PlayerState
 import org.guru.playlistmaker.domain.player.PlayerInteractor
 import org.guru.playlistmaker.ui.player.activity.PlayerViewState
-import java.text.SimpleDateFormat
-import java.util.Locale
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class PlayerViewModel(private val url: String) : ViewModel() {
+class PlayerViewModel(private val url: String) : ViewModel(), KoinComponent {
 
     val TAG = PlayerViewModel::class.java.name
-
-    companion object {
-
-        fun getFactory(trackUrl: String): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                PlayerViewModel(trackUrl)
-            }
-        }
-    }
 
     private val playerStateLiveData = MutableLiveData<PlayerViewState>()
     fun observePlayerState(): LiveData<PlayerViewState> = playerStateLiveData
 
-    private val playerInteractor: PlayerInteractor by lazy { Creator.providePlayerInteractor() }
+    private val playerInteractor: PlayerInteractor by inject()
 
-        private val handler = Handler(Looper.getMainLooper())
+    private val handler = Handler(Looper.getMainLooper())
 
     private val timerRunnable = Runnable {
         if (playerInteractor.getPlayerState() == PlayerState.STATE_PLAYING) {
@@ -49,10 +36,14 @@ class PlayerViewModel(private val url: String) : ViewModel() {
         preparePlayer()
     }
 
-    override fun onCleared() {
-        super.onCleared()
+    fun release() {
         playerInteractor.release()
         resetTimer()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        release()
     }
 
     fun onPlayButtonClicked() {

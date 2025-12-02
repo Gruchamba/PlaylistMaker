@@ -1,9 +1,7 @@
 package org.guru.playlistmaker.ui.player.activity
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import org.guru.playlistmaker.R
@@ -11,13 +9,16 @@ import org.guru.playlistmaker.databinding.ActivityPlayerBinding
 import org.guru.playlistmaker.domain.search.model.Track
 import org.guru.playlistmaker.ui.player.view_model.PlayerViewModel
 import org.guru.playlistmaker.ui.util.dpToPx
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.time.Instant
 import java.time.ZoneId
 
 class PlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
-    private lateinit var viewModel: PlayerViewModel
+    private lateinit var track: Track
+    private val viewModel: PlayerViewModel by viewModel { parametersOf(track.previewUrl) }
 
     private var isLike = false
 
@@ -26,7 +27,7 @@ class PlayerActivity : AppCompatActivity() {
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val track = intent.getSerializableExtra(TRACK_KEY) as Track
+        track = intent.getSerializableExtra(TRACK_KEY) as Track
 
         Glide.with(this)
             .load(track.getCoverArtwork())
@@ -46,15 +47,7 @@ class PlayerActivity : AppCompatActivity() {
         track.primaryGenreName.let { binding.primaryGenreName.text = it }
         track.country.let { binding.trackCountry.text = it }
 
-        viewModel = ViewModelProvider(
-            this,
-            PlayerViewModel.getFactory(track.previewUrl!!)
-        )[PlayerViewModel::class.java]
-
-        viewModel.observePlayerState().observe(this) {
-            Log.i(TRACK_KEY, "$it")
-            it.render(binding)
-        }
+        viewModel.observePlayerState().observe(this) { it.render(binding) }
 
         binding.backBtn.setOnClickListener { finish() }
         binding.playButton.setOnClickListener { viewModel.onPlayButtonClicked() }
@@ -71,6 +64,11 @@ class PlayerActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         viewModel.pausePlayer()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.release()
     }
 
     companion object {
