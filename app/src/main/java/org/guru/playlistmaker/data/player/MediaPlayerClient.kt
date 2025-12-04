@@ -1,10 +1,8 @@
 package org.guru.playlistmaker.data.player
 
 import android.media.MediaPlayer
-import org.guru.playlistmaker.data.player.PlayerClient.PlayerState.STATE_DEFAULT
-import org.guru.playlistmaker.data.player.PlayerClient.PlayerState.STATE_PAUSED
-import org.guru.playlistmaker.data.player.PlayerClient.PlayerState.STATE_PLAYING
-import org.guru.playlistmaker.data.player.PlayerClient.PlayerState.STATE_PREPARED
+import org.guru.playlistmaker.domain.player.model.PlayerState
+import org.guru.playlistmaker.domain.player.model.PlayerState.*
 
 class MediaPlayerClient : PlayerClient {
 
@@ -36,7 +34,7 @@ class MediaPlayerClient : PlayerClient {
         return mediaPlayer.currentPosition
     }
 
-    override fun getState(): PlayerClient.PlayerState {
+    override fun getState(): PlayerState {
         return state
     }
 

@@ -1,5 +1,7 @@
 package org.guru.playlistmaker.data.player
 
+import org.guru.playlistmaker.domain.player.model.PlayerState
+
 interface PlayerClient {
 
     fun preparePlayer(url: String)
@@ -13,12 +15,5 @@ interface PlayerClient {
     fun getCurrentTime() : Int
 
     fun getState() : PlayerState
-
-    enum class  PlayerState {
-        STATE_DEFAULT,
-        STATE_PREPARED,
-        STATE_PLAYING,
-        STATE_PAUSED
-    }
 
 }

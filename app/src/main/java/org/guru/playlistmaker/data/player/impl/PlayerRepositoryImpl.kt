@@ -2,6 +2,7 @@ package org.guru.playlistmaker.data.player.impl
 
 import org.guru.playlistmaker.data.player.PlayerClient
 import org.guru.playlistmaker.domain.player.PlayerRepository
+import org.guru.playlistmaker.domain.player.model.PlayerState
 
 class PlayerRepositoryImpl(private val playerClient: PlayerClient) : PlayerRepository {
 
@@ -25,7 +26,7 @@ class PlayerRepositoryImpl(private val playerClient: PlayerClient) : PlayerRepos
         return playerClient.getCurrentTime()
     }
 
-    override fun getPlayerState(): PlayerClient.PlayerState {
+    override fun getPlayerState(): PlayerState {
         return playerClient.getState()
     }
 }

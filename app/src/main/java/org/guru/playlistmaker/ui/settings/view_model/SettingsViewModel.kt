@@ -16,6 +16,7 @@ class SettingsViewModel : ViewModel(), KoinComponent {
 
     fun switchTheme(checked: Boolean) {
         settingsInteractor.switchTheme(checked)
+        isDarkThemeLiveData.value = checked
     }
 
 }

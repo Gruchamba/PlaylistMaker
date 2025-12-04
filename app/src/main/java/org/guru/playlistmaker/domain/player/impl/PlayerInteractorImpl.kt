@@ -1,8 +1,8 @@
 package org.guru.playlistmaker.domain.player.impl
 
-import org.guru.playlistmaker.data.player.PlayerClient
 import org.guru.playlistmaker.domain.player.PlayerInteractor
 import org.guru.playlistmaker.domain.player.PlayerRepository
+import org.guru.playlistmaker.domain.player.model.PlayerState
 
 class PlayerInteractorImpl(private val playerRepository: PlayerRepository) : PlayerInteractor {
 
@@ -26,7 +26,7 @@ class PlayerInteractorImpl(private val playerRepository: PlayerRepository) : Pla
         return playerRepository.getCurrentTimePosition()
     }
 
-    override fun getPlayerState(): PlayerClient.PlayerState {
+    override fun getPlayerState(): PlayerState {
         return playerRepository.getPlayerState()
     }
 
