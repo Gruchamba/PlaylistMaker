@@ -9,6 +9,7 @@ sealed class SearchViewState(val trackList: List<Track>? = null) {
     class Loading : SearchViewState() {
         override fun render(binding: ActivitySearchBinding) {
             binding.apply {
+                yourSearchTxtView.visibility =  View.GONE
                 progressBar.visibility = View.VISIBLE
                 trackRecyclerView.visibility = View.GONE
                 trackNotFoundLayout.visibility = View.GONE
@@ -22,6 +23,7 @@ sealed class SearchViewState(val trackList: List<Track>? = null) {
     class Content(list: List<Track>) : SearchViewState(list) {
         override fun render(binding: ActivitySearchBinding) {
             binding.apply {
+                yourSearchTxtView.visibility =  View.GONE
                 trackRecyclerView.visibility = View.VISIBLE
                 trackNotFoundLayout.visibility = View.GONE
                 notConnectionLayout.visibility = View.GONE
