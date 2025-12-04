@@ -11,16 +11,16 @@ import org.guru.playlistmaker.ui.settings.view_model.SettingsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-
-var settingsModule = module {
-
+var settingsInteractorModule = module {
     single<SettingsInteractor> { SettingsInteractorImpl(get()) }
+}
 
+var settingsViewModelModule = module {
     viewModel { SettingsViewModel() }
 }
 
 var settingsDataModule = module {
-    single<SettingsRepository> {
-        SettingsRepositoryImpl(get<Context>().getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE))
-    }
+    single<SettingsRepository> { SettingsRepositoryImpl(get()) }
+
+    single { get<Context>().getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE) }
 }

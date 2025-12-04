@@ -4,21 +4,13 @@ import org.guru.playlistmaker.data.NetworkClient
 import org.guru.playlistmaker.data.search.dto.Response
 import org.guru.playlistmaker.data.search.dto.TrackSearchRequest
 import org.guru.playlistmaker.data.search.dto.TrackSearchResponse
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import retrofit2.Callback
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 
-class RetrofitNetworkClient : NetworkClient {
+class RetrofitNetworkClient : NetworkClient, KoinComponent {
 
-    private val searchBaseUrl = "https://itunes.apple.com/"
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(searchBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val itunesApiService = retrofit.create<ItunesApiService>()
+    private val itunesApiService: ItunesApiService by inject()
 
     fun search(query: String, callback: Callback<TrackSearchResponse>) {
         itunesApiService.searchTrack(query).enqueue(callback)

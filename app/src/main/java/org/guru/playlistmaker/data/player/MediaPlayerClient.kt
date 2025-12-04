@@ -3,10 +3,12 @@ package org.guru.playlistmaker.data.player
 import android.media.MediaPlayer
 import org.guru.playlistmaker.domain.player.model.PlayerState
 import org.guru.playlistmaker.domain.player.model.PlayerState.*
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class MediaPlayerClient : PlayerClient {
+class MediaPlayerClient : PlayerClient, KoinComponent {
 
-    private val mediaPlayer = MediaPlayer()
+    private val mediaPlayer: MediaPlayer by inject()
     private var state = STATE_DEFAULT
 
     override fun preparePlayer(url: String) {
