@@ -52,7 +52,7 @@ val searchDataModule = module {
 
     single<ItunesApiService> {
         Retrofit.Builder()
-            .client(get<OkHttpClient>())
+//            .client(get<OkHttpClient>())
             .baseUrl(itunesURL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
