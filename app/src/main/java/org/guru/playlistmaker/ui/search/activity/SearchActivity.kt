@@ -49,7 +49,10 @@ class SearchActivity : AppCompatActivity() {
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     val searchHintVisibility = searchEditTxt.hasFocus() && p0?.isEmpty() == true
-                    if (searchHintVisibility) viewModel.readTracksFromHistory()
+                    if (searchHintVisibility) {
+                        viewModel.removeSearchCallback()
+                        viewModel.readTracksFromHistory()
+                    }
                     else if (!p0.isNullOrEmpty()) viewModel.searchDebounce(p0.toString())
                 }
 
@@ -74,11 +77,9 @@ class SearchActivity : AppCompatActivity() {
             searchEditTxt.clearFocus()
             searchEditTxt.apply {
                 addTextChangedListener(simpleTextWatcher)
-                setOnFocusChangeListener { view, hasFocus ->
-                    if(hasFocus && searchEditTxt.text.isNotEmpty())
-                        viewModel.searchDebounce(searchEditTxt.text.toString())
-                    else viewModel.readTracksFromHistory()
-
+                setOnFocusChangeListener { _, hasFocus ->
+                    if(hasFocus && searchEditTxt.text.isEmpty())
+                        viewModel.readTracksFromHistory()
                 }
                 setOnEditorActionListener{ _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -127,12 +128,13 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun onSearchResponse() {
-        viewModel.searchRequest(binding.searchEditTxt.text.toString())
+        if (binding.searchEditTxt.text.toString().isNotEmpty())
+            viewModel.searchRequest(binding.searchEditTxt.text.toString())
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        viewModel.onDestroy()
+        viewModel.removeSearchCallback()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

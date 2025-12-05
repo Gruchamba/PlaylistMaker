@@ -3,6 +3,7 @@ package org.guru.playlistmaker.ui.search.view_model
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -42,6 +43,7 @@ class SearchViewModel : ViewModel(), KoinComponent {
 
     fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
+            Log.d("SEARCH", "searchRequest: $newSearchText")
             renderState(SearchViewState.Loading())
 
             trackInteractor.searchTracks(newSearchText, object: TrackInteractor.TrackConsumer {
@@ -77,11 +79,12 @@ class SearchViewModel : ViewModel(), KoinComponent {
     }
 
     fun searchDebounce(changedText: String) {
-        if (latestSearchText == changedText)
+        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
+
+        if (changedText.isEmpty() || latestSearchText == changedText)
             return
 
         latestSearchText = changedText
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
         val searchRunnable = Runnable { searchRequest(changedText) }
         val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
         handler.postAtTime(
@@ -91,7 +94,7 @@ class SearchViewModel : ViewModel(), KoinComponent {
         )
     }
 
-    fun onDestroy() {
+    fun removeSearchCallback() {
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
     }
 
