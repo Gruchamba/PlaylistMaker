@@ -3,6 +3,8 @@ package org.guru.playlistmaker.di.search
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import com.google.gson.Gson
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.guru.playlistmaker.data.NetworkClient
 import org.guru.playlistmaker.data.search.ItunesApiService
 import org.guru.playlistmaker.data.search.RetrofitNetworkClient
@@ -38,8 +40,19 @@ val searchDataModule = module {
 
     single<NetworkClient> { RetrofitNetworkClient() }
 
+    single<HttpLoggingInterceptor> {
+        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+    }
+
+    single<OkHttpClient> {
+        OkHttpClient.Builder()
+            .addInterceptor(get<HttpLoggingInterceptor>())
+            .build()
+    }
+
     single<ItunesApiService> {
         Retrofit.Builder()
+            .client(get<OkHttpClient>())
             .baseUrl(itunesURL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

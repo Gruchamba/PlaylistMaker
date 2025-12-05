@@ -55,6 +55,7 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit
     implementation(libs.retrofit)
+    implementation(libs.logging.interceptor)
 
     // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-gson
     implementation(libs.converter.gson)

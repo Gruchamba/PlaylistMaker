@@ -43,7 +43,6 @@ class SearchViewModel : ViewModel(), KoinComponent {
 
     fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
-            Log.d("SEARCH", "searchRequest: $newSearchText")
             renderState(SearchViewState.Loading())
 
             trackInteractor.searchTracks(newSearchText, object: TrackInteractor.TrackConsumer {
