@@ -35,29 +35,35 @@ class PlayerActivity : AppCompatActivity() {
             .transform(RoundedCorners(dpToPx(8f, this)))
             .into(binding.albumPlaceholder)
 
-        track.trackName.let { binding.trackName.text = it }
-        binding.artistName.text = track.artistName
-        track.trackTime.let { binding.trackDuration.text = track.trackTime }
-        track.collectionName.let { binding.trackAlbum.text = it }
-        track.releaseDate.let {
-            val instant = Instant.parse(it)
-            val dateTime = instant.atZone(ZoneId.systemDefault())
-            binding.releaseDate.text = dateTime.year.toString()
+        track.apply {
+            trackName?.let { binding.trackName.text = it }
+            artistName.let { binding.artistName.text = it }
+            trackTime?.let { binding.trackDuration.text = track.trackTime }
+            collectionName?.let { binding.trackAlbum.text = it }
+            releaseDate?.let {
+                val instant = Instant.parse(it)
+                val dateTime = instant.atZone(ZoneId.systemDefault())
+                binding.releaseDate.text = dateTime.year.toString()
+            }
+            primaryGenreName.let { binding.primaryGenreName.text = it }
+            country.let { binding.trackCountry.text = it }
         }
-        track.primaryGenreName.let { binding.primaryGenreName.text = it }
-        track.country.let { binding.trackCountry.text = it }
 
         viewModel.observePlayerState().observe(this) { it.render(binding) }
 
-        binding.backBtn.setOnClickListener { finish() }
-        binding.playButton.setOnClickListener { viewModel.onPlayButtonClicked() }
+        binding.apply {
+            backBtn.setOnClickListener { finish() }
+            playButton.isEnabled = !track.previewUrl.isNullOrEmpty()
+            playButton.setOnClickListener { viewModel.onPlayButtonClicked() }
 
-        binding.likeButton.setOnClickListener {
-            isLike = !isLike
-            binding.likeButton.setImageResource(
-                if (isLike) R.drawable.ic_not_like_track else R.drawable.ic_like_track
-            )
+            likeButton.setOnClickListener {
+                isLike = !isLike
+                likeButton.setImageResource(
+                    if (isLike) R.drawable.ic_not_like_track else R.drawable.ic_like_track
+                )
+            }
         }
+
 
     }
 

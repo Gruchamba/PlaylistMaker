@@ -93,7 +93,7 @@ class SearchActivity : AppCompatActivity() {
             tracksAdapter = TrackAdapter(
                 Collections.emptyList(),
                 onClick = {
-                    if (clickDebounce() && !it.trackId.isNullOrEmpty() && !it.previewUrl.isNullOrEmpty()) {
+                    if (clickDebounce()) {
                         viewModel.addTrackToHistory(it)
                         val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
                         intent.putExtra(TRACK_KEY, it)
