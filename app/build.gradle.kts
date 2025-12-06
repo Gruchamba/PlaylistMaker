@@ -26,6 +26,9 @@ android {
                 "proguard-rules.pro"
             )
         }
+        buildFeatures {
+            viewBinding = true
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -51,9 +54,12 @@ dependencies {
     implementation(libs.glide.v4160)
 
     // https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation(libs.retrofit)
+    implementation(libs.logging.interceptor)
 
     // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-gson
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation(libs.converter.gson)
+
+    implementation(libs.koin.android)
 
 }

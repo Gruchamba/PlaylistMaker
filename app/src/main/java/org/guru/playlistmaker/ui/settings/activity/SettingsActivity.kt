@@ -1,0 +1,72 @@
+package org.guru.playlistmaker.ui.settings.activity
+
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
+import org.guru.playlistmaker.R
+import org.guru.playlistmaker.databinding.ActivitySettingsBinding
+import org.guru.playlistmaker.ui.settings.view_model.SettingsViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
+class SettingsActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivitySettingsBinding
+    private val viewModel: SettingsViewModel by viewModel()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.apply {
+            backBtn.setOnClickListener { finish() }
+
+            themeSwitcher.apply {
+                setOnCheckedChangeListener { _, checked ->
+                    viewModel.switchTheme(checked)
+                }
+            }
+
+            viewModel.observeDarkTheme().observe(this@SettingsActivity) {
+                Log.i("THEME", "theme dark - $it")
+                themeSwitcher.isChecked = it
+            }
+
+            shareAppBtn.setOnClickListener {
+                val shareIntent = Intent(Intent.ACTION_SEND).apply {  }
+                shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.uri_to_course))
+                shareIntent.setType("text/plain")
+                startActivity(shareIntent)
+
+                val chooserIntent = Intent.createChooser(shareIntent, null)
+
+                try {
+                    startActivity(chooserIntent)
+                } catch (e: ActivityNotFoundException) {
+                    Toast.makeText(this@SettingsActivity, getString(R.string.share_app_toast_message), Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            mailToSupportBtn.setOnClickListener {
+                val shareIntent = Intent(Intent.ACTION_SENDTO)
+                shareIntent.data = Uri.parse("mailto:")
+                shareIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.default_email)))
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.title_mail_for_support))
+                shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.text_mail_for_support))
+                startActivity(shareIntent)
+            }
+
+            userAgreementBtn.setOnClickListener {
+                startActivity(
+                    Intent(Intent.ACTION_VIEW, getString(R.string.uri_to_user_agreement).toUri())
+                )
+            }
+        }
+
+    }
+}
