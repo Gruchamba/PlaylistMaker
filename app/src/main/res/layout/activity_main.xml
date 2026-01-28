@@ -25,7 +25,7 @@
 
     <Button
         android:id="@+id/libraryBtn"
-        android:text="@string/library"
+        android:text="@string/media_library"
         app:icon="@drawable/ic_library"
         style="@style/ButtonStyle.MainMenuButtonStyle" />
 

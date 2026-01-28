@@ -85,6 +85,26 @@
         <item name="cornerRadius">12dp</item>
     </style>
 
+    <style name="TabLayoutStyle" parent="Widget.MaterialComponents.TabLayout">
+        <item name="background">?attr/whiteAndBlackColor</item>
+        <item name="tabTextColor">?attr/blackAndWhiteColor</item>
+        <item name="tabIndicatorColor">?attr/blackAndWhiteColor</item>
+        <item name="tabIndicatorFullWidth">true</item>
+<!--        <item name="tabIndicatorHeight">4dp</item>-->
+<!--        <item name="tabIndicatorGravity">bottom</item>-->
+        <item name="tabTextAppearance">@style/TabLayoutTextStyle</item>
+    </style>
+
+    <style name="TabLayoutTextStyle" parent="TextAppearance.Design.Tab">
+        <item name="android:textAllCaps">false</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+    </style>
+
     <style name="AudioPlayerTrackLabelStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

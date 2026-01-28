@@ -1,6 +1,8 @@
 package org.guru.playlistmaker.app
 
 import android.app.Application
+import org.guru.playlistmaker.di.library.favoritesTrackViewModelModule
+import org.guru.playlistmaker.di.library.playlistViewModelModule
 import org.guru.playlistmaker.di.player.playerDataModule
 import org.guru.playlistmaker.di.player.playerInteractorModule
 import org.guru.playlistmaker.di.player.playerRepositoryModule
@@ -26,7 +28,8 @@ class App : Application() {
             modules(
                 playerInteractorModule, playerViewModelModule, playerRepositoryModule, playerDataModule,
                 settingsInteractorModule, settingsViewModelModule, settingsDataModule,
-                searchInteractorModule, searchViewModelModule, searchRepositoryModule, searchDataModule
+                searchInteractorModule, searchViewModelModule, searchRepositoryModule, searchDataModule,
+                favoritesTrackViewModelModule, playlistViewModelModule
             )
         }
         val settingsRepository: SettingsRepository = getKoin().get()
