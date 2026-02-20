@@ -64,7 +64,7 @@ class PlayerFragment : Fragment() {
             country.let { binding.trackCountry.text = it }
         }
 
-        viewModel.observePlayerState().observe(this) { it.render(binding) }
+        viewModel.observePlayerState().observe(requireActivity()) { it.render(binding) }
 
         binding.apply {
             playButton.isEnabled = !track.previewUrl.isNullOrEmpty()
