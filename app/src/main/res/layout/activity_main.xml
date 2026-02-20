@@ -16,7 +16,7 @@
         app:layout_constraintBottom_toTopOf="@id/playlistMakerNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/playlistMakerNavigationView"
@@ -27,5 +27,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
 
-        app:menu="@menu/playlist_maker_menu"/>
+        app:menu="@menu/playlist_maker_menu"
+        app:itemIconTint="@color/bottom_nav_selector"
+        app:itemTextColor="@color/bottom_nav_selector"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
