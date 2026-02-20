@@ -1,38 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/mainMenuBackgroundColor"
-    android:orientation="vertical"
-    android:padding="@dimen/default_layout_padding">
+    tools:context="ui.main.activity.MainActivity" >
 
-    <TextView
-        android:layout_width="match_parent"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/rootFragmentContainerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/playlist_maker_navigation"
+
+        app:layout_constraintBottom_toTopOf="@id/playlistMakerNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/playlistMakerNavigationView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textColor="@color/yp_white"
-        android:layout_marginBottom="20dp"
-        android:background="?attr/mainMenuBackgroundColor"
-        android:textSize="@dimen/default_text_size"/>
 
-    <Button
-        android:id="@+id/searchBtn"
-        android:text="@string/search"
-        app:icon="@drawable/ic_search"
-        style="@style/ButtonStyle.MainMenuButtonStyle"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
 
-    <Button
-        android:id="@+id/libraryBtn"
-        android:text="@string/media_library"
-        app:icon="@drawable/ic_library"
-        style="@style/ButtonStyle.MainMenuButtonStyle" />
-
-    <Button
-        android:id="@+id/settingsBtn"
-        android:text="@string/settings"
-        app:icon="@drawable/ic_settings"
-        style="@style/ButtonStyle.MainMenuButtonStyle"/>
-
-</LinearLayout>
+        app:menu="@menu/playlist_maker_menu"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

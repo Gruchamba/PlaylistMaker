@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    tools:context=".ui.player.activity.PlayerActivity">
+    tools:context=".ui.player.fragment.PlayerFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -41,21 +41,11 @@
             app:layout_constraintGuide_end="16dp" />
 
         <ImageView
-            android:id="@+id/backBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_arrow_back"
-            android:layout_marginTop="15dp"
-            app:layout_constraintStart_toStartOf="@+id/left_guideline_24"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <ImageView
             android:id="@+id/albumPlaceholder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="10dp"
             android:contentDescription="@string/cover_image"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_def_album_img"

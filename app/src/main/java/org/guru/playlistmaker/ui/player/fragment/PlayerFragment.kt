@@ -1,11 +1,15 @@
-package org.guru.playlistmaker.ui.player.activity
+package org.guru.playlistmaker.ui.player.fragment
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import org.guru.playlistmaker.R
-import org.guru.playlistmaker.databinding.ActivityPlayerBinding
+import org.guru.playlistmaker.databinding.FragmentPlayerBinding
 import org.guru.playlistmaker.domain.search.model.Track
 import org.guru.playlistmaker.ui.player.view_model.PlayerViewModel
 import org.guru.playlistmaker.ui.util.dpToPx
@@ -13,26 +17,37 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.time.Instant
 import java.time.ZoneId
+import kotlin.getValue
 
-class PlayerActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityPlayerBinding
+class PlayerFragment : Fragment() {
+
+    private lateinit var binding: FragmentPlayerBinding
     private lateinit var track: Track
     private val viewModel: PlayerViewModel by viewModel { parametersOf(track.previewUrl) }
 
     private var isLike = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityPlayerBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        binding = FragmentPlayerBinding.inflate(layoutInflater)
+        return binding.root
+    }
 
-        track = intent.getSerializableExtra(TRACK_KEY) as Track
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        requireArguments().getSerializable(TRACK_KEY)?.apply {
+            track = this as Track
+        }
 
         Glide.with(this)
             .load(track.getCoverArtwork())
             .placeholder(R.drawable.ic_def_album_img)
-            .transform(RoundedCorners(dpToPx(8f, this)))
+            .transform(RoundedCorners(dpToPx(8f, requireContext())))
             .into(binding.albumPlaceholder)
 
         track.apply {
@@ -52,7 +67,6 @@ class PlayerActivity : AppCompatActivity() {
         viewModel.observePlayerState().observe(this) { it.render(binding) }
 
         binding.apply {
-            backBtn.setOnClickListener { finish() }
             playButton.isEnabled = !track.previewUrl.isNullOrEmpty()
             playButton.setOnClickListener { viewModel.onPlayButtonClicked() }
 
@@ -63,8 +77,6 @@ class PlayerActivity : AppCompatActivity() {
                 )
             }
         }
-
-
     }
 
     override fun onPause() {
@@ -78,6 +90,12 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     companion object {
+        val TAG = PlayerFragment::javaClass.name
         const val TRACK_KEY = "track"
+
+        fun createArgs(track: Track) :  Bundle = bundleOf(
+            TRACK_KEY to track
+        )
+
     }
 }
