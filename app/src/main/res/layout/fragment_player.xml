@@ -45,13 +45,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             android:contentDescription="@string/cover_image"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_def_album_img"
-            app:layout_constraintTop_toTopOf="@+id/backBtn"
             app:layout_constraintEnd_toEndOf="@+id/right_guideline_24"
-            app:layout_constraintStart_toStartOf="@+id/left_guideline_24" />
+            app:layout_constraintStart_toStartOf="@+id/left_guideline_24"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/trackName"
