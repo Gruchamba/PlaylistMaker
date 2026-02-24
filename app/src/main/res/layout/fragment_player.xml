@@ -41,17 +41,27 @@
             app:layout_constraintGuide_end="16dp" />
 
         <ImageView
+            android:id="@+id/backBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_arrow_back"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="@+id/left_guideline_24"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
             android:id="@+id/albumPlaceholder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="50dp"
             android:contentDescription="@string/cover_image"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_def_album_img"
+            app:layout_constraintTop_toTopOf="@+id/backBtn"
             app:layout_constraintEnd_toEndOf="@+id/right_guideline_24"
-            app:layout_constraintStart_toStartOf="@+id/left_guideline_24"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="@+id/left_guideline_24" />
 
         <TextView
             android:id="@+id/trackName"
@@ -83,7 +93,7 @@
             android:id="@+id/addButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="25dp"
             android:background="@drawable/rounded_bgn_for_btn"
             android:elevation="8dp"
             android:scaleType="centerInside"
@@ -99,7 +109,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_play_btn"
             android:elevation="8dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:background="?attr/whiteAndBlack25"
             app:layout_constraintTop_toBottomOf="@+id/artistName"
             app:layout_constraintEnd_toStartOf="@+id/likeButton"
@@ -109,7 +119,7 @@
             android:id="@+id/likeButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="25dp"
             android:background="@drawable/rounded_bgn_for_btn"
             android:elevation="8dp"
             android:scaleType="centerInside"

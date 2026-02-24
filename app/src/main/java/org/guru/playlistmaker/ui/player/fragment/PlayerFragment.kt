@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import org.guru.playlistmaker.R
@@ -31,8 +32,7 @@ class PlayerFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View {
         binding = FragmentPlayerBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -67,6 +67,7 @@ class PlayerFragment : Fragment() {
         viewModel.observePlayerState().observe(requireActivity()) { it.render(binding) }
 
         binding.apply {
+            backBtn.setOnClickListener { findNavController().navigateUp() }
             playButton.isEnabled = !track.previewUrl.isNullOrEmpty()
             playButton.setOnClickListener { viewModel.onPlayButtonClicked() }
 
