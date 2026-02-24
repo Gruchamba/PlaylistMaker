@@ -79,7 +79,7 @@
     <style name="TabLayoutStyle" parent="Widget.MaterialComponents.TabLayout">
         <item name="tabTextColor">?attr/blackAndWhiteColor</item>
         <item name="tabIndicatorColor">?attr/blackAndWhiteColor</item>
-        <item name="tabIndicatorFullWidth">false</item>
+        <item name="tabIndicatorFullWidth">true</item>
         <item name="tabTextAppearance">@style/TabLayoutTextStyle</item>
     </style>
 

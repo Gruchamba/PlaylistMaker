@@ -41,9 +41,8 @@ class MediaLibraryFragment : Fragment() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
+    override fun onDestroyView() {
+        super.onDestroyView()
         if(tabMediator.isAttached)
             tabMediator.detach()
 

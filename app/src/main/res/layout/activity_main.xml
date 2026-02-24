@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/whiteAndBlackColor"
     tools:context="ui.main.activity.MainActivity" >
 
     <androidx.fragment.app.FragmentContainerView
@@ -22,7 +23,7 @@
         android:id="@+id/playlistMakerNavigationView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-
+        android:background="?attr/whiteAndBlackColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

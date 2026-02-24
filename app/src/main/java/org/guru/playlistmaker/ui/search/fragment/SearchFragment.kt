@@ -144,8 +144,8 @@ class SearchFragment : Fragment() {
             viewModel.searchRequest(binding.searchEditTxt.text.toString())
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         viewModel.removeSearchCallback()
         _binding = null
     }

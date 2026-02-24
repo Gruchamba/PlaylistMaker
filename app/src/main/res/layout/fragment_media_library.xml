@@ -26,6 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
+        android:background="?attr/whiteAndBlackColor"
         style="@style/TabLayoutStyle"/>
 
     <androidx.viewpager2.widget.ViewPager2
