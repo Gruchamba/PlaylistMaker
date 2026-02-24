@@ -2,9 +2,7 @@ package org.guru.playlistmaker.ui.settings.fragment
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +24,7 @@ class SettingsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSettingsBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -43,21 +41,20 @@ class SettingsFragment : Fragment() {
             }
 
             viewModel.observeDarkTheme().observe(viewLifecycleOwner) {
-                Log.i("THEME", "theme dark - $it")
                 themeSwitcher.isChecked = it
             }
 
             shareAppBtn.setOnClickListener {
                 val shareIntent = Intent(Intent.ACTION_SEND).apply {  }
                 shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.uri_to_course))
-                shareIntent.setType("text/plain")
+                shareIntent.type = "text/plain"
                 startActivity(shareIntent)
 
                 val chooserIntent = Intent.createChooser(shareIntent, null)
 
                 try {
                     startActivity(chooserIntent)
-                } catch (e: ActivityNotFoundException) {
+                } catch (_: ActivityNotFoundException) {
                     Toast.makeText(
                         requireContext(),
                         getString(R.string.share_app_toast_message),
@@ -68,7 +65,7 @@ class SettingsFragment : Fragment() {
 
             mailToSupportBtn.setOnClickListener {
                 val shareIntent = Intent(Intent.ACTION_SENDTO)
-                shareIntent.data = Uri.parse("mailto:")
+                shareIntent.data = "mailto:".toUri()
                 shareIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.default_email)))
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.title_mail_for_support))
                 shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.text_mail_for_support))

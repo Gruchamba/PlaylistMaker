@@ -21,7 +21,7 @@ class MediaLibraryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMediaLibraryBinding.inflate(layoutInflater)
+        _binding = FragmentMediaLibraryBinding.inflate(layoutInflater,container, false)
         return binding.root
     }
 

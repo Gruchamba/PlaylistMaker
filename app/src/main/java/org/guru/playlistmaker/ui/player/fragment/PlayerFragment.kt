@@ -97,7 +97,6 @@ class PlayerFragment : Fragment() {
     }
 
     companion object {
-        val TAG = PlayerFragment::javaClass.name
         const val TRACK_KEY = "track"
 
         fun createArgs(track: Track) :  Bundle = bundleOf(
