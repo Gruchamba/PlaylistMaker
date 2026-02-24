@@ -142,14 +142,14 @@
         <TextView
             android:id="@+id/durationLbl"
             android:text="@string/duration"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="35dp"
             style="@style/AudioPlayerTrackLabelStyle"
             app:layout_constraintTop_toBottomOf="@+id/trackProgress"
             app:layout_constraintStart_toStartOf="@+id/left_guideline_16"/>
 
         <TextView
             android:id="@+id/trackDuration"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="35dp"
             style="@style/AudioPlayerTrackLabelStyle.TrackValueStyle"
             app:layout_constraintTop_toBottomOf="@+id/trackProgress"
             app:layout_constraintEnd_toEndOf="@+id/right_guideline_16"
