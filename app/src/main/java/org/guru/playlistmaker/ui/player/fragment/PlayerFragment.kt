@@ -1,11 +1,11 @@
 package org.guru.playlistmaker.ui.player.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -18,12 +18,13 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.time.Instant
 import java.time.ZoneId
-import kotlin.getValue
 
 
 class PlayerFragment : Fragment() {
 
-    private lateinit var binding: FragmentPlayerBinding
+    private var _binding: FragmentPlayerBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var track: Track
     private val viewModel: PlayerViewModel by viewModel { parametersOf(track.previewUrl) }
 
@@ -33,7 +34,7 @@ class PlayerFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPlayerBinding.inflate(layoutInflater)
+        _binding = FragmentPlayerBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -64,7 +65,7 @@ class PlayerFragment : Fragment() {
             country.let { binding.trackCountry.text = it }
         }
 
-        viewModel.observePlayerState().observe(requireActivity()) { it.render(binding) }
+        viewModel.observePlayerState().observe(viewLifecycleOwner) { it.render(binding) }
 
         binding.apply {
             backBtn.setOnClickListener { findNavController().navigateUp() }
@@ -78,6 +79,11 @@ class PlayerFragment : Fragment() {
                 )
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onPause() {

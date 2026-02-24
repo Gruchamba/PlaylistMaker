@@ -21,7 +21,6 @@ class MediaLibraryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         _binding = FragmentMediaLibraryBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -44,8 +43,11 @@ class MediaLibraryFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+
         if(tabMediator.isAttached)
             tabMediator.detach()
+
+        _binding = null
     }
 
 }

@@ -26,7 +26,9 @@ import java.util.Collections
 
 class SearchFragment : Fragment() {
 
-    private lateinit var binding: FragmentSearchBinding
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
+
     private val viewModel: SearchViewModel by viewModel()
     private lateinit var tracksAdapter: TrackAdapter
 
@@ -39,15 +41,15 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSearchBinding.inflate(layoutInflater)
+        _binding = FragmentSearchBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.observeState().observe(this) { render(it) }
-        viewModel.observeShowToast().observe(this) { showToast(it) }
+        viewModel.observeState().observe(viewLifecycleOwner) { render(it) }
+        viewModel.observeShowToast().observe(viewLifecycleOwner) { showToast(it) }
 
         binding.apply {
 
@@ -146,6 +148,7 @@ class SearchFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         viewModel.removeSearchCallback()
+        _binding = null
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

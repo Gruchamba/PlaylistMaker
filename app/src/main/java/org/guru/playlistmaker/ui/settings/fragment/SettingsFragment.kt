@@ -15,7 +15,6 @@ import org.guru.playlistmaker.R
 import org.guru.playlistmaker.databinding.FragmentSettingsBinding
 import org.guru.playlistmaker.ui.settings.view_model.SettingsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlin.getValue
 
 class SettingsFragment : Fragment() {
 
@@ -43,7 +42,7 @@ class SettingsFragment : Fragment() {
                 }
             }
 
-            viewModel.observeDarkTheme().observe(requireActivity()) {
+            viewModel.observeDarkTheme().observe(viewLifecycleOwner) {
                 Log.i("THEME", "theme dark - $it")
                 themeSwitcher.isChecked = it
             }
@@ -59,7 +58,11 @@ class SettingsFragment : Fragment() {
                 try {
                     startActivity(chooserIntent)
                 } catch (e: ActivityNotFoundException) {
-                    Toast.makeText(requireContext(), getString(R.string.share_app_toast_message), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.share_app_toast_message),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
