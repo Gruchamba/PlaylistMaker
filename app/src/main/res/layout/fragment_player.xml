@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    tools:context=".ui.player.activity.PlayerActivity">
+    tools:context=".ui.player.fragment.PlayerFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -93,7 +93,7 @@
             android:id="@+id/addButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="25dp"
             android:background="@drawable/rounded_bgn_for_btn"
             android:elevation="8dp"
             android:scaleType="centerInside"
@@ -109,7 +109,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_play_btn"
             android:elevation="8dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:background="?attr/whiteAndBlack25"
             app:layout_constraintTop_toBottomOf="@+id/artistName"
             app:layout_constraintEnd_toStartOf="@+id/likeButton"
@@ -119,7 +119,7 @@
             android:id="@+id/likeButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="25dp"
             android:background="@drawable/rounded_bgn_for_btn"
             android:elevation="8dp"
             android:scaleType="centerInside"
@@ -142,14 +142,14 @@
         <TextView
             android:id="@+id/durationLbl"
             android:text="@string/duration"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="35dp"
             style="@style/AudioPlayerTrackLabelStyle"
             app:layout_constraintTop_toBottomOf="@+id/trackProgress"
             app:layout_constraintStart_toStartOf="@+id/left_guideline_16"/>
 
         <TextView
             android:id="@+id/trackDuration"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="35dp"
             style="@style/AudioPlayerTrackLabelStyle.TrackValueStyle"
             app:layout_constraintTop_toBottomOf="@+id/trackProgress"
             app:layout_constraintEnd_toEndOf="@+id/right_guideline_16"

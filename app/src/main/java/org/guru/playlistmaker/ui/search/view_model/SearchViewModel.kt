@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.guru.playlistmaker.domain.search.TrackInteractor
 import org.guru.playlistmaker.domain.search.model.Track
-import org.guru.playlistmaker.ui.search.activity.SearchViewState
+import org.guru.playlistmaker.ui.search.fragment.SearchViewState
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

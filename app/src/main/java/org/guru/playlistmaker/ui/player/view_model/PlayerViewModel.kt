@@ -6,9 +6,9 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import org.guru.playlistmaker.domain.player.model.PlayerState
 import org.guru.playlistmaker.domain.player.PlayerInteractor
-import org.guru.playlistmaker.ui.player.activity.PlayerViewState
+import org.guru.playlistmaker.domain.player.model.PlayerState
+import org.guru.playlistmaker.ui.player.fragment.PlayerViewState
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

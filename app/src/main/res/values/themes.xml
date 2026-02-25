@@ -3,8 +3,7 @@
     <style name="Base.Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-        <item name="android:background">@color/yp_white</item>
-        <item name="mainMenuBackgroundColor">@color/yp_blue</item>
+<!--        <item name="android:background">@color/yp_white</item>-->
         <item name="blackAndWhiteColor">@color/yp_black</item>
         <item name="greyAndBlackColor">@color/yp_grey</item>
         <item name="greyAndWhiteColor">@color/yp_grey</item>
@@ -19,6 +18,5 @@
         <item name="colorControlActivated">@color/yp_blue</item>
         <item name="materialButtonStyle">@style/ButtonStyle.DefaultStyle</item>
     </style>
-
 
 </resources>

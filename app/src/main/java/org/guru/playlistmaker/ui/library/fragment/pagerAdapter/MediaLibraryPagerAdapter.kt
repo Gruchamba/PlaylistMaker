@@ -1,4 +1,4 @@
-package org.guru.playlistmaker.ui.library.activity.pagerAdapter
+package org.guru.playlistmaker.ui.library.fragment.pagerAdapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

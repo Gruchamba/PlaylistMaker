@@ -75,23 +75,11 @@
         <item name="android:textFontWeight">500</item>
     </style>
 
-    <style name="ButtonStyle.MainMenuButtonStyle">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:textSize">26sp</item>
-        <item name="android:backgroundTint">@color/yp_white</item>
-        <item name="android:textColor">@color/yp_black</item>
-        <item name="iconTint">@color/yp_black</item>
-        <item name="cornerRadius">12dp</item>
-    </style>
 
     <style name="TabLayoutStyle" parent="Widget.MaterialComponents.TabLayout">
-        <item name="background">?attr/whiteAndBlackColor</item>
         <item name="tabTextColor">?attr/blackAndWhiteColor</item>
         <item name="tabIndicatorColor">?attr/blackAndWhiteColor</item>
         <item name="tabIndicatorFullWidth">true</item>
-<!--        <item name="tabIndicatorHeight">4dp</item>-->
-<!--        <item name="tabIndicatorGravity">bottom</item>-->
         <item name="tabTextAppearance">@style/TabLayoutTextStyle</item>
     </style>
 
