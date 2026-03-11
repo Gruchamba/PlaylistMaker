@@ -51,6 +51,7 @@ class SearchFragment : Fragment() {
             CLICK_DEBOUNCE_DELAY,
             viewLifecycleOwner.lifecycleScope,
             false) { track ->
+            viewModel.addTrackToHistory(track)
             findNavController().navigate(
                 R.id.action_searchFragment_to_playerFragment,
                 PlayerFragment.createArgs(track)
@@ -68,7 +69,7 @@ class SearchFragment : Fragment() {
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     val searchHintVisibility = searchEditTxt.hasFocus() && p0?.isEmpty() == true
                     if (searchHintVisibility) {
-                        viewModel.removeSearchCallback()
+                        viewModel.cancelSearch()
                         viewModel.readTracksFromHistory()
                     }
                     else if (!p0.isNullOrEmpty()) viewModel.searchDebounce(p0.toString())
@@ -147,7 +148,7 @@ class SearchFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.removeSearchCallback()
+        viewModel.cancelSearch()
         _binding = null
     }
 

@@ -1,11 +1,12 @@
 package org.guru.playlistmaker.ui.search.view_model
 
-import android.os.Handler
-import android.os.Looper
-import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.guru.playlistmaker.domain.search.TrackInteractor
 import org.guru.playlistmaker.domain.search.model.Track
 import org.guru.playlistmaker.ui.search.fragment.SearchViewState
@@ -15,7 +16,7 @@ import org.koin.core.component.inject
 class SearchViewModel : ViewModel(), KoinComponent {
 
     private val trackInteractor: TrackInteractor by inject()
-    private val handler = Handler(Looper.getMainLooper())
+    private var searchJob: Job? = null
     private var latestSearchText: String? = null
 
     private val searchViewState = MutableLiveData<SearchViewState>()
@@ -44,28 +45,28 @@ class SearchViewModel : ViewModel(), KoinComponent {
         if (newSearchText.isNotEmpty()) {
             renderState(SearchViewState.Loading())
 
-            trackInteractor.searchTracks(newSearchText, object: TrackInteractor.TrackConsumer {
-                override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
-                    handler.post {
-                        val trackList = mutableListOf<Track>()
-                        if (foundTracks != null)
-                            trackList.addAll(foundTracks)
-
-                        when {
-                            errorMessage != null -> {
-                                renderState(SearchViewState.Error())
-                                showToast.postValue(errorMessage)
-                            }
-
-                            trackList.isEmpty() -> renderState(SearchViewState.Empty())
-                            else -> renderState(SearchViewState.Content(foundTracks!!))
-                        }
-                    }
+            viewModelScope.launch {
+                trackInteractor.searchTracks(newSearchText).collect { pair ->
+                    processResult(pair.first, pair.second)
                 }
-            })
-
+            }
         }
+    }
 
+    private fun processResult(foundTracks: List<Track>?, errorMessage: String?) {
+        val trackList = mutableListOf<Track>()
+        if (foundTracks != null)
+            trackList.addAll(foundTracks)
+
+        when {
+            errorMessage != null -> {
+                renderState(SearchViewState.Error())
+                showToast.postValue(errorMessage)
+            }
+
+            trackList.isEmpty() -> renderState(SearchViewState.Empty())
+            else -> renderState(SearchViewState.Content(foundTracks!!))
+        }
     }
 
     private fun renderState(state: SearchViewState) {
@@ -77,27 +78,25 @@ class SearchViewModel : ViewModel(), KoinComponent {
     }
 
     fun searchDebounce(changedText: String) {
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
 
         if (changedText.isEmpty() || latestSearchText == changedText)
             return
 
         latestSearchText = changedText
-        val searchRunnable = Runnable { searchRequest(changedText) }
-        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
-        handler.postAtTime(
-            searchRunnable,
-            SEARCH_REQUEST_TOKEN,
-            postTime,
-        )
+
+        cancelSearch()
+        searchJob = viewModelScope.launch {
+            delay(SEARCH_DEBOUNCE_DELAY)
+            searchRequest(changedText)
+        }
+
     }
 
-    fun removeSearchCallback() {
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
+    fun cancelSearch() {
+        searchJob?.cancel()
     }
 
     companion object {
         const val SEARCH_DEBOUNCE_DELAY = 2000L
-        private val SEARCH_REQUEST_TOKEN = Any()
     }
 }

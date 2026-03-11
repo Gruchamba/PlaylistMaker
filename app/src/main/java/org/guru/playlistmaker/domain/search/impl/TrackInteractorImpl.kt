@@ -1,14 +1,13 @@
 package org.guru.playlistmaker.domain.search.impl
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import org.guru.playlistmaker.domain.search.Resource
 import org.guru.playlistmaker.domain.search.TrackInteractor
 import org.guru.playlistmaker.domain.search.TrackRepository
 import org.guru.playlistmaker.domain.search.model.Track
-import java.util.concurrent.Executors
 
 class TrackInteractorImpl (private val repository: TrackRepository) : TrackInteractor {
-
-    private val executor = Executors.newCachedThreadPool()
 
     override fun addTrackToHistory(track: Track) {
         repository.addTrackToHistory(track)
@@ -22,12 +21,13 @@ class TrackInteractorImpl (private val repository: TrackRepository) : TrackInter
         return repository.readTracksFromHistory()
     }
 
-    override fun searchTracks(expression: String, consumer: TrackInteractor.TrackConsumer) {
-        executor.execute {
-            when(val resource = repository.searchTracks(expression)) {
-                is Resource.Success -> { consumer.consume(resource.data, null) }
-                is Resource.Error -> { consumer.consume(null, resource.message) }
+    override fun searchTracks(expression: String): Flow<Pair<List<Track>?, String?>> {
+        return repository.searchTracks(expression).map { result ->
+            when(result) {
+                is Resource.Success -> Pair(result.data, null)
+                is Resource.Error -> Pair(null, result.message)
             }
         }
     }
+
 }
