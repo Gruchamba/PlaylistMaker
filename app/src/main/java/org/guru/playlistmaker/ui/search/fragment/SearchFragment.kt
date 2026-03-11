@@ -3,8 +3,6 @@ package org.guru.playlistmaker.ui.search.fragment
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -14,6 +12,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import org.guru.playlistmaker.R
 import org.guru.playlistmaker.databinding.FragmentSearchBinding
@@ -21,6 +20,7 @@ import org.guru.playlistmaker.domain.search.model.Track
 import org.guru.playlistmaker.ui.player.fragment.PlayerFragment
 import org.guru.playlistmaker.ui.search.trackAdapter.TrackAdapter
 import org.guru.playlistmaker.ui.search.view_model.SearchViewModel
+import org.guru.playlistmaker.ui.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Collections
 
@@ -30,10 +30,9 @@ class SearchFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: SearchViewModel by viewModel()
-    private lateinit var tracksAdapter: TrackAdapter
 
-    private var isClickAllowed = true
-    private val handler = Handler(Looper.getMainLooper())
+    private lateinit var tracksAdapter: TrackAdapter
+    private lateinit var onTrackClickDebounce: (Track) -> Unit
 
     private var searchQuery = SEARCH_QUERY_DEF
 
@@ -47,6 +46,16 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        onTrackClickDebounce = debounce(
+            CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope,
+            false) { track ->
+            findNavController().navigate(
+                R.id.action_searchFragment_to_playerFragment,
+                PlayerFragment.createArgs(track)
+            )
+        }
 
         viewModel.observeState().observe(viewLifecycleOwner) { render(it) }
         viewModel.observeShowToast().observe(viewLifecycleOwner) { showToast(it) }
@@ -100,15 +109,7 @@ class SearchFragment : Fragment() {
 
             tracksAdapter = TrackAdapter(
                 Collections.emptyList(),
-                onClick = {
-                    if (clickDebounce()) {
-                        viewModel.addTrackToHistory(it)
-                        findNavController().navigate(
-                            R.id.action_searchFragment_to_playerFragment,
-                            PlayerFragment.createArgs(it)
-                        )
-                    }
-                }
+                onClick = onTrackClickDebounce
             )
 
             trackRecyclerView.adapter = tracksAdapter
@@ -169,17 +170,6 @@ class SearchFragment : Fragment() {
     private fun onSearchHistory(list: List<Track>) {
         tracksAdapter.tracks = list
         tracksAdapter.notifyDataSetChanged()
-    }
-
-    private fun clickDebounce() : Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true },
-                CLICK_DEBOUNCE_DELAY
-            )
-        }
-        return current
     }
 
     private fun showToast(message: String?) {
