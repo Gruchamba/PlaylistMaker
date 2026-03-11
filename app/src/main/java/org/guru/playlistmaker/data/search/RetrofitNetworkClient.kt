@@ -1,7 +1,5 @@
 package org.guru.playlistmaker.data.search
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.guru.playlistmaker.data.NetworkClient
 import org.guru.playlistmaker.data.search.dto.Response
 import org.guru.playlistmaker.data.search.dto.TrackSearchRequest
@@ -18,13 +16,11 @@ class RetrofitNetworkClient : NetworkClient, KoinComponent {
             return Response().apply { resultCode = 400 }
         }
 
-        return withContext(Dispatchers.IO) {
-            try {
-                val response = itunesApiService.searchTrack(dto.expression)
-                response.apply { resultCode = 200 }
-            } catch (_: Throwable) {
-                Response().apply { resultCode = 500 }
-            }
+        return try {
+            val response = itunesApiService.searchTrack(dto.expression)
+            response.apply { resultCode = 200 }
+        } catch (_: Throwable) {
+            Response().apply { resultCode = 500 }
         }
 
     }
