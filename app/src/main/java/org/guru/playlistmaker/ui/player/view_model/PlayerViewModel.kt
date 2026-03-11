@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import org.guru.playlistmaker.domain.player.PlayerInteractor
 import org.guru.playlistmaker.domain.player.model.PlayerState
 import org.guru.playlistmaker.ui.player.fragment.PlayerViewState
+import org.guru.playlistmaker.ui.player.fragment.PlayerViewState.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -58,31 +59,33 @@ class PlayerViewModel(private val url: String) : ViewModel(), KoinComponent {
 
     private fun preparePlayer() {
         playerInteractor.preparePlayer(url)
-        renderState(PlayerViewState.Prepare())
+        renderState(Prepare())
     }
 
     private fun startPlayer() {
-        renderState(PlayerViewState.Play())
+        renderState(Play())
         playerInteractor.startPlayer()
         startTimerUpdate()
     }
 
     fun pausePlayer() {
-        renderState(PlayerViewState.Pause(playerInteractor.getCurrentTimePosition()))
+        renderState(Pause(playerInteractor.getCurrentTimePosition()))
         playerInteractor.pausePlayer()
         pauseTimer()
     }
 
     private fun startTimerUpdate() {
-        renderState(PlayerViewState.Playing(playerInteractor.getCurrentTimePosition()))
+        renderState(Playing(playerInteractor.getCurrentTimePosition()))
+
+        timerJob?.cancel()
         timerJob = viewModelScope.launch {
             while (playerInteractor.getPlayerState() == PlayerState.STATE_PLAYING) {
                 delay(DELAY)
-                renderState(PlayerViewState.Playing(playerInteractor.getCurrentTimePosition()))
+                renderState(Playing(playerInteractor.getCurrentTimePosition()))
             }
 
             if (playerInteractor.getPlayerState() == PlayerState.STATE_PREPARED)
-                renderState(PlayerViewState.Prepare())
+                renderState(Prepare())
 
         }
     }
@@ -93,7 +96,7 @@ class PlayerViewModel(private val url: String) : ViewModel(), KoinComponent {
 
     private fun resetTimer() {
         timerJob?.cancel()
-        renderState(PlayerViewState.Playing(0))
+        renderState(Playing(0))
     }
 
 }
