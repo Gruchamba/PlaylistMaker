@@ -19,7 +19,6 @@ import org.koin.core.parameter.parametersOf
 import java.time.Instant
 import java.time.ZoneId
 
-
 class PlayerFragment : Fragment() {
 
     private var _binding: FragmentPlayerBinding? = null
