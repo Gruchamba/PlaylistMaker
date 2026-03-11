@@ -52,6 +52,7 @@ class PlayerViewModel(private val url: String) : ViewModel(), KoinComponent {
     }
 
     private fun renderState(state: PlayerViewState) {
+        Log.e(TAG, "render state $state")
         playerStateLiveData.postValue(state)
     }
 
@@ -79,6 +80,10 @@ class PlayerViewModel(private val url: String) : ViewModel(), KoinComponent {
                 delay(DELAY)
                 renderState(PlayerViewState.Playing(playerInteractor.getCurrentTimePosition()))
             }
+
+            if (playerInteractor.getPlayerState() == PlayerState.STATE_PREPARED)
+                renderState(PlayerViewState.Prepare())
+
         }
     }
 
