@@ -33,7 +33,8 @@ val searchViewModelModule = module {
 }
 
 val searchRepositoryModule = module {
-    single<SearchTrackRepository> { SearchTrackRepositoryImpl(get(), get()) }
+    single<SearchTrackRepository> {
+        SearchTrackRepositoryImpl(get(), get(), get()) }
 }
 
 val searchDataModule = module {
