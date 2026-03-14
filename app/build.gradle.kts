@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("kotlin-parcelize")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -67,6 +68,14 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.fragment.ktx)
 
+    // coroutines
     implementation(libs.kotlinx.coroutines.android)
+
+    // room
+    implementation(libs.androidx.room.runtime)
+    // Kotlin Symbol Processing (KSP)
+    ksp(libs.androidx.room.compiler)
+    // Kotlin Extensions для корутин
+    implementation(libs.androidx.room.ktx)
 
 }

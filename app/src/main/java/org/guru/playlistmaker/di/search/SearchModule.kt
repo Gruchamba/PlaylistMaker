@@ -8,13 +8,13 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.guru.playlistmaker.data.NetworkClient
 import org.guru.playlistmaker.data.search.ItunesApiService
 import org.guru.playlistmaker.data.search.RetrofitNetworkClient
-import org.guru.playlistmaker.data.search.impl.TrackRepositoryImpl
+import org.guru.playlistmaker.data.search.impl.SearchTrackRepositoryImpl
 import org.guru.playlistmaker.data.search.storage.TracksHistoryStorage
 import org.guru.playlistmaker.data.settings.impl.SettingsRepositoryImpl.Companion.APP_PREFERENCES
 import org.guru.playlistmaker.data.storage.impl.TracksHistoryStorageImpl
-import org.guru.playlistmaker.domain.search.TrackInteractor
-import org.guru.playlistmaker.domain.search.TrackRepository
-import org.guru.playlistmaker.domain.search.impl.TrackInteractorImpl
+import org.guru.playlistmaker.domain.search.SearchTrackInteractor
+import org.guru.playlistmaker.domain.search.SearchTrackRepository
+import org.guru.playlistmaker.domain.search.impl.SearchTrackInteractorImpl
 import org.guru.playlistmaker.ui.search.view_model.SearchViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -25,7 +25,7 @@ import retrofit2.create
 private const val itunesURL = "https://itunes.apple.com/"
 
 val searchInteractorModule = module {
-    single<TrackInteractor> { TrackInteractorImpl(get()) }
+    single<SearchTrackInteractor> { SearchTrackInteractorImpl(get()) }
 }
 
 val searchViewModelModule = module {
@@ -33,7 +33,8 @@ val searchViewModelModule = module {
 }
 
 val searchRepositoryModule = module {
-    single<TrackRepository> { TrackRepositoryImpl(get(), get()) }
+    single<SearchTrackRepository> {
+        SearchTrackRepositoryImpl(get(), get(), get()) }
 }
 
 val searchDataModule = module {

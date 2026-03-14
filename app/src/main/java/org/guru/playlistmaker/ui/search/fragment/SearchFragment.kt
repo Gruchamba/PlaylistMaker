@@ -181,7 +181,6 @@ class SearchFragment : Fragment() {
         const val SEARCH_QUERY = "SEARCH_QUERY"
         const val SEARCH_QUERY_DEF = ""
         const val CLICK_DEBOUNCE_DELAY = 1000L
-
     }
 
 }
