@@ -53,7 +53,6 @@ class PlayerViewModel(private val url: String) : ViewModel(), KoinComponent {
     }
 
     private fun renderState(state: PlayerViewState) {
-        Log.e(TAG, "render state $state")
         playerStateLiveData.postValue(state)
     }
 

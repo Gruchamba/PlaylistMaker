@@ -7,11 +7,11 @@ import org.guru.playlistmaker.data.search.dto.TrackSearchRequest
 import org.guru.playlistmaker.data.search.dto.TrackSearchResponse
 import org.guru.playlistmaker.data.search.storage.TracksHistoryStorage
 import org.guru.playlistmaker.domain.search.Resource
-import org.guru.playlistmaker.domain.search.TrackRepository
+import org.guru.playlistmaker.domain.search.SearchTrackRepository
 import org.guru.playlistmaker.domain.search.model.Track
 
-class TrackRepositoryImpl(private val tracksHistoryStorage: TracksHistoryStorage, private val networkClient: NetworkClient) :
-    TrackRepository {
+class SearchTrackRepositoryImpl(private val tracksHistoryStorage: TracksHistoryStorage, private val networkClient: NetworkClient) :
+    SearchTrackRepository {
 
     override fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TrackSearchRequest(expression))
