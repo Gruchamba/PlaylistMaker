@@ -11,7 +11,7 @@ class TrackDbConverter {
             track.artistName,
             track.trackName ?: "",
             track.collectionName ?: "",
-            track.trackTime ?.toLong() ?: 0L,
+            track.trackTime ?: "",
             track.artworkUrl100,
             track.releaseDate ?: "",
             track.country,
@@ -29,7 +29,7 @@ class TrackDbConverter {
             trackEntity.releaseDate,
             trackEntity.primaryGenreName,
             trackEntity.country,
-            trackEntity.trackTimeMillis.toString(),
+            trackEntity.trackTimeMillis,
             trackEntity.artworkUrl100,
             trackEntity.previewUrl
         )

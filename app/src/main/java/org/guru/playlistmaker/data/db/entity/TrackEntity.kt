@@ -10,7 +10,7 @@ class TrackEntity(
     val trackName: String,
     val artistName: String,
     val collectionName: String,
-    val trackTimeMillis: Long,
+    val trackTimeMillis: String,
     val artworkUrl100: String,
     val releaseDate: String,
     val country: String,

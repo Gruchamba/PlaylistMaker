@@ -8,30 +8,38 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.guru.playlistmaker.domain.library.favorites.FavoritesTrackInteractor
 import org.guru.playlistmaker.domain.player.PlayerInteractor
 import org.guru.playlistmaker.domain.player.model.PlayerState
+import org.guru.playlistmaker.domain.search.model.Track
 import org.guru.playlistmaker.ui.player.fragment.PlayerViewState
 import org.guru.playlistmaker.ui.player.fragment.PlayerViewState.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class PlayerViewModel(private val url: String) : ViewModel(), KoinComponent {
-
+class PlayerViewModel(
+    private val track: Track
+) : ViewModel(), KoinComponent {
 
     private companion object {
         val TAG: String = PlayerViewModel::class.java.name
         const val DELAY = 300L
     }
 
+    private val playerInteractor: PlayerInteractor by inject()
+    private val favoritesTrackInteractor: FavoritesTrackInteractor by inject()
+
     private val playerStateLiveData = MutableLiveData<PlayerViewState>()
     fun observePlayerState(): LiveData<PlayerViewState> = playerStateLiveData
 
-    private val playerInteractor: PlayerInteractor by inject()
+    private val favoriteStateLiveData = MutableLiveData<Boolean>()
+    fun observeFavoriteState(): LiveData<Boolean> = favoriteStateLiveData
 
     private var timerJob: Job? = null
 
     init {
         preparePlayer()
+        favoriteStateLiveData.postValue(track.isFavorite)
     }
 
     fun release() {
@@ -57,7 +65,7 @@ class PlayerViewModel(private val url: String) : ViewModel(), KoinComponent {
     }
 
     private fun preparePlayer() {
-        playerInteractor.preparePlayer(url)
+        playerInteractor.preparePlayer(track.previewUrl!!)
         renderState(Prepare())
     }
 
@@ -96,6 +104,15 @@ class PlayerViewModel(private val url: String) : ViewModel(), KoinComponent {
     private fun resetTimer() {
         timerJob?.cancel()
         renderState(Playing(0))
+    }
+
+    fun onFavoriteClicked() {
+        viewModelScope.launch {
+            if (track.isFavorite) favoritesTrackInteractor.deleteFromFavorites(track)
+            else favoritesTrackInteractor.addTrackToFavorites(track)
+        }
+        track.isFavorite = !track.isFavorite
+        favoriteStateLiveData.postValue(track.isFavorite)
     }
 
 }
