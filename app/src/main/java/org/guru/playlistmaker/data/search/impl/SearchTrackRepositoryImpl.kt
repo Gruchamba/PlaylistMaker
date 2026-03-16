@@ -3,7 +3,7 @@ package org.guru.playlistmaker.data.search.impl
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.guru.playlistmaker.data.NetworkClient
-import org.guru.playlistmaker.data.db.AppDatabase
+import org.guru.playlistmaker.data.db.dao.TrackDao
 import org.guru.playlistmaker.data.search.dto.TrackSearchRequest
 import org.guru.playlistmaker.data.search.dto.TrackSearchResponse
 import org.guru.playlistmaker.data.search.storage.TracksHistoryStorage
@@ -12,7 +12,7 @@ import org.guru.playlistmaker.domain.search.SearchTrackRepository
 import org.guru.playlistmaker.domain.search.model.Track
 
 class SearchTrackRepositoryImpl(
-    private val appDatabase: AppDatabase,
+    private val trackDao: TrackDao,
     private val tracksHistoryStorage: TracksHistoryStorage,
     private val networkClient: NetworkClient) :
     SearchTrackRepository {
@@ -22,7 +22,7 @@ class SearchTrackRepositoryImpl(
         when(response.resultCode) {
             -1 -> { emit(Resource.Error("Проверьте подключение к интернету")) }
             200 -> {
-                val idList = appDatabase.trackDao().getAllFavoriteTracksIds()
+                val idList = trackDao.getAllFavoriteTracksIds()
                 emit(
                     Resource.Success((response as TrackSearchResponse).results.map {
                         Track(
