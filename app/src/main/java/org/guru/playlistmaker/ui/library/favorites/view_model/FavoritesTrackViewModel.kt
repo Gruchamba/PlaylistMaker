@@ -23,7 +23,7 @@ class FavoritesTrackViewModel : ViewModel(), KoinComponent {
         viewModelScope.launch {
             favoritesTrackInteractor.getAllFavoriteTracks().collect {
                 if (it.isEmpty()) renderState(FavoritesViewState.Empty)
-                else renderState(FavoritesViewState.Content(it))
+                else renderState(FavoritesViewState.Content(it.reversed()))
             }
         }
     }
