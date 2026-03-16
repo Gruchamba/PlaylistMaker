@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.guru.playlistmaker.data.db.dao.TrackDao
 import org.guru.playlistmaker.domain.library.favorites.FavoritesTrackInteractor
 import org.guru.playlistmaker.domain.player.PlayerInteractor
 import org.guru.playlistmaker.domain.player.model.PlayerState
@@ -18,7 +19,8 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class PlayerViewModel(
-    private val track: Track
+    private val track: Track,
+    private val trackDao: TrackDao
 ) : ViewModel(), KoinComponent {
 
     private companion object {
@@ -39,7 +41,10 @@ class PlayerViewModel(
 
     init {
         preparePlayer()
-        favoriteStateLiveData.postValue(track.isFavorite)
+        viewModelScope.launch {
+            track.isFavorite = trackDao.getAllFavoriteTracksIds().contains(track.trackId)
+            favoriteStateLiveData.postValue(track.isFavorite)
+        }
     }
 
     fun release() {

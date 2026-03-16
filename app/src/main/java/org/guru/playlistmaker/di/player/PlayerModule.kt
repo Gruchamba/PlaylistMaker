@@ -17,7 +17,7 @@ val playerInteractorModule = module {
 }
 
 val playerViewModelModule = module {
-    viewModel { (track: Track) -> PlayerViewModel(track) }
+    viewModel { (track: Track) -> PlayerViewModel(track, get()) }
 }
 
 val playerRepositoryModule = module {
