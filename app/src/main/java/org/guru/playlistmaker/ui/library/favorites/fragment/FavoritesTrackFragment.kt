@@ -1,5 +1,6 @@
 package org.guru.playlistmaker.ui.library.favorites.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -64,13 +65,24 @@ class FavoritesTrackFragment : Fragment() {
     }
 
     private fun render(state: FavoritesViewState) {
-
-        state.render(binding)
-
-        if (state is FavoritesViewState.Content) {
-            tracksAdapter.tracks = state.list
-            tracksAdapter.notifyDataSetChanged()
+        when(state) {
+            is FavoritesViewState.Content -> showContent(state.list)
+            is FavoritesViewState.Empty -> showEmpty()
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun showContent(list: List<Track>) {
+        binding.trackRecyclerView.visibility = View.VISIBLE
+        binding.trackNotFoundLayout.visibility = View.GONE
+
+        tracksAdapter.tracks = list
+        tracksAdapter.notifyDataSetChanged()
+    }
+
+    private fun showEmpty() {
+        binding.trackRecyclerView.visibility = View.GONE
+        binding.trackNotFoundLayout.visibility = View.VISIBLE
     }
 
     override fun onDestroyView() {

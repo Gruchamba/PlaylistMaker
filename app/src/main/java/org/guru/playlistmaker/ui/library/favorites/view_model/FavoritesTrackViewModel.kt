@@ -22,7 +22,7 @@ class FavoritesTrackViewModel : ViewModel(), KoinComponent {
     fun loadFavoritesTrack() {
         viewModelScope.launch {
             favoritesTrackInteractor.getAllFavoriteTracks().collect {
-                if (it.isEmpty()) renderState(FavoritesViewState.Empty())
+                if (it.isEmpty()) renderState(FavoritesViewState.Empty)
                 else renderState(FavoritesViewState.Content(it))
             }
         }
