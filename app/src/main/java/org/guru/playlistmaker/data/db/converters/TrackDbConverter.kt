@@ -11,12 +11,12 @@ class TrackDbConverter {
             track.trackName ?: "",
             track.artistName,
             track.collectionName ?: "",
+            track.releaseDate ?: "",
+            track.primaryGenreName,
+            track.country,
             track.trackTime ?: "",
             track.artworkUrl100,
-            track.releaseDate ?: "",
-            track.country,
-            track.primaryGenreName,
-            track.artworkUrl100
+            track.previewUrl ?: ""
         )
     }
 
