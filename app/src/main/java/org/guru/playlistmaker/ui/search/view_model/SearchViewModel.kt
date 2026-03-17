@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.guru.playlistmaker.domain.search.TrackInteractor
+import org.guru.playlistmaker.domain.search.SearchTrackInteractor
 import org.guru.playlistmaker.domain.search.model.Track
 import org.guru.playlistmaker.ui.search.fragment.SearchViewState
 import org.koin.core.component.KoinComponent
@@ -15,7 +15,7 @@ import org.koin.core.component.inject
 
 class SearchViewModel : ViewModel(), KoinComponent {
 
-    private val trackInteractor: TrackInteractor by inject()
+    private val searchTrackInteractor: SearchTrackInteractor by inject()
     private var searchJob: Job? = null
     private var latestSearchText: String? = null
 
@@ -26,17 +26,17 @@ class SearchViewModel : ViewModel(), KoinComponent {
     fun observeShowToast(): LiveData<String?> = showToast
 
     fun addTrackToHistory(track: Track) {
-        trackInteractor.addTrackToHistory(track)
+        searchTrackInteractor.addTrackToHistory(track)
     }
 
     fun clearTracksHistory() {
-        trackInteractor.clearTracksHistory()
+        searchTrackInteractor.clearTracksHistory()
     }
 
     fun readTracksFromHistory() {
         renderState(
             SearchViewState.ShowSearchHistory(
-                trackInteractor.readTracksFromHistory()
+                searchTrackInteractor.readTracksFromHistory()
             )
         )
     }
@@ -46,7 +46,7 @@ class SearchViewModel : ViewModel(), KoinComponent {
             renderState(SearchViewState.Loading())
 
             viewModelScope.launch {
-                trackInteractor.searchTracks(newSearchText).collect { pair ->
+                searchTrackInteractor.searchTracks(newSearchText).collect { pair ->
                     processResult(pair.first, pair.second)
                 }
             }

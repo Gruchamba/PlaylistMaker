@@ -3,7 +3,9 @@ package org.guru.playlistmaker.domain.search
 import kotlinx.coroutines.flow.Flow
 import org.guru.playlistmaker.domain.search.model.Track
 
-interface TrackInteractor {
+interface SearchTrackRepository {
+
+    fun searchTracks(expression: String): Flow<Resource<List<Track>>>
 
     fun addTrackToHistory(track: Track)
 
@@ -11,5 +13,4 @@ interface TrackInteractor {
 
     fun readTracksFromHistory() : List<Track>
 
-    fun searchTracks(expression: String) : Flow<Pair<List<Track>?, String?>>
 }

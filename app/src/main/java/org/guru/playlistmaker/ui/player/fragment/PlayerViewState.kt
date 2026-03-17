@@ -12,21 +12,21 @@ sealed class PlayerViewState {
 
     class Play : PlayerViewState() {
         override fun render(binding: FragmentPlayerBinding) {
-            binding.playButton.setImageResource(R.drawable.ic_stop_btn)
+            binding.playBtn.setImageResource(R.drawable.ic_stop_btn)
             binding.trackProgress.text = simpleDateFormat.format(0)
         }
     }
 
     class Playing(private val playerPosition: Int) : PlayerViewState() {
         override fun render(binding: FragmentPlayerBinding) {
-            binding.playButton.setImageResource(R.drawable.ic_stop_btn)
+            binding.playBtn.setImageResource(R.drawable.ic_stop_btn)
             binding.trackProgress.text = simpleDateFormat.format(playerPosition)
         }
     }
 
     class Pause(private val playerPosition: Int) : PlayerViewState() {
         override fun render(binding: FragmentPlayerBinding) {
-            binding.playButton.setImageResource(R.drawable.ic_play_btn)
+            binding.playBtn.setImageResource(R.drawable.ic_play_btn)
             binding.trackProgress.text = simpleDateFormat.format(playerPosition)
         }
 
@@ -34,7 +34,7 @@ sealed class PlayerViewState {
 
     class Prepare : PlayerViewState() {
         override fun render(binding: FragmentPlayerBinding) {
-            binding.playButton.setImageResource(R.drawable.ic_play_btn)
+            binding.playBtn.setImageResource(R.drawable.ic_play_btn)
             binding.trackProgress.text =
                 ContextCompat.getString(binding.trackProgress.context, R.string.def_track_progress)
         }

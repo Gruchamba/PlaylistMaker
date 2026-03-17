@@ -25,9 +25,7 @@ class PlayerFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var track: Track
-    private val viewModel: PlayerViewModel by viewModel { parametersOf(track.previewUrl) }
-
-    private var isLike = false
+    private val viewModel: PlayerViewModel by viewModel { parametersOf(track) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,18 +63,18 @@ class PlayerFragment : Fragment() {
         }
 
         viewModel.observePlayerState().observe(viewLifecycleOwner) { it.render(binding) }
+        viewModel.observeFavoriteState().observe(viewLifecycleOwner) {
+            binding.favoriteBtn.setImageResource(
+                if (it) R.drawable.ic_favorite_track else R.drawable.ic_not_favorite_track
+            )
+        }
 
         binding.apply {
             backBtn.setOnClickListener { findNavController().navigateUp() }
-            playButton.isEnabled = !track.previewUrl.isNullOrEmpty()
-            playButton.setOnClickListener { viewModel.onPlayButtonClicked() }
+            playBtn.isEnabled = !track.previewUrl.isNullOrEmpty()
+            playBtn.setOnClickListener { viewModel.onPlayButtonClicked() }
 
-            likeButton.setOnClickListener {
-                isLike = !isLike
-                likeButton.setImageResource(
-                    if (isLike) R.drawable.ic_not_like_track else R.drawable.ic_like_track
-                )
-            }
+            favoriteBtn.setOnClickListener { viewModel.onFavoriteClicked() }
         }
     }
 
