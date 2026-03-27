@@ -1,39 +1,36 @@
-package org.guru.playlistmaker.ui.library.playlist.fragment
+package org.guru.playlistmaker.ui.library.newPlaylist.fragment
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.guru.playlistmaker.R
+import org.guru.playlistmaker.databinding.FragmentNewPlaylistBinding
 import org.guru.playlistmaker.databinding.FragmentPlaylistBinding
-import org.guru.playlistmaker.ui.library.playlist.view_model.PlaylistViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PlaylistFragment : Fragment() {
+class NewPlaylistFragment : Fragment() {
 
-    private var _binding: FragmentPlaylistBinding? = null
+    private var _binding: FragmentNewPlaylistBinding? = null
     private val binding get() = _binding!!
 
-    private val playlistViewModel: PlaylistViewModel by viewModel()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentPlaylistBinding.inflate(layoutInflater)
+    ): View? {
+        _binding = FragmentNewPlaylistBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.newPlaylistBtn.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_mediaLibraryFragment_to_newPlaylistFragment
-            )
-        }
+        binding.backBtn.setOnClickListener { findNavController().navigateUp() }
     }
 
     override fun onDestroyView() {
