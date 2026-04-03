@@ -1,5 +1,6 @@
 package org.guru.playlistmaker.ui.library.newPlaylist.fragment
 
+import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -18,6 +19,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.guru.playlistmaker.databinding.FragmentNewPlaylistBinding
 import org.guru.playlistmaker.ui.library.newPlaylist.view_model.NewPlaylistViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.File
+import java.io.FileOutputStream
 
 class NewPlaylistFragment : Fragment() {
 
@@ -26,22 +29,36 @@ class NewPlaylistFragment : Fragment() {
 
     private val viewModel: NewPlaylistViewModel by viewModel()
 
-    private var imageUri: Uri? = null
+    private var imageUri: String? = null
 
     val pickMedia =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             uri?.let {
-                imageUri = it
+                imageUri = saveImage(uri)
                 binding.playlistImage.setImageURI(it)
             }
         }
 
     companion object {
-        const val PLAYLIST_TITLE = "playlist_title"
+        const val LOCAL_STORAGE_FOR_IMAGE = "playlist_images"
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private fun saveImage(uri: Uri) : String {
+        val path = uri.toString()
+        val fileName = path.substring(path.lastIndexOf("/") + 1)
+
+        val destinationFile = File(
+            requireContext().getDir(LOCAL_STORAGE_FOR_IMAGE, Context.MODE_PRIVATE),
+            fileName
+        )
+
+        requireContext().contentResolver.openInputStream(uri)?.use { inputStream ->
+            FileOutputStream(destinationFile).use { outputStream ->
+                inputStream.copyTo(outputStream)
+            }
+        }
+
+        return fileName
     }
 
     override fun onCreateView(
@@ -64,7 +81,6 @@ class NewPlaylistFragment : Fragment() {
                 override fun afterTextChanged(p0: Editable?) {
                     createBtn.isEnabled = p0.toString().isNotEmpty()
                 }
-
             }
 
             backBtn.setOnClickListener { backPressed() }

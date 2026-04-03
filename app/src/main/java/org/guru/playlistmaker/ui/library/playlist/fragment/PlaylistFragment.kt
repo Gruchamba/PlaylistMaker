@@ -4,12 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.guru.playlistmaker.R
 import org.guru.playlistmaker.databinding.FragmentPlaylistBinding
-import org.guru.playlistmaker.ui.library.newPlaylist.fragment.NewPlaylistFragment.Companion.PLAYLIST_TITLE
 import org.guru.playlistmaker.ui.library.playlist.view_model.PlaylistViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
