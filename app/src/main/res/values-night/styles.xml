@@ -53,4 +53,8 @@
         <item name="android:textColor">@color/yp_white</item>
     </style>
 
+    <style name="PLMaterialAlertDialog.App.Title.Text" parent="MaterialAlertDialog.Material3.Title.Text">
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
+
 </resources>

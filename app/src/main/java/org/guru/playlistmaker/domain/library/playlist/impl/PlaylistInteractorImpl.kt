@@ -8,8 +8,8 @@ class PlaylistInteractorImpl(
     private val playlistRepository: PlaylistRepository
 ) : PlaylistInteractor{
 
-    override suspend fun createPlaylist(playlist: Playlist) {
-        playlistRepository.createPlaylist(playlist)
+    override suspend fun createPlaylist(title: String, description: String?, imageUri: String?) {
+        playlistRepository.createPlaylist(title, description, imageUri)
     }
 
     override suspend fun getAllPlaylists() : List<Playlist> {

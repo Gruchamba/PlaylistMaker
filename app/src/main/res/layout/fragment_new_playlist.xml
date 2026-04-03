@@ -54,6 +54,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:scaleType="centerCrop"
         android:layout_marginTop="32dp"
         android:src="@drawable/playlist_placeholder_layer_list"
         app:layout_constraintDimensionRatio="1:1"

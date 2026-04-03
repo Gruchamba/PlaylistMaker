@@ -11,8 +11,19 @@ class PlaylistRepositoryImpl(
     private val playlistDbConverter: PlaylistDbConverter
 ) : PlaylistRepository {
 
-    override suspend fun createPlaylist(playlist: Playlist) {
-        playlistDao.createPlaylist(playlistDbConverter.map(playlist))
+    override suspend fun createPlaylist(title: String, description: String?, imageUri: String?) {
+        playlistDao.createPlaylist(
+            playlistDbConverter.map(
+                Playlist(
+                    playlistId = 0,
+                    title = title,
+                    description = description,
+                    uriImage = imageUri,
+                    tracks = emptyList(),
+                    size = 0
+                )
+            )
+        )
     }
 
     override suspend fun getAllPlaylists() : List<Playlist> {
