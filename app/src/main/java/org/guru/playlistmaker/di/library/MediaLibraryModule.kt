@@ -2,11 +2,16 @@ package org.guru.playlistmaker.di.library
 
 import androidx.room.Room
 import org.guru.playlistmaker.data.db.AppDatabase
+import org.guru.playlistmaker.data.db.converters.PlaylistDbConverter
 import org.guru.playlistmaker.data.db.converters.TrackDbConverter
 import org.guru.playlistmaker.data.favorites.FavoritesTrackRepositoryImpl
+import org.guru.playlistmaker.data.playlist.PlaylistRepositoryImpl
 import org.guru.playlistmaker.domain.library.favorites.FavoritesTrackInteractor
 import org.guru.playlistmaker.domain.library.favorites.FavoritesTrackRepository
 import org.guru.playlistmaker.domain.library.favorites.impl.FavoritesTrackInteractorImpl
+import org.guru.playlistmaker.domain.library.playlist.PlaylistInteractor
+import org.guru.playlistmaker.domain.library.playlist.PlaylistRepository
+import org.guru.playlistmaker.domain.library.playlist.impl.PlaylistInteractorImpl
 import org.guru.playlistmaker.ui.library.favorites.view_model.FavoritesTrackViewModel
 import org.guru.playlistmaker.ui.library.playlist.view_model.PlaylistViewModel
 import org.koin.android.ext.koin.androidContext
@@ -31,11 +36,26 @@ val libraryRepositoryModule = module {
     single<FavoritesTrackInteractor> {
         FavoritesTrackInteractorImpl(get())
     }
+
+    factory { PlaylistDbConverter() }
+
+    single<PlaylistRepository> {
+        PlaylistRepositoryImpl(get(), get())
+    }
+
+    single<PlaylistInteractor> {
+        PlaylistInteractorImpl(get())
+    }
 }
 
 val libraryDataModule = module {
     single {
         Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
             .build().trackDao()
+    }
+
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .build().playlistDao()
     }
 }
