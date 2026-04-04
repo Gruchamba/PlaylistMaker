@@ -1,5 +1,6 @@
 package org.guru.playlistmaker.domain.library.playlist.impl
 
+import kotlinx.coroutines.flow.Flow
 import org.guru.playlistmaker.domain.library.playlist.PlaylistInteractor
 import org.guru.playlistmaker.domain.library.playlist.PlaylistRepository
 import org.guru.playlistmaker.domain.library.playlist.model.Playlist
@@ -12,7 +13,7 @@ class PlaylistInteractorImpl(
         playlistRepository.createPlaylist(title, description, imageUri)
     }
 
-    override suspend fun getAllPlaylists() : List<Playlist> {
+    override suspend fun getAllPlaylists() : Flow<List<Playlist>> {
         return playlistRepository.getAllPlaylists()
     }
 }

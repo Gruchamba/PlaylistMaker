@@ -1,5 +1,7 @@
 package org.guru.playlistmaker.data.playlist
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import org.guru.playlistmaker.data.db.converters.PlaylistDbConverter
 import org.guru.playlistmaker.data.db.dao.PlaylistDao
 import org.guru.playlistmaker.data.db.entity.PlaylistEntity
@@ -26,10 +28,13 @@ class PlaylistRepositoryImpl(
         )
     }
 
-    override suspend fun getAllPlaylists() : List<Playlist> {
-        return convertFromPlaylistEntity(
-            playlistDao.getAllPlaylists()
+    override suspend fun getAllPlaylists() : Flow<List<Playlist>> = flow {
+        emit(
+            convertFromPlaylistEntity(
+                playlistDao.getAllPlaylists()
+            )
         )
+
     }
 
     private fun convertFromPlaylistEntity(playlistEntityList: List<PlaylistEntity>) : List<Playlist> {
