@@ -34,12 +34,15 @@ class PlaylistFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         playlistAdapter = PlaylistAdapter(emptyList())
-        binding.recyclerView.adapter = playlistAdapter
 
-        binding.newPlaylistBtn.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_mediaLibraryFragment_to_newPlaylistFragment
-            )
+        binding.apply {
+            recyclerView.adapter = playlistAdapter
+
+            newPlaylistBtn.setOnClickListener {
+                findNavController().navigate(
+                    R.id.action_mediaLibraryFragment_to_newPlaylistFragment
+                )
+            }
         }
 
         viewModel.observePlaylistViewState().observe(viewLifecycleOwner) { render(it) }

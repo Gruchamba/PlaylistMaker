@@ -48,4 +48,5 @@
         <item quantity="many">%d треков</item>
         <item quantity="other">%d треков</item>
     </plurals>
+    <string name="add_in_playles">Добавить в плейлист</string>
 </resources>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="55dp"
+    android:paddingBottom="5dp"
+    android:paddingTop="5dp"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/playlistImage"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        tools:src="@drawable/ic_def_track_img" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/playlistNameView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingTop="5dp"
+            android:textColor="?attr/blackAndWhiteColor"
+            android:textSize="16sp"
+            android:lines="1"
+            android:ellipsize="end"
+            tools:text="Rock Rock Rock"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/playlistSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/greyAndWhiteColor"
+                android:textSize="11sp"
+                android:lines="1"
+                android:ellipsize="end"
+                tools:text="98 треков"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_arrow_forward" />
+
+</LinearLayout>

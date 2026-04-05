@@ -9,9 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.guru.playlistmaker.R
 import org.guru.playlistmaker.databinding.FragmentPlayerBinding
 import org.guru.playlistmaker.domain.search.model.Track
+import org.guru.playlistmaker.ui.player.addInPlaylistAdapter.AddInPlaylistAdapter
 import org.guru.playlistmaker.ui.player.view_model.PlayerViewModel
 import org.guru.playlistmaker.ui.util.dpToPx
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -26,6 +28,10 @@ class PlayerFragment : Fragment() {
 
     private lateinit var track: Track
     private val viewModel: PlayerViewModel by viewModel { parametersOf(track) }
+
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+    private lateinit var playlistAdapter: AddInPlaylistAdapter
+    private lateinit var onPlaylistClickDebounce: (Track) -> Unit
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,6 +81,31 @@ class PlayerFragment : Fragment() {
             playBtn.setOnClickListener { viewModel.onPlayButtonClicked() }
 
             favoriteBtn.setOnClickListener { viewModel.onFavoriteClicked() }
+
+            playlistBtn.setOnClickListener {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+            }
+
+            bottomSheetBehavior = BottomSheetBehavior.from(binding.playlistsBottomSheet)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+            bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+
+                override fun onStateChanged(bottomSheet: View, newState: Int) {
+
+                    when (newState) {
+                        BottomSheetBehavior.STATE_HIDDEN -> {
+                            overlay.visibility = View.GONE
+                        }
+                        else -> {
+                            overlay.visibility = View.VISIBLE
+                        }
+                    }
+                }
+
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+            })
+
         }
     }
 
