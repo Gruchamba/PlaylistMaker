@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -75,11 +76,16 @@ class PlayerFragment : Fragment() {
             country.let { binding.trackCountry.text = it }
         }
 
-        viewModel.observePlayerState().observe(viewLifecycleOwner) { render(it) }
+        viewModel.observePlayerState().observe(viewLifecycleOwner) { renderPlayerState(it) }
+
         viewModel.observeFavoriteState().observe(viewLifecycleOwner) {
             binding.favoriteBtn.setImageResource(
                 if (it) R.drawable.ic_favorite_track else R.drawable.ic_not_favorite_track
             )
+        }
+
+        viewModel.observeAddInPlaylistState().observe(viewLifecycleOwner) {
+            renderAddInPlaylistResult(it)
         }
 
         binding.apply {
@@ -149,7 +155,31 @@ class PlayerFragment : Fragment() {
         viewModel.release()
     }
 
-    private fun render(state: PlayerViewState) {
+    private fun renderAddInPlaylistResult(state: AddInPlaylistState) {
+        when(state) {
+            is AddInPlaylistState.AlreadyExist -> { renderAddInPlaylistAlreadyExistState(state.playlistTitle)}
+            is AddInPlaylistState.Successful -> { renderAddedInPlaylistState(state.playlistTitle) }
+        }
+    }
+
+    private fun renderAddInPlaylistAlreadyExistState(title: String) {
+        Toast.makeText(
+            requireActivity(),
+            "${getString(R.string.track_already_exist_in_playlist)} $title",
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    private fun renderAddedInPlaylistState(title: String) {
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        Toast.makeText(
+            requireActivity(),
+            "${getString(R.string.added_to_playlist)} $title",
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    private fun renderPlayerState(state: PlayerViewState) {
         when(state) {
             is PlayerViewState.Pause -> renderPauseState(state.playerPosition)
             is PlayerViewState.Play -> renderPlayState()

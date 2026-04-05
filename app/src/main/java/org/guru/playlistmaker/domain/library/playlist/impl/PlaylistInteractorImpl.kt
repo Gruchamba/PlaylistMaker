@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import org.guru.playlistmaker.domain.library.playlist.PlaylistInteractor
 import org.guru.playlistmaker.domain.library.playlist.PlaylistRepository
 import org.guru.playlistmaker.domain.library.playlist.model.Playlist
+import org.guru.playlistmaker.domain.search.model.Track
 
 class PlaylistInteractorImpl(
     private val playlistRepository: PlaylistRepository
@@ -15,5 +16,9 @@ class PlaylistInteractorImpl(
 
     override suspend fun getAllPlaylists() : Flow<List<Playlist>> {
         return playlistRepository.getAllPlaylists()
+    }
+
+    override suspend fun addTrackForPlaylist(playlist: Playlist, track: Track) : Flow<Playlist> {
+        return playlistRepository.addTrackForPlaylist(playlist, track)
     }
 }

@@ -4,12 +4,14 @@ import androidx.room.Room
 import org.guru.playlistmaker.data.db.AppDatabase
 import org.guru.playlistmaker.data.db.converters.PlaylistDbConverter
 import org.guru.playlistmaker.data.db.converters.TrackDbConverter
+import org.guru.playlistmaker.data.db.converters.TrackForPlaylistDbConverter
 import org.guru.playlistmaker.data.db.dao.PlaylistDao
-import org.guru.playlistmaker.data.db.dao.TrackDao
-import org.guru.playlistmaker.data.favorites.FavoritesTrackRepositoryImpl
+import org.guru.playlistmaker.data.db.dao.FavoriteTrackDao
+import org.guru.playlistmaker.data.db.dao.TrackForPlaylistDao
+import org.guru.playlistmaker.data.favorites.TrackRepositoryImpl
 import org.guru.playlistmaker.data.playlist.PlaylistRepositoryImpl
 import org.guru.playlistmaker.domain.library.favorites.FavoritesTrackInteractor
-import org.guru.playlistmaker.domain.library.favorites.FavoritesTrackRepository
+import org.guru.playlistmaker.domain.library.favorites.TrackRepository
 import org.guru.playlistmaker.domain.library.favorites.impl.FavoritesTrackInteractorImpl
 import org.guru.playlistmaker.domain.library.playlist.PlaylistInteractor
 import org.guru.playlistmaker.domain.library.playlist.PlaylistRepository
@@ -19,7 +21,6 @@ import org.guru.playlistmaker.ui.library.newPlaylist.view_model.NewPlaylistViewM
 import org.guru.playlistmaker.ui.library.playlist.view_model.PlaylistViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val favoritesTrackViewModelModule = module {
@@ -32,10 +33,11 @@ val libraryViewModelModule = module {
 }
 
 val libraryRepositoryModule = module {
+    factory { TrackForPlaylistDbConverter() }
     factory { TrackDbConverter() }
 
-    single<FavoritesTrackRepository> {
-        FavoritesTrackRepositoryImpl(get(), get())
+    single<TrackRepository> {
+        TrackRepositoryImpl(get(), get())
     }
 
     single<FavoritesTrackInteractor> {
@@ -45,7 +47,12 @@ val libraryRepositoryModule = module {
     factory { PlaylistDbConverter() }
 
     single<PlaylistRepository> {
-        PlaylistRepositoryImpl(get(), get())
+        PlaylistRepositoryImpl(
+            get(),
+            get(),
+            get(),
+            get()
+        )
     }
 
     single<PlaylistInteractor> {
@@ -61,12 +68,16 @@ val libraryDataModule = module {
             .build()
     }
 
-    single<TrackDao> {
-        get<AppDatabase>().trackDao()
+    single<FavoriteTrackDao> {
+        get<AppDatabase>().favoriteTrackDao()
     }
 
     single<PlaylistDao> {
         get<AppDatabase>().playlistDao()
+    }
+
+    single<TrackForPlaylistDao> {
+        get<AppDatabase>().trackForPlaylistDao()
     }
 
 

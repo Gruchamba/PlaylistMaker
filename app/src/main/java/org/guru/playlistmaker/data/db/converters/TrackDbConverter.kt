@@ -1,12 +1,12 @@
 package org.guru.playlistmaker.data.db.converters
 
-import org.guru.playlistmaker.data.db.entity.TrackEntity
+import org.guru.playlistmaker.data.db.entity.FavoriteTrackEntity
 import org.guru.playlistmaker.domain.search.model.Track
 
 class TrackDbConverter {
 
-    fun map(track: Track) : TrackEntity {
-        return TrackEntity(
+    fun map(track: Track) : FavoriteTrackEntity {
+        return FavoriteTrackEntity(
             track.trackId!!,
             track.trackName ?: "",
             track.artistName,
@@ -20,18 +20,18 @@ class TrackDbConverter {
         )
     }
 
-    fun map(trackEntity: TrackEntity) : Track {
+    fun map(favoriteTrackEntity: FavoriteTrackEntity) : Track {
         return Track(
-            trackEntity.trackId,
-            trackEntity.trackName,
-            trackEntity.artistName,
-            trackEntity.collectionName,
-            trackEntity.releaseDate,
-            trackEntity.primaryGenreName,
-            trackEntity.country,
-            trackEntity.trackTimeMillis,
-            trackEntity.artworkUrl100,
-            trackEntity.previewUrl
+            favoriteTrackEntity.trackId,
+            favoriteTrackEntity.trackName,
+            favoriteTrackEntity.artistName,
+            favoriteTrackEntity.collectionName,
+            favoriteTrackEntity.releaseDate,
+            favoriteTrackEntity.primaryGenreName,
+            favoriteTrackEntity.country,
+            favoriteTrackEntity.trackTimeMillis,
+            favoriteTrackEntity.artworkUrl100,
+            favoriteTrackEntity.previewUrl
         )
     }
 

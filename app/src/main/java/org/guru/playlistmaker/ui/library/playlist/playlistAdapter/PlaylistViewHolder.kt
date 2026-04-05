@@ -21,8 +21,8 @@ class PlaylistViewHolder(view: View): RecyclerView.ViewHolder(view) {
         title.text = playlist.title
         playlistSize.text = itemView.resources.getQuantityString(
             R.plurals.tracks_count,
-            playlist.tracks.size,
-            playlist.tracks.size
+            playlist.tracksIdList.size,
+            playlist.tracksIdList.size
         )
         loadImage(playlist.uriImage)
     }

@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "favorite_tracks")
-class TrackEntity(
+class FavoriteTrackEntity(
     @PrimaryKey
     val trackId: String,
     val trackName: String,

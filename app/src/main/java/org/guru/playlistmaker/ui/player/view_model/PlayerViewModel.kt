@@ -7,16 +7,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
-import org.guru.playlistmaker.data.db.dao.TrackDao
+import org.guru.playlistmaker.data.db.dao.FavoriteTrackDao
 import org.guru.playlistmaker.domain.library.favorites.FavoritesTrackInteractor
 import org.guru.playlistmaker.domain.library.playlist.PlaylistInteractor
 import org.guru.playlistmaker.domain.library.playlist.model.Playlist
 import org.guru.playlistmaker.domain.player.PlayerInteractor
 import org.guru.playlistmaker.domain.player.model.PlayerState
 import org.guru.playlistmaker.domain.search.model.Track
+import org.guru.playlistmaker.ui.player.fragment.AddInPlaylistState
 import org.guru.playlistmaker.ui.player.fragment.PlayerViewState
 import org.guru.playlistmaker.ui.player.fragment.PlayerViewState.*
 import org.koin.core.component.KoinComponent
@@ -24,7 +23,7 @@ import org.koin.core.component.inject
 
 class PlayerViewModel(
     private val track: Track,
-    private val trackDao: TrackDao
+    private val favoriteTrackDao: FavoriteTrackDao
 ) : ViewModel(), KoinComponent {
 
     private companion object {
@@ -42,12 +41,15 @@ class PlayerViewModel(
     private val favoriteStateLiveData = MutableLiveData<Boolean>()
     fun observeFavoriteState(): LiveData<Boolean> = favoriteStateLiveData
 
+    private val addInPlaylistState = MutableLiveData<AddInPlaylistState>()
+    fun observeAddInPlaylistState(): LiveData<AddInPlaylistState> = addInPlaylistState
+
     private var timerJob: Job? = null
 
     init {
         preparePlayer()
         viewModelScope.launch {
-            track.isFavorite = trackDao.getAllFavoriteTracksIds().contains(track.trackId)
+            track.isFavorite = favoriteTrackDao.getAllFavoriteTracksIds().contains(track.trackId)
             favoriteStateLiveData.postValue(track.isFavorite)
         }
     }
@@ -135,6 +137,16 @@ class PlayerViewModel(
 
     fun addTrackInPlaylist(playlist: Playlist, track: Track) {
 
+        if (playlist.tracksIdList.contains(track.trackId)) {
+            addInPlaylistState.postValue(AddInPlaylistState.AlreadyExist(playlist.title))
+
+        } else {
+            viewModelScope.launch {
+                playlistInteractor.addTrackForPlaylist(playlist, track).collect {
+                    addInPlaylistState.postValue(AddInPlaylistState.Successful(playlist.title))
+                }
+            }
+        }
     }
 
 }

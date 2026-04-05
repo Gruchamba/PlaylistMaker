@@ -3,7 +3,6 @@ package org.guru.playlistmaker.data.db.converters
 import com.google.gson.Gson
 import org.guru.playlistmaker.data.db.entity.PlaylistEntity
 import org.guru.playlistmaker.domain.library.playlist.model.Playlist
-import org.guru.playlistmaker.domain.search.model.Track
 
 class PlaylistDbConverter {
 
@@ -12,7 +11,7 @@ class PlaylistDbConverter {
             title = playlist.title,
             description = playlist.description,
             uriImage = playlist.uriImage,
-            tracks = Gson().toJson(playlist.tracks),
+            tracksId = Gson().toJson(playlist.tracksIdList),
             size = playlist.size
         )
     }
@@ -23,7 +22,7 @@ class PlaylistDbConverter {
             playlistEntity.title,
             playlistEntity.description,
             playlistEntity.uriImage,
-            ArrayList(Gson().fromJson(playlistEntity.tracks, Array<Track>::class.java).toList()),
+            ArrayList(Gson().fromJson(playlistEntity.tracksId, Array<String>::class.java).toMutableList()),
             playlistEntity.size
         )
     }

@@ -30,8 +30,8 @@ class AddInPlaylistViewHolder(
             playlistNameView.text = playlist.title
             playlistSize.text = resources.getQuantityString(
                     R.plurals.tracks_count,
-            playlist.tracks.size,
-            playlist.tracks.size
+            playlist.tracksIdList.size,
+            playlist.tracksIdList.size
             )
 
             val existUri = loadImage(playlist.uriImage)
