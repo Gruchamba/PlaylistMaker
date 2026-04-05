@@ -86,20 +86,21 @@ class PlayerFragment : Fragment() {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
             }
 
+            createNewPlaylistBtn.setOnClickListener {
+                findNavController().navigate(
+                    R.id.action_playerFragment_to_newPlaylistFragment
+                )
+            }
+
             bottomSheetBehavior = BottomSheetBehavior.from(binding.playlistsBottomSheet)
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
             bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
 
                 override fun onStateChanged(bottomSheet: View, newState: Int) {
-
                     when (newState) {
-                        BottomSheetBehavior.STATE_HIDDEN -> {
-                            overlay.visibility = View.GONE
-                        }
-                        else -> {
-                            overlay.visibility = View.VISIBLE
-                        }
+                        BottomSheetBehavior.STATE_HIDDEN -> { overlay.visibility = View.GONE }
+                        else -> { overlay.visibility = View.VISIBLE }
                     }
                 }
 

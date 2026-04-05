@@ -254,6 +254,7 @@
             style="@style/MediumText_22sp"/>
 
         <Button
+            android:id="@+id/createNewPlaylistBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/new_playlist"
