@@ -1,46 +1,15 @@
 package org.guru.playlistmaker.ui.player.fragment
 
-import androidx.core.content.ContextCompat
-import org.guru.playlistmaker.R
-import org.guru.playlistmaker.databinding.FragmentPlayerBinding
-import java.text.SimpleDateFormat
-import java.util.Locale
+sealed interface PlayerViewState {
 
-sealed class PlayerViewState {
 
-    protected val simpleDateFormat = SimpleDateFormat("mm:ss", Locale.getDefault())
+    object Play : PlayerViewState
 
-    class Play : PlayerViewState() {
-        override fun render(binding: FragmentPlayerBinding) {
-            binding.playBtn.setImageResource(R.drawable.ic_stop_btn)
-            binding.trackProgress.text = simpleDateFormat.format(0)
-        }
-    }
+    data class Playing(val playerPosition: Int) : PlayerViewState
 
-    class Playing(private val playerPosition: Int) : PlayerViewState() {
-        override fun render(binding: FragmentPlayerBinding) {
-            binding.playBtn.setImageResource(R.drawable.ic_stop_btn)
-            binding.trackProgress.text = simpleDateFormat.format(playerPosition)
-        }
-    }
 
-    class Pause(private val playerPosition: Int) : PlayerViewState() {
-        override fun render(binding: FragmentPlayerBinding) {
-            binding.playBtn.setImageResource(R.drawable.ic_play_btn)
-            binding.trackProgress.text = simpleDateFormat.format(playerPosition)
-        }
+    data class Pause(val playerPosition: Int) : PlayerViewState
 
-    }
-
-    class Prepare : PlayerViewState() {
-        override fun render(binding: FragmentPlayerBinding) {
-            binding.playBtn.setImageResource(R.drawable.ic_play_btn)
-            binding.trackProgress.text =
-                ContextCompat.getString(binding.trackProgress.context, R.string.def_track_progress)
-        }
-
-    }
-
-    abstract fun render(binding: FragmentPlayerBinding)
+    object Prepare : PlayerViewState
 
 }

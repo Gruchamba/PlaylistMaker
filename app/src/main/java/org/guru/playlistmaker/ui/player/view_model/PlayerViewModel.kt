@@ -10,6 +10,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.guru.playlistmaker.data.db.dao.TrackDao
 import org.guru.playlistmaker.domain.library.favorites.FavoritesTrackInteractor
+import org.guru.playlistmaker.domain.library.playlist.PlaylistInteractor
 import org.guru.playlistmaker.domain.player.PlayerInteractor
 import org.guru.playlistmaker.domain.player.model.PlayerState
 import org.guru.playlistmaker.domain.search.model.Track
@@ -30,6 +31,7 @@ class PlayerViewModel(
 
     private val playerInteractor: PlayerInteractor by inject()
     private val favoritesTrackInteractor: FavoritesTrackInteractor by inject()
+    private val playlistInteractor: PlaylistInteractor by inject()
 
     private val playerStateLiveData = MutableLiveData<PlayerViewState>()
     fun observePlayerState(): LiveData<PlayerViewState> = playerStateLiveData
@@ -71,11 +73,11 @@ class PlayerViewModel(
 
     private fun preparePlayer() {
         playerInteractor.preparePlayer(track.previewUrl!!)
-        renderState(Prepare())
+        renderState(Prepare)
     }
 
     private fun startPlayer() {
-        renderState(Play())
+        renderState(Play)
         playerInteractor.startPlayer()
         startTimerUpdate()
     }
@@ -97,7 +99,7 @@ class PlayerViewModel(
             }
 
             if (playerInteractor.getPlayerState() == PlayerState.STATE_PREPARED)
-                renderState(Prepare())
+                renderState(Prepare)
 
         }
     }

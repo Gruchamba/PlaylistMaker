@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -18,8 +19,10 @@ import org.guru.playlistmaker.ui.player.view_model.PlayerViewModel
 import org.guru.playlistmaker.ui.util.dpToPx
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZoneId
+import java.util.Locale
 
 class PlayerFragment : Fragment() {
 
@@ -31,7 +34,7 @@ class PlayerFragment : Fragment() {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     private lateinit var playlistAdapter: AddInPlaylistAdapter
-    private lateinit var onPlaylistClickDebounce: (Track) -> Unit
+    private lateinit var onPlaylistClick: (Track) -> Unit
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,7 +71,7 @@ class PlayerFragment : Fragment() {
             country.let { binding.trackCountry.text = it }
         }
 
-        viewModel.observePlayerState().observe(viewLifecycleOwner) { it.render(binding) }
+        viewModel.observePlayerState().observe(viewLifecycleOwner) { render(it) }
         viewModel.observeFavoriteState().observe(viewLifecycleOwner) {
             binding.favoriteBtn.setImageResource(
                 if (it) R.drawable.ic_favorite_track else R.drawable.ic_not_favorite_track
@@ -94,7 +97,6 @@ class PlayerFragment : Fragment() {
 
             bottomSheetBehavior = BottomSheetBehavior.from(binding.playlistsBottomSheet)
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-
             bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
 
                 override fun onStateChanged(bottomSheet: View, newState: Int) {
@@ -125,7 +127,48 @@ class PlayerFragment : Fragment() {
         viewModel.release()
     }
 
+    private fun render(state: PlayerViewState) {
+        when(state) {
+            is PlayerViewState.Pause -> renderPauseState(state.playerPosition)
+            is PlayerViewState.Play -> renderPlayState()
+            is PlayerViewState.Playing -> renderPlayingState(state.playerPosition)
+            is PlayerViewState.Prepare -> renderPrepareState()
+        }
+    }
+
+    private fun renderPlayState() {
+        binding.apply {
+            playBtn.setImageResource(R.drawable.ic_stop_btn)
+            trackProgress.text = simpleDateFormat.format(0)
+        }
+    }
+
+    private fun renderPlayingState(playerPosition: Int) {
+        binding.apply {
+            playBtn.setImageResource(R.drawable.ic_stop_btn)
+            trackProgress.text = simpleDateFormat.format(playerPosition)
+        }
+    }
+
+    private fun renderPauseState(playerPosition: Int) {
+        binding.apply {
+            playBtn.setImageResource(R.drawable.ic_play_btn)
+            trackProgress.text = simpleDateFormat.format(playerPosition)
+        }
+    }
+
+    private fun renderPrepareState() {
+        binding.apply {
+            playBtn.setImageResource(R.drawable.ic_play_btn)
+            binding.trackProgress.text = ContextCompat.getString(
+                requireActivity(),
+                R.string.def_track_progress
+            )
+        }
+    }
+
     companion object {
+        private val simpleDateFormat = SimpleDateFormat("mm:ss", Locale.getDefault())
         const val TRACK_KEY = "track"
 
         fun createArgs(track: Track) :  Bundle = bundleOf(
