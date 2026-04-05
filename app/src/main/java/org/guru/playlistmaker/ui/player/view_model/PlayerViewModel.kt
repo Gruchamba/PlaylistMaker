@@ -7,10 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import org.guru.playlistmaker.data.db.dao.TrackDao
 import org.guru.playlistmaker.domain.library.favorites.FavoritesTrackInteractor
 import org.guru.playlistmaker.domain.library.playlist.PlaylistInteractor
+import org.guru.playlistmaker.domain.library.playlist.model.Playlist
 import org.guru.playlistmaker.domain.player.PlayerInteractor
 import org.guru.playlistmaker.domain.player.model.PlayerState
 import org.guru.playlistmaker.domain.search.model.Track
@@ -120,6 +123,18 @@ class PlayerViewModel(
         }
         track.isFavorite = !track.isFavorite
         favoriteStateLiveData.postValue(track.isFavorite)
+    }
+
+    fun loadPlaylists() {
+        viewModelScope.launch {
+            playlistInteractor.getAllPlaylists().collect {
+                renderState(LoadPlaylists(it))
+            }
+        }
+    }
+
+    fun addTrackInPlaylist(playlist: Playlist, track: Track) {
+
     }
 
 }

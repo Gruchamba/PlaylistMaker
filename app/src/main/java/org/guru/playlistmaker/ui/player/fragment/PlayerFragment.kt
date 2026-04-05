@@ -7,21 +7,25 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.guru.playlistmaker.R
 import org.guru.playlistmaker.databinding.FragmentPlayerBinding
+import org.guru.playlistmaker.domain.library.playlist.model.Playlist
 import org.guru.playlistmaker.domain.search.model.Track
 import org.guru.playlistmaker.ui.player.addInPlaylistAdapter.AddInPlaylistAdapter
 import org.guru.playlistmaker.ui.player.view_model.PlayerViewModel
+import org.guru.playlistmaker.ui.util.debounce
 import org.guru.playlistmaker.ui.util.dpToPx
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZoneId
+import java.util.Collections
 import java.util.Locale
 
 class PlayerFragment : Fragment() {
@@ -34,7 +38,7 @@ class PlayerFragment : Fragment() {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     private lateinit var playlistAdapter: AddInPlaylistAdapter
-    private lateinit var onPlaylistClick: (Track) -> Unit
+    private lateinit var onPlaylistClickDebounce: (Playlist) -> Unit
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,6 +91,7 @@ class PlayerFragment : Fragment() {
 
             playlistBtn.setOnClickListener {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+                viewModel.loadPlaylists()
             }
 
             createNewPlaylistBtn.setOnClickListener {
@@ -109,8 +114,25 @@ class PlayerFragment : Fragment() {
                 override fun onSlide(bottomSheet: View, slideOffset: Float) {}
             })
 
+            onPlaylistClickDebounce = debounce(
+                CLICK_DEBOUNCE_DELAY,
+                viewLifecycleOwner.lifecycleScope,
+                false) { playlist ->
+
+                viewModel.addTrackInPlaylist(playlist, track)
+
+            }
+
+            playlistAdapter = AddInPlaylistAdapter(
+                Collections.emptyList(),
+                onPlaylistClickDebounce
+            )
+
+            playlistRecyclerView.adapter = playlistAdapter
+
         }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -133,6 +155,7 @@ class PlayerFragment : Fragment() {
             is PlayerViewState.Play -> renderPlayState()
             is PlayerViewState.Playing -> renderPlayingState(state.playerPosition)
             is PlayerViewState.Prepare -> renderPrepareState()
+            is PlayerViewState.LoadPlaylists -> renderLoadPlaylistsState(state.list)
         }
     }
 
@@ -167,8 +190,14 @@ class PlayerFragment : Fragment() {
         }
     }
 
+    private fun renderLoadPlaylistsState(list: List<Playlist>) {
+        playlistAdapter.playlists = list
+        playlistAdapter.notifyDataSetChanged()
+    }
+
     companion object {
         private val simpleDateFormat = SimpleDateFormat("mm:ss", Locale.getDefault())
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
         const val TRACK_KEY = "track"
 
         fun createArgs(track: Track) :  Bundle = bundleOf(
