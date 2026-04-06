@@ -1,6 +1,7 @@
 package org.guru.playlistmaker.ui.player.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -117,7 +118,13 @@ class PlayerFragment : Fragment() {
                     }
                 }
 
-                override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                    overlay.alpha = when {
+                        slideOffset in -1f..0f -> slideOffset + 1f
+                        else -> 1f
+                    }
+                    Log.d("TAG", "slideOffset $slideOffset ${overlay.alpha}")
+                }
             })
 
             onPlaylistClickDebounce = debounce(
