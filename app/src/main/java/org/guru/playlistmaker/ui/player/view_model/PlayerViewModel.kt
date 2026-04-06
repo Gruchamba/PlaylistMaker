@@ -54,7 +54,7 @@ class PlayerViewModel(
         }
     }
 
-    fun release() {
+    private fun release() {
         playerInteractor.release()
         resetTimer()
     }

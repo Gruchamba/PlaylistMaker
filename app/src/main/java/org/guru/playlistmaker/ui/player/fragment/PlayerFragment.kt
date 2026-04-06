@@ -150,11 +150,6 @@ class PlayerFragment : Fragment() {
         viewModel.pausePlayer()
     }
 
-    override fun onStop() {
-        super.onStop()
-        viewModel.release()
-    }
-
     private fun renderAddInPlaylistResult(state: AddInPlaylistState) {
         when(state) {
             is AddInPlaylistState.AlreadyExist -> { renderAddInPlaylistAlreadyExistState(state.playlistTitle)}
