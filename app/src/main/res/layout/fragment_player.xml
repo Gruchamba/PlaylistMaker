@@ -267,6 +267,8 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_marginTop="20dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/list_item_add_track_in_playlist"
             tools:visibility="visible"/>
