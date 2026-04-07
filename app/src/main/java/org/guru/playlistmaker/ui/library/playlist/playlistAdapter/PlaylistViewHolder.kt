@@ -2,16 +2,20 @@ package org.guru.playlistmaker.ui.library.playlist.playlistAdapter
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import org.guru.playlistmaker.R
 import org.guru.playlistmaker.domain.library.playlist.model.Playlist
 import org.guru.playlistmaker.ui.library.newPlaylist.fragment.NewPlaylistFragment.Companion.LOCAL_STORAGE_FOR_IMAGE
+import org.guru.playlistmaker.ui.util.dpToPx
 import java.io.File
 
-class PlaylistViewHolder(view: View): RecyclerView.ViewHolder(view) {
+class PlaylistViewHolder(val view: View): RecyclerView.ViewHolder(view) {
 
     private val image: ImageView = itemView.findViewById(R.id.playlistImage)
     private val title: TextView = itemView.findViewById(R.id.playlistTitle)
@@ -24,10 +28,15 @@ class PlaylistViewHolder(view: View): RecyclerView.ViewHolder(view) {
             playlist.tracksIdList.size,
             playlist.tracksIdList.size
         )
-        loadImage(playlist.uriImage)
+        Glide.with(itemView)
+            .load(loadImage(playlist.uriImage))
+            .placeholder(R.drawable.ic_def_track_img)
+            .centerCrop()
+            .transform(RoundedCorners(dpToPx(4f, itemView.context)))
+            .into(image)
     }
 
-    private fun loadImage(fileName: String?) {
+    private fun loadImage(fileName: String?) : Uri? {
         if (!fileName.isNullOrEmpty()) {
             val file = File(
                 itemView.context.getDir(
@@ -36,15 +45,8 @@ class PlaylistViewHolder(view: View): RecyclerView.ViewHolder(view) {
                 fileName
             )
 
-            if (file.exists()) {
-                val uri = Uri.fromFile(file)
-                image.setImageURI(uri)
-            } else {
-                image.setImageResource(R.drawable.ic_def_track_img)
-            }
-
-        } else {
-            image.setImageResource(R.drawable.ic_def_track_img)
-        }
+            return if (file.exists()) Uri.fromFile(file) else null
+        } else { return null }
     }
+
 }

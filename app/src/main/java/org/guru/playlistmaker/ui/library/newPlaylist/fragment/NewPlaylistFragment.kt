@@ -15,9 +15,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import org.guru.playlistmaker.R
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.guru.playlistmaker.databinding.FragmentNewPlaylistBinding
 import org.guru.playlistmaker.ui.library.newPlaylist.view_model.NewPlaylistViewModel
+import org.guru.playlistmaker.ui.util.dpToPx
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
@@ -31,11 +34,16 @@ class NewPlaylistFragment : Fragment() {
 
     private var imageUri: String? = null
 
-    val pickMedia =
+    private val pickMedia =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             uri?.let {
-                imageUri = saveImage(uri)
-                binding.playlistImage.setImageURI(it)
+                imageUri = saveImage(it)
+                Glide.with(requireContext())
+                    .load(it)
+                    .placeholder(R.drawable.ic_def_track_img)
+                    .centerCrop()
+                    .transform(RoundedCorners(dpToPx(8f, requireContext())))
+                    .into(binding.playlistImage)
             }
         }
 
