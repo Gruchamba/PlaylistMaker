@@ -138,4 +138,22 @@
         <item name="android:textFontWeight">400</item>
     </style>
 
+    <style name="AppDialogStyle" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+
+        <item name="colorPrimary">@color/yp_blue</item>
+        <item name="colorAccent">@color/yp_blue</item>
+        <item name="background">@color/yp_white</item>
+
+        <item name="buttonBarPositiveButtonStyle">@style/DefaultDialogButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/DefaultDialogButtonStyle</item>
+
+    </style>
+
+    <!-- Стиль положительной кнопки -->
+    <style name="DefaultDialogButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/yp_blue</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
 </resources>

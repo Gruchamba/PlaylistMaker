@@ -12,12 +12,12 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import org.guru.playlistmaker.R
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.guru.playlistmaker.R
 import org.guru.playlistmaker.databinding.FragmentNewPlaylistBinding
 import org.guru.playlistmaker.ui.library.newPlaylist.view_model.NewPlaylistViewModel
 import org.guru.playlistmaker.ui.util.dpToPx
@@ -151,10 +151,10 @@ class NewPlaylistFragment : Fragment() {
     }
 
     private fun showConfirmCloseDialog() {
-        MaterialAlertDialogBuilder(requireActivity())
+        MaterialAlertDialogBuilder(requireActivity(), R.style.AppDialogStyle)
             .setTitle(getString(R.string.finish_creating_a_playlist))
             .setMessage(getString(R.string.all_unsaved_data_will_be_lost))
-            .setNegativeButton(getString(R.string.no)) { _, _ ->
+            .setNegativeButton(getString(R.string.cancel)) { _, _ ->
             }.setPositiveButton(getString(R.string.finish)) { _, _ ->
                 findNavController().navigateUp()
             }.show()

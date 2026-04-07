@@ -51,4 +51,5 @@
     <string name="add_in_playles">Добавить в плейлист</string>
     <string name="track_already_exist_in_playlist">Трек уже добавлен в плейлист</string>
     <string name="added_to_playlist">Добавлено в плейлист</string>
+    <string name="cancel">Отмена</string>
 </resources>
