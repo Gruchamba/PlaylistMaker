@@ -20,6 +20,14 @@
         <item name="android:fontFamily">@font/ys_display_regular</item>
     </style>
 
+    <style name="RegularText_14sp">
+        <item name="android:textColor">@color/yp_black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+
     <style name="RegularText_19sp">
         <item name="android:textAlignment">textStart</item>
         <item name="android:textColor">@color/yp_black</item>

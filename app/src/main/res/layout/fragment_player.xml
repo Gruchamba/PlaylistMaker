@@ -241,7 +241,7 @@
             android:layout_width="64dp"
             android:layout_height="4dp"
             android:layout_gravity="center"
-            android:background="@color/white"
+            android:background="?attr/blackAndWhiteColor"
             android:layout_marginTop="10dp"/>
 
         <TextView

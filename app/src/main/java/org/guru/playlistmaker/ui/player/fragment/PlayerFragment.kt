@@ -2,9 +2,11 @@ package org.guru.playlistmaker.ui.player.fragment
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -165,20 +167,28 @@ class PlayerFragment : Fragment() {
     }
 
     private fun renderAddInPlaylistAlreadyExistState(title: String) {
-        Toast.makeText(
-            requireActivity(),
-            "${getString(R.string.track_already_exist_in_playlist)} $title",
-            Toast.LENGTH_SHORT
-        ).show()
+        showCustomToast("${getString(R.string.track_already_exist_in_playlist)} $title")
     }
 
     private fun renderAddedInPlaylistState(title: String) {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        Toast.makeText(
-            requireActivity(),
-            "${getString(R.string.added_to_playlist)} $title",
-            Toast.LENGTH_SHORT
-        ).show()
+        showCustomToast("${getString(R.string.added_to_playlist)} $title")
+    }
+
+    private fun showCustomToast(message: String) {
+        val inflater = layoutInflater
+        val customView = inflater.inflate(R.layout.playlist_maker_toast, null)
+
+        val textView = customView.findViewById<TextView>(R.id.toast_text)
+        textView.text = message
+
+       Toast(requireContext()).apply {
+            duration = Toast.LENGTH_LONG
+            view = customView
+            setGravity(Gravity.BOTTOM, 0, 100)
+            show()
+        }
+
     }
 
     private fun renderPlayerState(state: PlayerViewState) {
