@@ -18,6 +18,7 @@ import org.guru.playlistmaker.domain.search.model.Track
 import org.guru.playlistmaker.ui.player.fragment.AddInPlaylistState
 import org.guru.playlistmaker.ui.player.fragment.PlayerViewState
 import org.guru.playlistmaker.ui.player.fragment.PlayerViewState.*
+import org.guru.playlistmaker.ui.search.view_model.SingleLiveEvent
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -41,7 +42,7 @@ class PlayerViewModel(
     private val favoriteStateLiveData = MutableLiveData<Boolean>()
     fun observeFavoriteState(): LiveData<Boolean> = favoriteStateLiveData
 
-    private val addInPlaylistState = MutableLiveData<AddInPlaylistState>()
+    private val addInPlaylistState = SingleLiveEvent<AddInPlaylistState>()
     fun observeAddInPlaylistState(): LiveData<AddInPlaylistState> = addInPlaylistState
 
     private var timerJob: Job? = null
