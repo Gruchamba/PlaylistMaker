@@ -71,6 +71,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="start"
+                android:ellipsize="end"
                 android:maxLines="1"
                 android:layout_marginTop="25dp"
                 style="@style/MediumText_22sp"
@@ -161,16 +162,24 @@
             <TextView
                 android:id="@+id/albumLbl"
                 android:text="@string/album"
+                android:paddingStart="0dp"
+                android:paddingEnd="8dp"
                 style="@style/AudioPlayerTrackLabelStyle"
                 app:layout_constraintTop_toBottomOf="@+id/durationLbl"
                 app:layout_constraintStart_toStartOf="@+id/left_guideline_16"/>
 
             <TextView
                 android:id="@+id/trackAlbum"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textAlignment="textEnd"
                 style="@style/AudioPlayerTrackLabelStyle.TrackValueStyle"
+                app:layout_constraintStart_toEndOf="@+id/albumLbl"
                 app:layout_constraintTop_toBottomOf="@+id/trackDuration"
                 app:layout_constraintEnd_toEndOf="@+id/right_guideline_16"
-                tools:text="Yesterday (Remastered 2009)"/>
+                tools:text="Yesterday (Remastered 2009) Yesterday (Remastered 2009) Yesterday (Remastered 2009)"/>
 
             <TextView
                 android:id="@+id/yearLbl"
@@ -195,7 +204,13 @@
 
             <TextView
                 android:id="@+id/primaryGenreName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textAlignment="textEnd"
                 style="@style/AudioPlayerTrackLabelStyle.TrackValueStyle"
+                app:layout_constraintStart_toEndOf="@+id/genreLbl"
                 app:layout_constraintTop_toBottomOf="@+id/releaseDate"
                 app:layout_constraintEnd_toEndOf="@+id/right_guideline_16"
                 tools:text="Rock"/>
@@ -235,7 +250,8 @@
         android:orientation="vertical"
         app:behavior_hideable="true"
         app:behavior_peekHeight="240dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        tools:visibility="gone">
 
         <View
             android:layout_width="64dp"
