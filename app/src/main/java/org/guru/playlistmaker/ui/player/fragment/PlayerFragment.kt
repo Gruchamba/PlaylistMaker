@@ -1,13 +1,12 @@
 package org.guru.playlistmaker.ui.player.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -16,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.snackbar.Snackbar
 import org.guru.playlistmaker.R
 import org.guru.playlistmaker.databinding.FragmentPlayerBinding
 import org.guru.playlistmaker.domain.library.playlist.model.Playlist
@@ -125,7 +125,6 @@ class PlayerFragment : Fragment() {
                         slideOffset in -1f..0f -> slideOffset + 1f
                         else -> 1f
                     }
-                    Log.d("TAG", "slideOffset $slideOffset ${overlay.alpha}")
                 }
             })
 
@@ -167,28 +166,36 @@ class PlayerFragment : Fragment() {
     }
 
     private fun renderAddInPlaylistAlreadyExistState(title: String) {
-        showCustomToast("${getString(R.string.track_already_exist_in_playlist)} $title")
+        showCustomSnackbar("${getString(R.string.track_already_exist_in_playlist)} $title")
     }
 
     private fun renderAddedInPlaylistState(title: String) {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        showCustomToast("${getString(R.string.added_to_playlist)} $title")
+        showCustomSnackbar("${getString(R.string.added_to_playlist)} $title")
     }
 
-    private fun showCustomToast(message: String) {
-        val inflater = layoutInflater
-        val customView = inflater.inflate(R.layout.playlist_maker_toast, null)
-
-        val textView = customView.findViewById<TextView>(R.id.toast_text)
+    private fun showCustomSnackbar(message: String) {
+        // Инфлейтим кастомный layout
+        val customView = layoutInflater.inflate(R.layout.playlist_maker_snackbar, null)
+        val textView = customView.findViewById<TextView>(R.id.snackbar_message)
         textView.text = message
 
-       Toast(requireContext()).apply {
-            duration = Toast.LENGTH_LONG
-            view = customView
-            setGravity(Gravity.BOTTOM, 0, 100)
-            show()
-        }
+        // Создаём Snackbar
+        val snackbar = Snackbar.make(binding.root, "", Snackbar.LENGTH_LONG)
 
+        // Устанавливаем кастомный view
+        val snackbarView = snackbar.view
+        val params = snackbarView.layoutParams as CoordinatorLayout.LayoutParams
+
+        // Устанавливаем отступы
+        val marginPx = resources.getDimensionPixelSize(R.dimen.snackbar_margin)
+        params.setMargins(marginPx, 0, marginPx, marginPx)
+        snackbarView.layoutParams = params
+
+        // Устанавливаем кастомный layout
+        (snackbarView as? ViewGroup)?.addView(customView, 0)
+
+        snackbar.show()
     }
 
     private fun renderPlayerState(state: PlayerViewState) {
@@ -232,6 +239,7 @@ class PlayerFragment : Fragment() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun renderLoadPlaylistsState(list: List<Playlist>) {
         playlistAdapter.playlists = list
         playlistAdapter.notifyDataSetChanged()

@@ -15,7 +15,7 @@ import org.guru.playlistmaker.data.db.entity.TrackForPlaylistEntity
     version = 2,
     entities = [FavoriteTrackEntity::class, PlaylistEntity::class, TrackForPlaylistEntity::class]
 )
-abstract  class AppDatabase : RoomDatabase() {
+abstract class AppDatabase : RoomDatabase() {
 
     abstract fun favoriteTrackDao(): FavoriteTrackDao
 

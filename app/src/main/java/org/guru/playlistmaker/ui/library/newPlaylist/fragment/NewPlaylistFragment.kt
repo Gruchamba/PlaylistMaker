@@ -38,7 +38,7 @@ class NewPlaylistFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             uri?.let {
                 imageUri = saveImage(it)
-                Glide.with(requireContext())
+                Glide.with(this)
                     .load(it)
                     .placeholder(R.drawable.ic_def_track_img)
                     .centerCrop()
