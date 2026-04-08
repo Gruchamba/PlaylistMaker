@@ -175,24 +175,20 @@ class PlayerFragment : Fragment() {
     }
 
     private fun showCustomSnackbar(message: String) {
-        // Инфлейтим кастомный layout
+
         val customView = layoutInflater.inflate(R.layout.playlist_maker_snackbar, null)
         val textView = customView.findViewById<TextView>(R.id.snackbar_message)
         textView.text = message
 
-        // Создаём Snackbar
         val snackbar = Snackbar.make(binding.root, "", Snackbar.LENGTH_LONG)
 
-        // Устанавливаем кастомный view
         val snackbarView = snackbar.view
         val params = snackbarView.layoutParams as CoordinatorLayout.LayoutParams
 
-        // Устанавливаем отступы
         val marginPx = resources.getDimensionPixelSize(R.dimen.snackbar_margin)
         params.setMargins(marginPx, 0, marginPx, marginPx)
         snackbarView.layoutParams = params
 
-        // Устанавливаем кастомный layout
         (snackbarView as? ViewGroup)?.addView(customView, 0)
 
         snackbar.show()
