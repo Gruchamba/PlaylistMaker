@@ -5,12 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import org.guru.playlistmaker.R
 import org.guru.playlistmaker.databinding.FragmentLibraryPlaylistBinding
 import org.guru.playlistmaker.domain.library.playlist.model.Playlist
 import org.guru.playlistmaker.ui.library.libraryPlaylist.playlistAdapter.PlaylistAdapter
 import org.guru.playlistmaker.ui.library.libraryPlaylist.view_model.PlaylistViewModel
+import org.guru.playlistmaker.ui.library.readPlaylist.fragment.ReadPlaylistFragment
+import org.guru.playlistmaker.ui.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistFragment : Fragment() {
@@ -21,6 +24,12 @@ class PlaylistFragment : Fragment() {
     private val viewModel: PlaylistViewModel by viewModel()
 
     private lateinit var playlistAdapter: PlaylistAdapter
+
+    private lateinit var onPlaylistClickDebounce: (Playlist) -> Unit
+
+    private companion object {
+        const val CLICK_DEBOUNCE_DELAY = 1000L
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,7 +42,20 @@ class PlaylistFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        playlistAdapter = PlaylistAdapter(emptyList())
+        onPlaylistClickDebounce = debounce(
+            CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope,
+            false) { playlist ->
+            findNavController().navigate(
+                R.id.action_mediaLibraryFragment_to_readPlaylistFragment,
+                ReadPlaylistFragment.createArgs(playlist)
+            )
+        }
+
+        playlistAdapter = PlaylistAdapter(
+            emptyList(),
+            onPlaylistClickDebounce
+        )
 
         binding.apply {
             recyclerView.adapter = playlistAdapter

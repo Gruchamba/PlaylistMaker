@@ -249,6 +249,5 @@ class PlayerFragment : Fragment() {
         fun createArgs(track: Track) :  Bundle = bundleOf(
             TRACK_KEY to track
         )
-
     }
 }
