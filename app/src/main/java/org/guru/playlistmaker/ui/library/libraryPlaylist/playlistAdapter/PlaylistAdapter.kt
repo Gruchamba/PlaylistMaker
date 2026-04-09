@@ -1,4 +1,4 @@
-package org.guru.playlistmaker.ui.library.playlist.playlistAdapter
+package org.guru.playlistmaker.ui.library.libraryPlaylist.playlistAdapter
 
 import android.view.LayoutInflater
 import androidx.recyclerview.widget.RecyclerView

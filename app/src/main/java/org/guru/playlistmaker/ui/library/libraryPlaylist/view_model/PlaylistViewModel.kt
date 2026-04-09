@@ -1,4 +1,4 @@
-package org.guru.playlistmaker.ui.library.playlist.view_model
+package org.guru.playlistmaker.ui.library.libraryPlaylist.view_model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.guru.playlistmaker.domain.library.playlist.PlaylistInteractor
-import org.guru.playlistmaker.ui.library.playlist.fragment.PlaylistViewState
+import org.guru.playlistmaker.ui.library.libraryPlaylist.fragment.PlaylistViewState
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

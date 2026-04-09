@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import org.guru.playlistmaker.ui.library.favorites.fragment.FavoritesTrackFragment
-import org.guru.playlistmaker.ui.library.playlist.fragment.PlaylistFragment
+import org.guru.playlistmaker.ui.library.libraryPlaylist.fragment.PlaylistFragment
 
 class MediaLibraryPagerAdapter(
     fragmentManager: FragmentManager,

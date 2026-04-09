@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import org.guru.playlistmaker.R
-import org.guru.playlistmaker.databinding.FragmentFavoritesTrackBinding
+import org.guru.playlistmaker.databinding.FragmentLibraryFavoritesTrackBinding
 import org.guru.playlistmaker.domain.search.model.Track
 import org.guru.playlistmaker.ui.library.favorites.trackAdapter.FavoritesTrackAdapter
 import org.guru.playlistmaker.ui.library.favorites.view_model.FavoritesTrackViewModel
@@ -20,7 +20,7 @@ import java.util.Collections
 
 class FavoritesTrackFragment : Fragment() {
 
-    private var _binding: FragmentFavoritesTrackBinding? = null
+    private var _binding: FragmentLibraryFavoritesTrackBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var tracksAdapter: FavoritesTrackAdapter
@@ -36,7 +36,7 @@ class FavoritesTrackFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentFavoritesTrackBinding.inflate(layoutInflater)
+        _binding = FragmentLibraryFavoritesTrackBinding.inflate(layoutInflater)
         return binding.root
     }
 

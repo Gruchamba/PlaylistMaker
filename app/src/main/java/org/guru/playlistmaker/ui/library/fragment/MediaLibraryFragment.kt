@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import org.guru.playlistmaker.R
-import org.guru.playlistmaker.databinding.FragmentMediaLibraryBinding
+import org.guru.playlistmaker.databinding.FragmentLibraryBinding
 import org.guru.playlistmaker.ui.library.fragment.pagerAdapter.MediaLibraryPagerAdapter
 
 class MediaLibraryFragment : Fragment() {
 
-    private var _binding: FragmentMediaLibraryBinding? = null
+    private var _binding: FragmentLibraryBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var tabMediator: TabLayoutMediator
@@ -21,7 +21,7 @@ class MediaLibraryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMediaLibraryBinding.inflate(layoutInflater,container, false)
+        _binding = FragmentLibraryBinding.inflate(layoutInflater,container, false)
         return binding.root
     }
 

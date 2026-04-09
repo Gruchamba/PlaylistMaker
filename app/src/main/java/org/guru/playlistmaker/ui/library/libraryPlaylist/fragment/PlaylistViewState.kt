@@ -1,4 +1,4 @@
-package org.guru.playlistmaker.ui.library.playlist.fragment
+package org.guru.playlistmaker.ui.library.libraryPlaylist.fragment
 
 import org.guru.playlistmaker.domain.library.playlist.model.Playlist
 

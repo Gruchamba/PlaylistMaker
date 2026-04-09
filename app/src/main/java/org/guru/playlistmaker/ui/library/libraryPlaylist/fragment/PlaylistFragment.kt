@@ -1,4 +1,4 @@
-package org.guru.playlistmaker.ui.library.playlist.fragment
+package org.guru.playlistmaker.ui.library.libraryPlaylist.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,15 +7,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.guru.playlistmaker.R
-import org.guru.playlistmaker.databinding.FragmentPlaylistBinding
+import org.guru.playlistmaker.databinding.FragmentLibraryPlaylistBinding
 import org.guru.playlistmaker.domain.library.playlist.model.Playlist
-import org.guru.playlistmaker.ui.library.playlist.playlistAdapter.PlaylistAdapter
-import org.guru.playlistmaker.ui.library.playlist.view_model.PlaylistViewModel
+import org.guru.playlistmaker.ui.library.libraryPlaylist.playlistAdapter.PlaylistAdapter
+import org.guru.playlistmaker.ui.library.libraryPlaylist.view_model.PlaylistViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistFragment : Fragment() {
 
-    private var _binding: FragmentPlaylistBinding? = null
+    private var _binding: FragmentLibraryPlaylistBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: PlaylistViewModel by viewModel()
@@ -26,7 +26,7 @@ class PlaylistFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentPlaylistBinding.inflate(layoutInflater)
+        _binding = FragmentLibraryPlaylistBinding.inflate(layoutInflater)
         return binding.root
     }
 
