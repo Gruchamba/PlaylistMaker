@@ -52,5 +52,9 @@
         android:id="@+id/readPlaylistFragment"
         android:name="org.guru.playlistmaker.ui.library.readPlaylist.fragment.ReadPlaylistFragment"
         android:label="fragment_library_read_playlist"
-        tools:layout="@layout/fragment_library_read_playlist" />
+        tools:layout="@layout/fragment_library_read_playlist" >
+        <action
+            android:id="@+id/action_readPlaylistFragment_to_playerFragment"
+            app:destination="@id/playerFragment" />
+    </fragment>
 </navigation>

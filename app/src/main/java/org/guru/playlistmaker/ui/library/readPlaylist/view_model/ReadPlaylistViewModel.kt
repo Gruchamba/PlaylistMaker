@@ -8,6 +8,7 @@ import kotlinx.coroutines.launch
 import org.guru.playlistmaker.domain.library.playlist.PlaylistInteractor
 import org.guru.playlistmaker.domain.library.playlist.model.Playlist
 import org.guru.playlistmaker.domain.search.model.Track
+import org.guru.playlistmaker.ui.library.readPlaylist.fragment.ReadPlaylistFragmentViewState
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -18,8 +19,8 @@ class ReadPlaylistViewModel: ViewModel(), KoinComponent {
     private val playlistStateLiveData = MutableLiveData<Playlist>()
     fun observePlayerState(): LiveData<Playlist> = playlistStateLiveData
 
-    private val tracksStateLiveData = MutableLiveData<List<Track>>()
-    fun observeTracksState(): LiveData<List<Track>> = tracksStateLiveData
+    private val tracksStateLiveData = MutableLiveData<ReadPlaylistFragmentViewState>()
+    fun observeTracksState(): LiveData<ReadPlaylistFragmentViewState> = tracksStateLiveData
 
     fun setPlaylistId(playlistId: Int) {
         viewModelScope.launch {
@@ -27,13 +28,31 @@ class ReadPlaylistViewModel: ViewModel(), KoinComponent {
                 playlistStateLiveData.postValue(playlist)
 
                 playlistInteractor.getTracksForPlaylist(playlist.tracksIdList).collect {
-                    tracksStateLiveData.postValue(it)
+                    renderReadPlaylistFragmentViewState(it)
                 }
             }
         }
+    }
 
+    fun removeTrackFromPlaylist(trackId: String, tracks: List<Track>) {
+        if (playlistStateLiveData.value != null) {
+            viewModelScope.launch {
+                playlistInteractor.removeTrackFromPlaylist(
+                    playlistStateLiveData.value!!,
+                    tracks,
+                    trackId
+                ).collect {
+                    renderReadPlaylistFragmentViewState(it)
+                }
+            }
+        }
+    }
 
-
+    private fun renderReadPlaylistFragmentViewState(list: List<Track>) {
+        tracksStateLiveData.postValue(
+            if (list.isEmpty()) ReadPlaylistFragmentViewState.Empty
+            else ReadPlaylistFragmentViewState.Content(list)
+        )
     }
 
 }

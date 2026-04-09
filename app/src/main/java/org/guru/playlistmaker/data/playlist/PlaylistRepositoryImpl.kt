@@ -71,6 +71,40 @@ class PlaylistRepositoryImpl(
         )
     }
 
+    override suspend fun removeTrackFromPlaylist(
+        playlist: Playlist,
+        tracks: List<Track>,
+        trackId: String
+    ): Flow<List<Track>> = flow {
+
+        val track = trackForPlaylistDbConverter.map(
+            trackForPlaylistDao.getTracksByIds(trackId)
+        )
+
+        playlist.size--
+        playlist.tracksIdList.remove(trackId)
+
+        playlistDao.updatePlaylist(playlistDbConverter.map(playlist))
+
+        if (!checkTrackForPlaylist(trackId)) {
+            trackForPlaylistDao.deleteTrack(
+                trackForPlaylistDbConverter.map(track)
+            )
+        }
+
+        val mutableList = tracks.toMutableList()
+        mutableList.remove(track)
+
+        emit(mutableList)
+
+    }
+
+    private suspend fun checkTrackForPlaylist(trackId: String) : Boolean {
+        return convertFromPlaylistEntity(
+            playlistDao.getAllPlaylists()
+        ).any { playlist -> playlist.tracksIdList.contains(trackId) }
+    }
+
     private fun convertFromPlaylistEntity(entityList: List<PlaylistEntity>) : List<Playlist> {
         return entityList.map { playlist -> playlistDbConverter.map(playlist) }
     }
