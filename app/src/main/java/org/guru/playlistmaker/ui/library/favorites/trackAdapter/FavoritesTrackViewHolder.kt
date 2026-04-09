@@ -27,7 +27,7 @@ class FavoritesTrackViewHolder(private val binding: ListItemFavotiteTrackViewBin
             } ?: "-"
 
             artistNameView.text = track.artistName
-            track.trackTime?.let { durationView.text = track.trackTime }
+            track.getTrackTime()?.let { durationView.text = track.getFormatTrackTime() }
         }
 
     }

@@ -48,6 +48,12 @@
         <item quantity="many">%d треков</item>
         <item quantity="other">%d треков</item>
     </plurals>
+    <plurals name="minutes">
+        <item quantity="one">%d минута</item>
+        <item quantity="few">%d минуты</item>
+        <item quantity="many">%d минут</item>
+        <item quantity="other">%d минут</item>
+    </plurals>
     <string name="add_in_playles">Добавить в плейлист</string>
     <string name="track_already_exist_in_playlist">Трек уже добавлен в плейлист</string>
     <string name="added_to_playlist">Добавлено в плейлист</string>

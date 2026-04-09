@@ -30,7 +30,7 @@ class SearchTrackRepositoryImpl(
                             it.releaseDate,
                             it.primaryGenreName,
                             it.country,
-                            it.getFormatTrackTime(),
+                            it.trackTime,
                             it.artworkUrl100,
                             it.previewUrl
                         )

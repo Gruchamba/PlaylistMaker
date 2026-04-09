@@ -43,8 +43,8 @@
             android:scaleType="centerCrop"
             android:src="@drawable/ic_def_album_img"
             app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="@id/right_guideline_16"
-            app:layout_constraintStart_toStartOf="@id/left_guideline_16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/backBtn" />
 
         <TextView
@@ -181,7 +181,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/list_item_track_view"
+            tools:listitem="@layout/list_item_add_track_in_playlist"
             tools:visibility="visible"/>
 
     </LinearLayout>

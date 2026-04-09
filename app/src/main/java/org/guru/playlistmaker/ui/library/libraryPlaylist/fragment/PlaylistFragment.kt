@@ -48,7 +48,7 @@ class PlaylistFragment : Fragment() {
             false) { playlist ->
             findNavController().navigate(
                 R.id.action_mediaLibraryFragment_to_readPlaylistFragment,
-                ReadPlaylistFragment.createArgs(playlist)
+                ReadPlaylistFragment.createArgs(playlist.playlistId)
             )
         }
 
