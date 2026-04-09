@@ -1,10 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="RegularText_12sp">
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:textColor">@color/yp_black</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="lineHeight">16sp</item>
+    </style>
+
     <style name="RegularText_13sp">
         <item name="android:textAlignment">textStart</item>
         <item name="android:textColor">@color/yp_black</item>
         <item name="android:textSize">13sp</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+
+    <style name="RegularText_14sp">
+        <item name="android:textColor">@color/yp_black</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textFontWeight">400</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
@@ -113,6 +131,37 @@
 
     <style name="ButtonStyle.DefaultStyle">
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextInputLayout" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/text_input_selector</item>
+        <item name="placeholderTextColor">?attr/blackAndWhiteColor</item>
+        <item name="hintTextColor">?attr/blackAndWhiteColor</item>
+        <item name="android:textColorHint">?attr/blackAndWhiteColor</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="android:lines">1</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+    </style>
+
+    <style name="AppDialogStyle" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+
+        <item name="colorPrimary">@color/yp_blue</item>
+        <item name="colorAccent">@color/yp_blue</item>
+        <item name="background">@color/yp_white</item>
+
+        <item name="buttonBarPositiveButtonStyle">@style/DefaultDialogButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/DefaultDialogButtonStyle</item>
+
+    </style>
+
+    <!-- Стиль положительной кнопки -->
+    <style name="DefaultDialogButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/yp_blue</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
 </resources>

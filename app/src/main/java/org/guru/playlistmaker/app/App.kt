@@ -4,7 +4,7 @@ import android.app.Application
 import org.guru.playlistmaker.di.library.favoritesTrackViewModelModule
 import org.guru.playlistmaker.di.library.libraryDataModule
 import org.guru.playlistmaker.di.library.libraryRepositoryModule
-import org.guru.playlistmaker.di.library.playlistViewModelModule
+import org.guru.playlistmaker.di.library.libraryViewModelModule
 import org.guru.playlistmaker.di.player.playerDataModule
 import org.guru.playlistmaker.di.player.playerInteractorModule
 import org.guru.playlistmaker.di.player.playerRepositoryModule
@@ -31,7 +31,7 @@ class App : Application() {
                 playerInteractorModule, playerViewModelModule, playerRepositoryModule, playerDataModule,
                 settingsInteractorModule, settingsViewModelModule, settingsDataModule,
                 searchInteractorModule, searchViewModelModule, searchRepositoryModule, searchDataModule,
-                favoritesTrackViewModelModule, playlistViewModelModule, libraryRepositoryModule,
+                favoritesTrackViewModelModule, libraryViewModelModule, libraryRepositoryModule,
                 libraryDataModule
             )
         }

@@ -24,8 +24,10 @@ class MediaPlayerClient : PlayerClient, KoinComponent {
     }
 
     override fun pausePlayer() {
-        mediaPlayer.pause()
-        state = STATE_PAUSED
+       if (state == STATE_PLAYING) {
+           mediaPlayer.pause()
+           state = STATE_PAUSED
+       }
     }
 
     override fun release() {

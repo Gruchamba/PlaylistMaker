@@ -3,11 +3,11 @@ package org.guru.playlistmaker.domain.library.favorites.impl
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.guru.playlistmaker.domain.library.favorites.FavoritesTrackInteractor
-import org.guru.playlistmaker.domain.library.favorites.FavoritesTrackRepository
+import org.guru.playlistmaker.domain.library.favorites.TrackRepository
 import org.guru.playlistmaker.domain.search.model.Track
 
 class FavoritesTrackInteractorImpl(
-    private val favoritesRepository: FavoritesTrackRepository
+    private val favoritesRepository: TrackRepository
 ) : FavoritesTrackInteractor {
 
     override suspend fun addTrackToFavorites(track: Track) {
