@@ -35,7 +35,8 @@ class ReadPlaylistFragment : Fragment() {
     private var playlistId: Int = 0
     private val viewModel: ReadPlaylistViewModel by viewModel()
 
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+    private lateinit var trackBottomSheetBehavior: BottomSheetBehavior<View>
+    private lateinit var moreBottomSheetBehavior: BottomSheetBehavior<View>
 
     private lateinit var tracksAdapter: TrackAdapter
     private lateinit var onTrackClickDebounce: (Track) -> Unit
@@ -82,9 +83,9 @@ class ReadPlaylistFragment : Fragment() {
 
             backBtn.setOnClickListener { findNavController().navigateUp() }
 
-            bottomSheetBehavior = BottomSheetBehavior.from(tracksBottomSheet)
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-            bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            trackBottomSheetBehavior = BottomSheetBehavior.from(tracksBottomSheet)
+            trackBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            trackBottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
 
                 override fun onStateChanged(bottomSheet: View, newState: Int) {
                     when (newState) {
@@ -108,12 +109,37 @@ class ReadPlaylistFragment : Fragment() {
             )
             tracksRecyclerView.adapter = tracksAdapter
 
+            moreBottomSheetBehavior = BottomSheetBehavior.from(moreBottomSheet)
+            moreBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            moreBottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+
+                override fun onStateChanged(bottomSheet: View, newState: Int) {
+                    when (newState) {
+                        BottomSheetBehavior.STATE_HIDDEN -> { overlay.visibility = View.GONE }
+                        else -> { overlay.visibility = View.VISIBLE }
+                    }
+                }
+
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                    overlay.alpha = when {
+                        slideOffset in -1f..0f -> slideOffset + 1f
+                        else -> 1f
+                    }
+                }
+            })
+
+            moreImg.setOnClickListener {
+                moreBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
+
         }
 
         requireArguments().getSerializable(PLAYLIST_ID_KEY)?.apply {
             playlistId = this as Int
             viewModel.setPlaylistId(playlistId)
         }
+
+
 
     }
 

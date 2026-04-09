@@ -1,5 +1,6 @@
 package org.guru.playlistmaker.ui.library.libraryPlaylist.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -79,6 +80,7 @@ class PlaylistFragment : Fragment() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun showContent(playlists: List<Playlist>) {
         binding.recyclerView.visibility = View.VISIBLE
         binding.playlistNotFoundLayout.visibility = View.GONE

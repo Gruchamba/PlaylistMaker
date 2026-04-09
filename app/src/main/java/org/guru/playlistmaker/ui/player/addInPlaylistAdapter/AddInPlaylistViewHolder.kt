@@ -24,9 +24,10 @@ class AddInPlaylistViewHolder(
     }
 
     fun bind(playlist: Playlist) {
+
         binding.apply {
-            playlistNameView.text = playlist.title
-            playlistSize.text = itemView.resources.getQuantityString(
+            itemPlaylist.playlistNameView.text = playlist.title
+            itemPlaylist.playlistSize.text = itemView.resources.getQuantityString(
                     R.plurals.tracks_count,
                 playlist.tracksIdList.size,
                 playlist.tracksIdList.size
@@ -37,7 +38,7 @@ class AddInPlaylistViewHolder(
                 .placeholder(R.drawable.ic_def_track_img)
                 .centerCrop()
                 .transform(RoundedCorners(dpToPx(4f, itemView.context)))
-                .into(playlistImage)
+                .into(itemPlaylist.playlistImage)
         }
     }
 

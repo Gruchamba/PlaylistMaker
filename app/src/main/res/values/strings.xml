@@ -10,7 +10,10 @@
     <string name="you_dont_have_playlists">Вы не создали\n ни одного плейлиста</string>
     <string name="settings">Настройки</string>
     <string name="dark_theme">Тёмная тема</string>
-    <string name="share">Поделиться приложением</string>
+    <string name="share_app">Поделиться приложением</string>
+    <string name="share">Поделиться</string>
+    <string name="edit_information">Редактировать информацию</string>
+    <string name="remove_playlist">Удалить плейлист</string>
     <string name="support">Написать в поддержку</string>
     <string name="user_agreement">Пользовательское соглашение</string>
     <string name="text_mail_for_support">Спасибо разработчикам и разработчицам за крутое приложение!</string>
