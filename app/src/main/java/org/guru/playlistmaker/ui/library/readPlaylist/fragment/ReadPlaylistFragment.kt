@@ -1,8 +1,10 @@
 package org.guru.playlistmaker.ui.library.readPlaylist.fragment
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -128,6 +130,8 @@ class ReadPlaylistFragment : Fragment() {
                 }
             })
 
+            shareImg.setOnClickListener { onShareImgClick() }
+
             moreImg.setOnClickListener {
                 moreBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             }
@@ -139,8 +143,50 @@ class ReadPlaylistFragment : Fragment() {
             viewModel.setPlaylistId(playlistId)
         }
 
+    }
 
+    private fun onShareImgClick() {
+        if (tracksAdapter.tracks.isEmpty()) {
+            showInformationDialog()
 
+        } else {
+            val shareIntent = Intent(Intent.ACTION_SEND).apply {  }
+            shareIntent.putExtra(
+                Intent.EXTRA_TEXT,
+                buildMessageForShare()
+            )
+            shareIntent.type = "text/plain"
+            startActivity(shareIntent)
+        }
+    }
+
+    fun buildMessageForShare() : String {
+        val builder = StringBuilder().append(getString(R.string.playlist))
+            .append(" ")
+            .append(binding.playlistTitle.text)
+            .append("\n")
+            .append(getTrackQuantityString(tracksAdapter.tracks.size))
+            .append("\n")
+
+        tracksAdapter.tracks.forEachIndexed {
+            index, track -> builder.append(index + 1)
+                .append(". ")
+                .append(track.artistName)
+                .append(" - ")
+                .append(track.trackName)
+                .append("(${track.getFormatTrackTime()})")
+                .append("\n")
+        }
+        Log.d("TEST", builder.toString())
+        return binding.toString()
+    }
+
+    private fun getTrackQuantityString(count: Int) : String {
+         return resources.getQuantityString(
+            R.plurals.tracks_count,
+            count,
+            count
+        )
     }
 
     private fun onLongClickOnTrack(trackId: String) {
@@ -161,6 +207,13 @@ class ReadPlaylistFragment : Fragment() {
             }.show()
     }
 
+    private fun showInformationDialog() {
+        MaterialAlertDialogBuilder(requireActivity(), R.style.AppDialogStyle)
+            .setMessage(R.string.track_for_share_is_empty)
+            .setNeutralButton(getString(R.string.yes)) { _, _ -> }
+            .show()
+    }
+
     private fun renderLoadPlaylist(playlist: Playlist) {
         binding.apply {
             playlist.uriImage?.let { playlistImage.setImageURI(it.toUri())
@@ -177,11 +230,7 @@ class ReadPlaylistFragment : Fragment() {
                 playlistDescription.visibility = View.GONE
             else playlistDescription.text = playlist.description
 
-            playlistTrackCount.text = resources.getQuantityString(
-                R.plurals.tracks_count,
-                playlist.tracksIdList.size,
-                playlist.tracksIdList.size
-            )
+            playlistTrackCount.text = getTrackQuantityString(playlist.tracksIdList.size)
         }
     }
 
