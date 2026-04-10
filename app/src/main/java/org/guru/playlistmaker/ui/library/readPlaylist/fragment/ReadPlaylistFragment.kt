@@ -195,7 +195,7 @@ class ReadPlaylistFragment : Fragment() {
                 .append("(${track.getFormatTrackTime()})")
                 .append("\n")
         }
-        return binding.toString()
+        return builder.toString()
     }
 
     private fun getTrackQuantityString(count: Int) : String {
