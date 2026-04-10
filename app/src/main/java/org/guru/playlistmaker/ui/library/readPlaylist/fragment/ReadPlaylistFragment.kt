@@ -192,13 +192,14 @@ class ReadPlaylistFragment : Fragment() {
             )
 
         } else {
-            val shareIntent = Intent(Intent.ACTION_SEND).apply {  }
-            shareIntent.putExtra(
-                Intent.EXTRA_TEXT,
-                buildMessageForShare()
-            )
-            shareIntent.type = "text/plain"
-            startActivity(shareIntent)
+            Intent(Intent.ACTION_SEND).apply {
+                putExtra(
+                    Intent.EXTRA_TEXT,
+                    buildMessageForShare()
+                )
+                type = "text/plain"
+                startActivity(this)
+            }
         }
     }
 
@@ -216,6 +217,7 @@ class ReadPlaylistFragment : Fragment() {
                 .append(track.artistName)
                 .append(" - ")
                 .append(track.trackName)
+                .append(" ")
                 .append("(${track.trackTime})")
                 .append("\n")
         }
