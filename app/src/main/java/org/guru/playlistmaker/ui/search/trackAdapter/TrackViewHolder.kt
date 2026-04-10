@@ -27,7 +27,7 @@ class TrackViewHolder(private val binding: ListItemTrackViewBinding) : RecyclerV
             } ?: "-"
 
             artistNameView.text = track.artistName
-            track.getTrackTime()?.let { durationView.text = track.getFormatTrackTime() }
+            track.trackTime?.let { durationView.text = track.trackTime }
         }
 
     }

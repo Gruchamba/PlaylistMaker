@@ -69,7 +69,7 @@ class PlayerFragment : Fragment() {
         track.apply {
             trackName?.let { binding.trackName.text = it }
             artistName.let { binding.artistName.text = it }
-            getTrackTime()?.let { binding.trackDuration.text = track.getFormatTrackTime() }
+            trackTime?.let { binding.trackDuration.text = track.trackTime }
             collectionName?.let { binding.trackAlbum.text = it }
             releaseDate?.let {
                 val instant = Instant.parse(it)

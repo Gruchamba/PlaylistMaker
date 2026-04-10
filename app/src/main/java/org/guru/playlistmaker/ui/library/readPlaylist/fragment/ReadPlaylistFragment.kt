@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -192,7 +193,7 @@ class ReadPlaylistFragment : Fragment() {
                 .append(track.artistName)
                 .append(" - ")
                 .append(track.trackName)
-                .append("(${track.getFormatTrackTime()})")
+                .append("(${track.trackTime})")
                 .append("\n")
         }
         return builder.toString()
@@ -277,10 +278,9 @@ class ReadPlaylistFragment : Fragment() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun renderTracks(list: List<Track>) {
-        val totalDuration = SimpleDateFormat("mm", Locale.getDefault()).format(
-            list.filter { !it.getTrackTime().isNullOrEmpty() }
-                .sumOf { it.getTrackTime()!!.toInt() }
-        ).toInt()
+        val totalDuration = list.filter { !it.trackTime.isNullOrEmpty() }
+            .map { formatDurationToSeconds(it.trackTime!!) }
+            .sumOf { it } / 60
 
         binding.playlistDuration.text = resources.getQuantityString(
             R.plurals.minutes,
@@ -291,6 +291,12 @@ class ReadPlaylistFragment : Fragment() {
         tracksAdapter.tracks = list
         tracksAdapter.notifyDataSetChanged()
 
+    }
+
+    private fun formatDurationToSeconds(duration: String): Int {
+        return duration.split(":")
+            .map { it.toInt() }
+            .let { (minutes, seconds) -> minutes * 60 + seconds }
     }
 
     override fun onDestroyView() {

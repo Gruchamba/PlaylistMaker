@@ -182,6 +182,7 @@
 
         <item name="buttonBarPositiveButtonStyle">@style/DefaultDialogButtonStyle</item>
         <item name="buttonBarNegativeButtonStyle">@style/DefaultDialogButtonStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/DefaultDialogButtonStyle</item>
 
     </style>
 

@@ -1,6 +1,8 @@
 package org.guru.playlistmaker.data.search.dto
 
+import android.icu.text.SimpleDateFormat
 import com.google.gson.annotations.SerializedName
+import java.util.Locale
 
 class TrackDto(
     val trackId: String?,
@@ -13,4 +15,12 @@ class TrackDto(
     @SerializedName("trackTimeMillis") val trackTime: String?,
     val artworkUrl100: String,
     val previewUrl: String
-)
+) {
+
+    fun getFormatTrackTime(): String {
+        return trackTime?.let {
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackTime.toLong())
+        } ?: ""
+    }
+
+}
