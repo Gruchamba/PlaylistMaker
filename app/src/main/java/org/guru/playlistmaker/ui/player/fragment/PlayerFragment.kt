@@ -25,6 +25,7 @@ import org.guru.playlistmaker.ui.player.addInPlaylistAdapter.AddInPlaylistAdapte
 import org.guru.playlistmaker.ui.player.view_model.PlayerViewModel
 import org.guru.playlistmaker.ui.util.debounce
 import org.guru.playlistmaker.ui.util.dpToPx
+import org.guru.playlistmaker.ui.util.showCustomSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
@@ -168,32 +169,20 @@ class PlayerFragment : Fragment() {
     }
 
     private fun renderAddInPlaylistAlreadyExistState(title: String) {
-        showCustomSnackbar("${getString(R.string.track_already_exist_in_playlist)} $title")
+        showCustomSnackbar(
+            layoutInflater,
+            binding.root,
+            "${getString(R.string.track_already_exist_in_playlist)} $title"
+        )
     }
 
     private fun renderAddedInPlaylistState(title: String) {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        showCustomSnackbar("${getString(R.string.added_to_playlist)} $title")
-    }
-
-    private fun showCustomSnackbar(message: String) {
-
-        val customView = layoutInflater.inflate(R.layout.playlist_maker_snackbar, null)
-        val textView = customView.findViewById<TextView>(R.id.snackbar_message)
-        textView.text = message
-
-        val snackbar = Snackbar.make(binding.root, "", Snackbar.LENGTH_LONG)
-
-        val snackbarView = snackbar.view
-        val params = snackbarView.layoutParams as CoordinatorLayout.LayoutParams
-
-        val marginPx = resources.getDimensionPixelSize(R.dimen.snackbar_margin)
-        params.setMargins(marginPx, 0, marginPx, marginPx)
-        snackbarView.layoutParams = params
-
-        (snackbarView as? ViewGroup)?.addView(customView, 0)
-
-        snackbar.show()
+        showCustomSnackbar(
+            layoutInflater,
+            binding.root,
+            "${getString(R.string.added_to_playlist)} $title"
+        )
     }
 
     private fun renderPlayerState(state: PlayerViewState) {

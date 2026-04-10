@@ -23,6 +23,7 @@ import org.guru.playlistmaker.ui.player.fragment.PlayerFragment
 import org.guru.playlistmaker.ui.search.trackAdapter.TrackAdapter
 import org.guru.playlistmaker.ui.util.debounce
 import org.guru.playlistmaker.ui.util.loadImageFromLocalStorage
+import org.guru.playlistmaker.ui.util.showCustomSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Collections
 
@@ -134,7 +135,10 @@ class ReadPlaylistFragment : Fragment() {
 
             shareImg.setOnClickListener { onShareClick() }
             moreImg.setOnClickListener { moreBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED }
-            shareTxt.setOnClickListener { onShareClick() }
+            shareTxt.setOnClickListener {
+                moreBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                onShareClick()
+            }
             editPlaylistTxt.setOnClickListener {
                 findNavController().navigate(
                     R.id.action_readPlaylistFragment_to_createOrUpdatePlaylistFragment,
@@ -163,7 +167,11 @@ class ReadPlaylistFragment : Fragment() {
 
     private fun onShareClick() {
         if (tracksAdapter.tracks.isEmpty()) {
-            showInformationDialog()
+            showCustomSnackbar(
+                layoutInflater,
+                binding.root,
+                getString(R.string.track_for_share_is_empty)
+            )
 
         } else {
             val shareIntent = Intent(Intent.ACTION_SEND).apply {  }
@@ -223,13 +231,6 @@ class ReadPlaylistFragment : Fragment() {
             }.setPositiveButton(getString(R.string.yes)) { _, _ ->
                 onConfirm.invoke()
             }.show()
-    }
-
-    private fun showInformationDialog() {
-        MaterialAlertDialogBuilder(requireActivity(), R.style.AppDialogStyle)
-            .setMessage(R.string.track_for_share_is_empty)
-            .setNeutralButton(getString(R.string.yes)) { _, _ -> }
-            .show()
     }
 
     private fun renderLoadPlaylist(playlist: Playlist) {
