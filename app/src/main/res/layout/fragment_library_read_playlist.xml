@@ -184,6 +184,15 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/list_item_track_view" />
 
+        <TextView
+            android:id="@+id/playlist_empty_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/playlist_is_empty"
+            android:layout_marginTop="24dp"
+            android:textAlignment="center"
+            android:visibility="gone"/>
+
     </LinearLayout>
 
     <LinearLayout

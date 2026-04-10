@@ -272,6 +272,10 @@ class ReadPlaylistFragment : Fragment() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun renderEmptyTracks() {
+        binding.apply {
+            tracksRecyclerView.visibility = View.GONE
+            playlistEmptyMessage.visibility = View.VISIBLE
+        }
         tracksAdapter.tracks = emptyList()
         tracksAdapter.notifyDataSetChanged()
     }
@@ -282,11 +286,15 @@ class ReadPlaylistFragment : Fragment() {
             .map { formatDurationToSeconds(it.trackTime!!) }
             .sumOf { it } / 60
 
-        binding.playlistDuration.text = resources.getQuantityString(
-            R.plurals.minutes,
-            totalDuration,
-            totalDuration
-        )
+        binding.apply {
+            tracksRecyclerView.visibility = View.VISIBLE
+            playlistEmptyMessage.visibility = View.GONE
+            playlistDuration.text = resources.getQuantityString(
+                R.plurals.minutes,
+                totalDuration,
+                totalDuration
+            )
+        }
 
         tracksAdapter.tracks = list
         tracksAdapter.notifyDataSetChanged()
