@@ -39,4 +39,8 @@ class PlaylistInteractorImpl(
     override suspend fun removePlaylist(playlist: Playlist) : Flow<Boolean> {
         return playlistRepository.removePlaylist(playlist)
     }
+
+    override suspend fun updatePlaylist(playlist: Playlist) {
+        playlistRepository.updatePlaylist(playlist)
+    }
 }

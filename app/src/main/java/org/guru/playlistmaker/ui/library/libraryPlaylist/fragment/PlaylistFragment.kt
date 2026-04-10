@@ -13,6 +13,7 @@ import org.guru.playlistmaker.databinding.FragmentLibraryPlaylistBinding
 import org.guru.playlistmaker.domain.library.playlist.model.Playlist
 import org.guru.playlistmaker.ui.library.libraryPlaylist.playlistAdapter.PlaylistAdapter
 import org.guru.playlistmaker.ui.library.libraryPlaylist.view_model.PlaylistViewModel
+import org.guru.playlistmaker.ui.library.newPlaylist.fragment.CreateOrUpdatePlaylistFragment
 import org.guru.playlistmaker.ui.library.readPlaylist.fragment.ReadPlaylistFragment
 import org.guru.playlistmaker.ui.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -63,7 +64,8 @@ class PlaylistFragment : Fragment() {
 
             newPlaylistBtn.setOnClickListener {
                 findNavController().navigate(
-                    R.id.action_mediaLibraryFragment_to_newPlaylistFragment
+                    R.id.action_mediaLibraryFragment_to_createOrUpdatePlaylistFragment,
+                    CreateOrUpdatePlaylistFragment.createArgs(null)
                 )
             }
         }

@@ -17,7 +17,7 @@ import org.guru.playlistmaker.domain.library.playlist.PlaylistInteractor
 import org.guru.playlistmaker.domain.library.playlist.PlaylistRepository
 import org.guru.playlistmaker.domain.library.playlist.impl.PlaylistInteractorImpl
 import org.guru.playlistmaker.ui.library.favorites.view_model.FavoritesTrackViewModel
-import org.guru.playlistmaker.ui.library.newPlaylist.view_model.NewPlaylistViewModel
+import org.guru.playlistmaker.ui.library.newPlaylist.view_model.CreateOrUpdatePlaylistViewModel
 import org.guru.playlistmaker.ui.library.libraryPlaylist.view_model.PlaylistViewModel
 import org.guru.playlistmaker.ui.library.readPlaylist.view_model.ReadPlaylistViewModel
 import org.koin.android.ext.koin.androidContext
@@ -30,7 +30,7 @@ val favoritesTrackViewModelModule = module {
 
 val libraryViewModelModule = module {
     viewModel { PlaylistViewModel() }
-    viewModel { NewPlaylistViewModel() }
+    viewModel { CreateOrUpdatePlaylistViewModel() }
     viewModel { ReadPlaylistViewModel() }
 }
 

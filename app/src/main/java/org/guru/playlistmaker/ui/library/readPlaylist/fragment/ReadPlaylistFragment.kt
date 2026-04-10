@@ -19,6 +19,7 @@ import org.guru.playlistmaker.R
 import org.guru.playlistmaker.databinding.FragmentLibraryReadPlaylistBinding
 import org.guru.playlistmaker.domain.library.playlist.model.Playlist
 import org.guru.playlistmaker.domain.search.model.Track
+import org.guru.playlistmaker.ui.library.newPlaylist.fragment.CreateOrUpdatePlaylistFragment
 import org.guru.playlistmaker.ui.library.readPlaylist.view_model.ReadPlaylistViewModel
 import org.guru.playlistmaker.ui.player.fragment.PlayerFragment
 import org.guru.playlistmaker.ui.search.trackAdapter.TrackAdapter
@@ -136,7 +137,12 @@ class ReadPlaylistFragment : Fragment() {
             shareImg.setOnClickListener { onShareClick() }
             moreImg.setOnClickListener { moreBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED }
             shareTxt.setOnClickListener { onShareClick() }
-            editPlaylistTxt.setOnClickListener {  }
+            editPlaylistTxt.setOnClickListener {
+                findNavController().navigate(
+                    R.id.action_readPlaylistFragment_to_createOrUpdatePlaylistFragment,
+                    CreateOrUpdatePlaylistFragment.createArgs(viewModel.getPlaylist())
+                )
+            }
             removePlaylist.setOnClickListener {
                 moreBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 showConfirmCloseDialog(
@@ -189,7 +195,6 @@ class ReadPlaylistFragment : Fragment() {
                 .append("(${track.getFormatTrackTime()})")
                 .append("\n")
         }
-        Log.d("TEST", builder.toString())
         return binding.toString()
     }
 

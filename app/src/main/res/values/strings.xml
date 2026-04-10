@@ -13,6 +13,7 @@
     <string name="share_app">Поделиться приложением</string>
     <string name="share">Поделиться</string>
     <string name="edit_information">Редактировать информацию</string>
+    <string name="edit">Редактировать</string>
     <string name="remove_playlist">Удалить плейлист</string>
     <string name="support">Написать в поддержку</string>
     <string name="user_agreement">Пользовательское соглашение</string>
@@ -26,6 +27,7 @@
     <string name="error_not_connection">Проблемы со связью</string>
     <string name="error_not_connection_description">Загрузка не удалась. Проверьте подключение к интернету</string>
     <string name="update">Обновить</string>
+    <string name="save">Сохранить</string>
     <string name="your_search">Вы искали</string>
     <string name="clear_history">Очистить историю</string>
     <string name="duration">Длительность</string>

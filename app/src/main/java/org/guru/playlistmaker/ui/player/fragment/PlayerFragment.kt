@@ -20,6 +20,7 @@ import org.guru.playlistmaker.R
 import org.guru.playlistmaker.databinding.FragmentPlayerBinding
 import org.guru.playlistmaker.domain.library.playlist.model.Playlist
 import org.guru.playlistmaker.domain.search.model.Track
+import org.guru.playlistmaker.ui.library.newPlaylist.fragment.CreateOrUpdatePlaylistFragment
 import org.guru.playlistmaker.ui.player.addInPlaylistAdapter.AddInPlaylistAdapter
 import org.guru.playlistmaker.ui.player.view_model.PlayerViewModel
 import org.guru.playlistmaker.ui.util.debounce
@@ -105,7 +106,8 @@ class PlayerFragment : Fragment() {
 
             createNewPlaylistBtn.setOnClickListener {
                 findNavController().navigate(
-                    R.id.action_playerFragment_to_newPlaylistFragment
+                    R.id.action_playerFragment_to_createOrUpdatePlaylistFragment,
+                    CreateOrUpdatePlaylistFragment.createArgs(null)
                 )
             }
 
@@ -244,7 +246,7 @@ class PlayerFragment : Fragment() {
     companion object {
         private val simpleDateFormat = SimpleDateFormat("mm:ss", Locale.getDefault())
         private const val CLICK_DEBOUNCE_DELAY = 1000L
-        const val TRACK_KEY = "track"
+        private const val TRACK_KEY = "track"
 
         fun createArgs(track: Track) :  Bundle = bundleOf(
             TRACK_KEY to track

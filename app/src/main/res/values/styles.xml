@@ -176,8 +176,8 @@
 
     <style name="AppDialogStyle" parent="Theme.MaterialComponents.Light.Dialog.Alert">
 
-        <item name="colorPrimary">@color/yp_blue</item>
-        <item name="colorAccent">@color/yp_blue</item>
+        <item name="colorPrimary">@color/yp_white</item>
+        <item name="colorAccent">@color/yp_white</item>
         <item name="background">@color/yp_white</item>
 
         <item name="buttonBarPositiveButtonStyle">@style/DefaultDialogButtonStyle</item>
@@ -185,10 +185,9 @@
 
     </style>
 
-    <!-- Стиль положительной кнопки -->
     <style name="DefaultDialogButtonStyle" parent="RegularText_18sp">
         <item name="android:textColor">@color/yp_blue</item>
-        <item name="android:background">@color/white</item>
+        <item name="android:background">@color/yp_white</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">true</item>
     </style>

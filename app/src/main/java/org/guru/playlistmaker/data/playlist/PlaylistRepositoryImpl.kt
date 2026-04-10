@@ -112,6 +112,10 @@ class PlaylistRepositoryImpl(
         emit(true)
     }
 
+    override suspend fun updatePlaylist(playlist: Playlist) {
+        playlistDao.updatePlaylist(playlistDbConverter.map(playlist))
+    }
+
     private suspend fun checkTrackForPlaylist(trackId: String) : Boolean {
         return convertFromPlaylistEntity(
             playlistDao.getAllPlaylists()

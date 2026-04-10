@@ -66,4 +66,8 @@ class ReadPlaylistViewModel: ViewModel(), KoinComponent {
         )
     }
 
+    fun getPlaylist() : Playlist? {
+        return playlistStateLiveData.value
+    }
+
 }

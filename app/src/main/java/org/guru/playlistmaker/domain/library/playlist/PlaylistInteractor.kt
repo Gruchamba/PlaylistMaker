@@ -21,4 +21,6 @@ interface PlaylistInteractor {
     ) : Flow<List<Track>>
 
     suspend fun removePlaylist(playlist: Playlist) : Flow<Boolean>
+
+    suspend fun updatePlaylist(playlist: Playlist)
 }
