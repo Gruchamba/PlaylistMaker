@@ -208,23 +208,29 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:layout_marginTop="8dp">
-            <include layout="@layout/item_playlist"/>
+            android:layout_marginVertical="8dp">
+
+            <include android:id="@+id/item_playlist"
+                layout="@layout/item_playlist" />
+
         </LinearLayout>
 
         <TextView
+            android:id="@+id/shareTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/share"
             style="@style/EditTextInPlaylistBottomSheet"/>
 
         <TextView
+            android:id="@+id/editPlaylistTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/edit_information"
             style="@style/EditTextInPlaylistBottomSheet"/>
 
         <TextView
+            android:id="@+id/removePlaylist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/remove_playlist"

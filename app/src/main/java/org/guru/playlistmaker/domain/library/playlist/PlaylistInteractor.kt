@@ -19,4 +19,6 @@ interface PlaylistInteractor {
     suspend fun removeTrackFromPlaylist(
         playlist: Playlist, tracks: List<Track>, trackId: String
     ) : Flow<List<Track>>
+
+    suspend fun removePlaylist(playlist: Playlist) : Flow<Boolean>
 }

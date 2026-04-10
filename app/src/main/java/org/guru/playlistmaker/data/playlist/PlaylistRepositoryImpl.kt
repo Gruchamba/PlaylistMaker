@@ -99,6 +99,19 @@ class PlaylistRepositoryImpl(
 
     }
 
+    override suspend fun removePlaylist(playlist: Playlist) : Flow<Boolean> = flow {
+        playlistDao.deletePlaylist(playlistDbConverter.map(playlist))
+        playlist.tracksIdList.forEach {
+            if (!checkTrackForPlaylist(it)) {
+                trackForPlaylistDao.deleteTrackById(
+                    it
+                )
+            }
+        }
+
+        emit(true)
+    }
+
     private suspend fun checkTrackForPlaylist(trackId: String) : Boolean {
         return convertFromPlaylistEntity(
             playlistDao.getAllPlaylists()

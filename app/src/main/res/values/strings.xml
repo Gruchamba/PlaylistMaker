@@ -64,4 +64,5 @@
     <string name="cancel">Отмена</string>
     <string name="remove_track_confirm">Хотите удалить трек?</string>
     <string name="track_for_share_is_empty">В этом плейлисте нет списка треков, которым можно поделиться</string>
+    <string name="do_you_want_to_delete_a_playlist">Хотите удалить плейлист?</string>
 </resources>

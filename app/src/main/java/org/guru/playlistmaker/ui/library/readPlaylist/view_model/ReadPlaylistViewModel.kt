@@ -16,6 +16,9 @@ class ReadPlaylistViewModel: ViewModel(), KoinComponent {
 
     private val playlistInteractor: PlaylistInteractor by inject()
 
+    private val removePlaylistStateLiveData = MutableLiveData<Boolean>()
+    fun observeRemovePlayerState(): LiveData<Boolean> = removePlaylistStateLiveData
+
     private val playlistStateLiveData = MutableLiveData<Playlist>()
     fun observePlayerState(): LiveData<Playlist> = playlistStateLiveData
 
@@ -44,6 +47,14 @@ class ReadPlaylistViewModel: ViewModel(), KoinComponent {
                 ).collect {
                     renderReadPlaylistFragmentViewState(it)
                 }
+            }
+        }
+    }
+
+    fun removePlaylist() {
+        viewModelScope.launch {
+            playlistInteractor.removePlaylist(playlistStateLiveData.value!!).collect {
+                removePlaylistStateLiveData.postValue(it)
             }
         }
     }

@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -81,6 +80,10 @@ class ReadPlaylistFragment : Fragment() {
             renderLoadPlaylist(playlist)
         }
 
+        viewModel.observeRemovePlayerState().observe(viewLifecycleOwner) { _ ->
+            findNavController().navigateUp()
+        }
+
         binding.apply {
 
             backBtn.setOnClickListener { findNavController().navigateUp() }
@@ -130,11 +133,20 @@ class ReadPlaylistFragment : Fragment() {
                 }
             })
 
-            shareImg.setOnClickListener { onShareImgClick() }
-
-            moreImg.setOnClickListener {
-                moreBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            shareImg.setOnClickListener { onShareClick() }
+            moreImg.setOnClickListener { moreBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED }
+            shareTxt.setOnClickListener { onShareClick() }
+            editPlaylistTxt.setOnClickListener {  }
+            removePlaylist.setOnClickListener {
+                moreBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                showConfirmCloseDialog(
+                    getString(R.string.remove_playlist),
+                        getString(R.string.do_you_want_to_delete_a_playlist)
+                ) {
+                    viewModel.removePlaylist()
+                }
             }
+
 
         }
 
@@ -145,7 +157,7 @@ class ReadPlaylistFragment : Fragment() {
 
     }
 
-    private fun onShareImgClick() {
+    private fun onShareClick() {
         if (tracksAdapter.tracks.isEmpty()) {
             showInformationDialog()
 
@@ -190,7 +202,7 @@ class ReadPlaylistFragment : Fragment() {
     }
 
     private fun onLongClickOnTrack(trackId: String) {
-        showConfirmCloseDialog {
+        showConfirmCloseDialog(getString(R.string.remove_track_confirm), null) {
             viewModel.removeTrackFromPlaylist(
                 trackId,
                 tracksAdapter.tracks
@@ -198,9 +210,10 @@ class ReadPlaylistFragment : Fragment() {
         }
     }
 
-    private fun showConfirmCloseDialog(onConfirm: () -> Unit) {
+    private fun showConfirmCloseDialog(title: String?, message: String?, onConfirm: () -> Unit) {
         MaterialAlertDialogBuilder(requireActivity(), R.style.AppDialogStyle)
-            .setTitle(getString(R.string.remove_track_confirm))
+            .setTitle(title)
+            .setMessage(message)
             .setNegativeButton(getString(R.string.no)) { _, _ ->
             }.setPositiveButton(getString(R.string.yes)) { _, _ ->
                 onConfirm.invoke()
@@ -216,12 +229,18 @@ class ReadPlaylistFragment : Fragment() {
 
     private fun renderLoadPlaylist(playlist: Playlist) {
         binding.apply {
-            playlist.uriImage?.let { playlistImage.setImageURI(it.toUri())
+            playlist.uriImage?.let {
                 Glide.with(this@ReadPlaylistFragment)
                     .load(loadImageFromLocalStorage(requireContext(), playlist.uriImage))
                     .placeholder(R.drawable.ic_def_track_img)
                     .centerCrop()
                     .into(playlistImage)
+
+                Glide.with(this@ReadPlaylistFragment)
+                    .load(loadImageFromLocalStorage(requireContext(), playlist.uriImage))
+                    .placeholder(R.drawable.ic_def_track_img)
+                    .centerCrop()
+                    .into(itemPlaylist.playlistImage)
             }
 
             playlistTitle.text = playlist.title
@@ -231,6 +250,8 @@ class ReadPlaylistFragment : Fragment() {
             else playlistDescription.text = playlist.description
 
             playlistTrackCount.text = getTrackQuantityString(playlist.tracksIdList.size)
+            itemPlaylist.playlistNameView.text = playlist.title
+            itemPlaylist.playlistSize.text = getTrackQuantityString(playlist.tracksIdList.size)
         }
     }
 
@@ -262,6 +283,7 @@ class ReadPlaylistFragment : Fragment() {
 
         tracksAdapter.tracks = list
         tracksAdapter.notifyDataSetChanged()
+
     }
 
     override fun onDestroyView() {

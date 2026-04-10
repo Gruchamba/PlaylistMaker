@@ -1,6 +1,7 @@
 package org.guru.playlistmaker.data.db.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
@@ -20,5 +21,8 @@ interface PlaylistDao {
 
     @Query("SELECT * FROM playlists WHERE id = :playlistId")
     suspend fun getPlaylistById(playlistId: Int) : PlaylistEntity
+
+    @Delete
+    suspend fun deletePlaylist(playlistEntity: PlaylistEntity)
 
 }

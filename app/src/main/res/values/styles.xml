@@ -188,6 +188,7 @@
     <!-- Стиль положительной кнопки -->
     <style name="DefaultDialogButtonStyle" parent="RegularText_18sp">
         <item name="android:textColor">@color/yp_blue</item>
+        <item name="android:background">@color/white</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">true</item>
     </style>
