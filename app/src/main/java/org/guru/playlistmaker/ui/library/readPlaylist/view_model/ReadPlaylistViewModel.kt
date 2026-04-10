@@ -31,7 +31,7 @@ class ReadPlaylistViewModel: ViewModel(), KoinComponent {
                 playlistStateLiveData.postValue(playlist)
 
                 playlistInteractor.getTracksForPlaylist(playlist.tracksIdList).collect {
-                    renderReadPlaylistFragmentViewState(it)
+                    renderReadPlaylistFragmentViewState(it.reversed())
                 }
             }
         }

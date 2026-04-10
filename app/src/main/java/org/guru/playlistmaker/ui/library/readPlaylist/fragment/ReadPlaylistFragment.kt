@@ -2,9 +2,7 @@ package org.guru.playlistmaker.ui.library.readPlaylist.fragment
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.icu.text.SimpleDateFormat
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +25,6 @@ import org.guru.playlistmaker.ui.util.debounce
 import org.guru.playlistmaker.ui.util.loadImageFromLocalStorage
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Collections
-import java.util.Locale
 
 class ReadPlaylistFragment : Fragment() {
 
@@ -179,7 +176,7 @@ class ReadPlaylistFragment : Fragment() {
         }
     }
 
-    fun buildMessageForShare() : String {
+    private fun buildMessageForShare() : String {
         val builder = StringBuilder().append(getString(R.string.playlist))
             .append(" ")
             .append(binding.playlistTitle.text)
