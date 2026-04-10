@@ -108,10 +108,11 @@ class ReadPlaylistFragment : Fragment() {
                 }
             })
 
+
             tracksAdapter = TrackAdapter(
                 Collections.emptyList(),
                 onClick = onTrackClickDebounce,
-                onLongClick = { onLongClickOnTrack(it.trackId!!) }
+                onLongClick = { onLongClickOnTrack(it.trackId) }
             )
             tracksRecyclerView.adapter = tracksAdapter
 
@@ -206,12 +207,14 @@ class ReadPlaylistFragment : Fragment() {
         )
     }
 
-    private fun onLongClickOnTrack(trackId: String) {
-        showConfirmCloseDialog(getString(R.string.remove_track_confirm), null) {
-            viewModel.removeTrackFromPlaylist(
-                trackId,
-                tracksAdapter.tracks
-            )
+    private fun onLongClickOnTrack(trackId: String?) {
+        trackId?.let {
+            showConfirmCloseDialog(getString(R.string.remove_track_confirm), null) {
+                viewModel.removeTrackFromPlaylist(
+                    it,
+                    tracksAdapter.tracks
+                )
+            }
         }
     }
 
