@@ -38,13 +38,9 @@ class ReadPlaylistViewModel: ViewModel(), KoinComponent {
     }
 
     fun removeTrackFromPlaylist(trackId: String, tracks: List<Track>) {
-        if (playlistStateLiveData.value != null) {
+        playlistStateLiveData.value?.let {
             viewModelScope.launch {
-                playlistInteractor.removeTrackFromPlaylist(
-                    playlistStateLiveData.value!!,
-                    tracks,
-                    trackId
-                ).collect {
+                playlistInteractor.removeTrackFromPlaylist(it,tracks, trackId).collect {
                     renderReadPlaylistFragmentViewState(it)
                 }
             }
@@ -52,11 +48,14 @@ class ReadPlaylistViewModel: ViewModel(), KoinComponent {
     }
 
     fun removePlaylist() {
-        viewModelScope.launch {
-            playlistInteractor.removePlaylist(playlistStateLiveData.value!!).collect {
-                removePlaylistStateLiveData.postValue(it)
+        playlistStateLiveData.value?.let {
+            viewModelScope.launch {
+                playlistInteractor.removePlaylist(it).collect {
+                    removePlaylistStateLiveData.postValue(it)
+                }
             }
         }
+
     }
 
     private fun renderReadPlaylistFragmentViewState(list: List<Track>) {
