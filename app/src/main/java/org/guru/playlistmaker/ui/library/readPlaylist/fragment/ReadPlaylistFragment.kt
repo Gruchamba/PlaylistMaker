@@ -291,9 +291,16 @@ class ReadPlaylistFragment : Fragment() {
         binding.apply {
             tracksRecyclerView.visibility = View.GONE
             playlistEmptyMessage.visibility = View.VISIBLE
+
+            playlistDuration.text = resources.getQuantityString(
+                R.plurals.minutes,
+                0,
+                0
+            )
         }
         tracksAdapter.tracks = emptyList()
         tracksAdapter.notifyDataSetChanged()
+
     }
 
     @SuppressLint("NotifyDataSetChanged")
