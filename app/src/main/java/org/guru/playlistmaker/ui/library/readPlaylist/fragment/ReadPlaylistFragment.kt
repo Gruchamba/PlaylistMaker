@@ -22,6 +22,7 @@ import org.guru.playlistmaker.ui.library.readPlaylist.view_model.ReadPlaylistVie
 import org.guru.playlistmaker.ui.player.fragment.PlayerFragment
 import org.guru.playlistmaker.ui.search.trackAdapter.TrackAdapter
 import org.guru.playlistmaker.ui.util.debounce
+import org.guru.playlistmaker.ui.util.dpToPx
 import org.guru.playlistmaker.ui.util.loadImageFromLocalStorage
 import org.guru.playlistmaker.ui.util.showCustomSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -88,24 +89,41 @@ class ReadPlaylistFragment : Fragment() {
             backBtn.setOnClickListener { findNavController().navigateUp() }
 
             trackBottomSheetBehavior = BottomSheetBehavior.from(tracksBottomSheet)
-            trackBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-            trackBottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            trackBottomSheetBehavior.apply {
+                state = BottomSheetBehavior.STATE_COLLAPSED
+                peekHeight = dpToPx(10f, requireContext())
 
-                override fun onStateChanged(bottomSheet: View, newState: Int) {
-                    when (newState) {
-                        BottomSheetBehavior.STATE_COLLAPSED -> { overlay.visibility = View.GONE }
-                        else -> { overlay.visibility = View.VISIBLE }
-                    }
+                tracksBottomSheet.post {
+                    val bottomSheetLocation = IntArray(2)
+                    tracksBottomSheet.getLocationOnScreen(bottomSheetLocation)
+
+                    val lastButtonLocation = IntArray(2)
+                    moreImg.getLocationOnScreen(lastButtonLocation)
+
+                    val availableSpace = bottomSheetLocation[1] - lastButtonLocation[1] - binding.moreImg.height
+                    val minPeek = dpToPx(100f, requireContext())
+                    val newPeekHeight = availableSpace.coerceAtLeast(minPeek)
+
+                    peekHeight = newPeekHeight
+
+                    addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+
+                        override fun onStateChanged(bottomSheet: View, newState: Int) {
+                            when (newState) {
+                                BottomSheetBehavior.STATE_COLLAPSED -> { overlay.visibility = View.GONE }
+                                else -> { overlay.visibility = View.VISIBLE }
+                            }
+                        }
+
+                        override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                            overlay.alpha = when {
+                                slideOffset in -1f..0f -> 0f
+                                else -> slideOffset + 0.3f
+                            }
+                        }
+                    })
                 }
-
-                override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                    overlay.alpha = when {
-                        slideOffset in -1f..0f -> 0f
-                        else -> slideOffset + 0.3f
-                    }
-                }
-            })
-
+            }
 
             tracksAdapter = TrackAdapter(
                 Collections.emptyList(),
