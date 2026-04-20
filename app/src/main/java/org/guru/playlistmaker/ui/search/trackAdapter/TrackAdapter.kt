@@ -6,7 +6,8 @@ import org.guru.playlistmaker.domain.search.model.Track
 
 class TrackAdapter(
     var tracks: List<Track>,
-    private val onClick: (Track) -> Unit
+    private val onClick: (Track) -> Unit,
+    private val onLongClick: ((Track) -> Unit)?
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder =
@@ -16,6 +17,11 @@ class TrackAdapter(
         val track = tracks[position]
         holder.bind(track)
         holder.itemView.setOnClickListener { onClick(track) }
+        holder.itemView.setOnLongClickListener {
+            onLongClick?.invoke(track)
+            true
+        }
+
     }
 
     override fun getItemCount() = tracks.size

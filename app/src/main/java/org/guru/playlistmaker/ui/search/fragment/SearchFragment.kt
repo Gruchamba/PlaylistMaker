@@ -110,7 +110,8 @@ class SearchFragment : Fragment() {
 
             tracksAdapter = TrackAdapter(
                 Collections.emptyList(),
-                onClick = onTrackClickDebounce
+                onClick = onTrackClickDebounce,
+                null
             )
 
             trackRecyclerView.adapter = tracksAdapter

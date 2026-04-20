@@ -4,8 +4,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.guru.playlistmaker.domain.search.model.Track
 
-class FavoritesTrackAdapter(var tracks: List<Track>,
-                            private val onClick: (Track) -> Unit
+class FavoritesTrackAdapter(
+    var tracks: List<Track>,
+    private val onClick: (Track) -> Unit
 ) : RecyclerView.Adapter<FavoritesTrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoritesTrackViewHolder =

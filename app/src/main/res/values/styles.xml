@@ -28,6 +28,24 @@
         <item name="android:fontFamily">@font/ys_display_regular</item>
     </style>
 
+    <style name="RegularText_16sp">
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:textColor">@color/yp_black</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+
+    <style name="RegularText_18sp">
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:textColor">@color/yp_black</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+
     <style name="RegularText_19sp">
         <item name="android:textAlignment">textStart</item>
         <item name="android:textColor">@color/yp_black</item>
@@ -42,6 +60,16 @@
         <item name="android:textColor">@color/yp_black</item>
         <item name="android:textSize">26sp</item>
         <item name="android:textFontWeight">500</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+    </style>
+
+    <style name="MediumText_24sp">
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:textColor">@color/yp_black</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textFontWeight">700</item>
         <item name="android:textStyle">bold</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
@@ -148,20 +176,26 @@
 
     <style name="AppDialogStyle" parent="Theme.MaterialComponents.Light.Dialog.Alert">
 
-        <item name="colorPrimary">@color/yp_blue</item>
-        <item name="colorAccent">@color/yp_blue</item>
+        <item name="colorPrimary">@color/yp_white</item>
+        <item name="colorAccent">@color/yp_white</item>
         <item name="background">@color/yp_white</item>
 
         <item name="buttonBarPositiveButtonStyle">@style/DefaultDialogButtonStyle</item>
         <item name="buttonBarNegativeButtonStyle">@style/DefaultDialogButtonStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/DefaultDialogButtonStyle</item>
 
     </style>
 
-    <!-- Стиль положительной кнопки -->
-    <style name="DefaultDialogButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
+    <style name="DefaultDialogButtonStyle" parent="RegularText_18sp">
         <item name="android:textColor">@color/yp_blue</item>
+        <item name="android:background">@color/yp_white</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="EditTextInPlaylistBottomSheet" parent="RegularText_16sp">
+        <item name="textFillColor">?attr/blackAndWhiteColor</item>
+        <item name="android:layout_marginVertical">16dp</item>
     </style>
 
 </resources>

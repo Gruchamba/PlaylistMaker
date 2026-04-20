@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.library.playlist.fragment.PlaylistFragment">
+    tools:context=".ui.library.libraryPlaylist.fragment.PlaylistFragment">
 
     <Button
         android:id="@+id/newPlaylistBtn"

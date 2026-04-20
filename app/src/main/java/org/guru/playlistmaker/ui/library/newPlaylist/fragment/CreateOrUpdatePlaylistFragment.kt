@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,27 +13,32 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.guru.playlistmaker.R
-import org.guru.playlistmaker.databinding.FragmentNewPlaylistBinding
-import org.guru.playlistmaker.ui.library.newPlaylist.view_model.NewPlaylistViewModel
+import org.guru.playlistmaker.databinding.FragmentCreateOrUpdatePlaylistBinding
+import org.guru.playlistmaker.domain.library.playlist.model.Playlist
+import org.guru.playlistmaker.ui.library.newPlaylist.view_model.CreateOrUpdatePlaylistViewModel
 import org.guru.playlistmaker.ui.util.dpToPx
+import org.guru.playlistmaker.ui.util.loadImageFromLocalStorage
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
 
-class NewPlaylistFragment : Fragment() {
+class CreateOrUpdatePlaylistFragment : Fragment() {
 
-    private var _binding: FragmentNewPlaylistBinding? = null
+    private var _binding: FragmentCreateOrUpdatePlaylistBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: NewPlaylistViewModel by viewModel()
+    private val viewModel: CreateOrUpdatePlaylistViewModel by viewModel()
 
     private var imageUri: String? = null
+    private var playlist: Playlist? = null
 
     private val pickMedia =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -49,6 +55,11 @@ class NewPlaylistFragment : Fragment() {
 
     companion object {
         const val LOCAL_STORAGE_FOR_IMAGE = "playlist_images"
+        const val PLAYLIST_KEY = "playlist"
+
+        fun createArgs(playlist: Playlist?) :  Bundle = bundleOf(
+            PLAYLIST_KEY to playlist
+        )
     }
 
     private fun saveImage(uri: Uri) : String {
@@ -73,7 +84,7 @@ class NewPlaylistFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentNewPlaylistBinding.inflate(layoutInflater)
+        _binding = FragmentCreateOrUpdatePlaylistBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -83,15 +94,20 @@ class NewPlaylistFragment : Fragment() {
 
         binding.apply {
 
+            requireArguments().getSerializable(PLAYLIST_KEY)?.apply {
+                playlist = this as Playlist
+            }
+            viewModel.setPlaylist(playlist)
+
+            viewModel.observePlaylistState().observe(viewLifecycleOwner) { renderViewState(it) }
+
             val simpleTextWatcher = object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
                 override fun afterTextChanged(p0: Editable?) {
-                    createBtn.isEnabled = p0.toString().isNotEmpty()
+                    confirmBtn.isEnabled = p0.toString().isNotEmpty()
                 }
             }
-
-            backBtn.setOnClickListener { backPressed() }
 
             playlistImage.setOnClickListener {
                 pickMedia.launch(
@@ -103,7 +119,55 @@ class NewPlaylistFragment : Fragment() {
 
             playlistTitle.editText?.addTextChangedListener(simpleTextWatcher)
 
-            createBtn.setOnClickListener {
+        }
+
+    }
+
+    private fun renderViewState(state: CreateOrUpdateStateView) {
+        when(state) {
+            is CreateOrUpdateStateView.UpdateState -> renderUpdateState(state.playlist)
+            CreateOrUpdateStateView.CreateState -> renderCreateState()
+        }
+    }
+
+    private fun renderUpdateState(playlist: Playlist) {
+        binding.apply {
+
+            backBtn.setOnClickListener { findNavController().navigateUp() }
+
+            fragmentTitle.text = getString(R.string.edit)
+            playlistTitle.editText?.setText(playlist.title)
+            playlist.description?.let {
+                playlistDescription.editText?.setText(it)
+            }
+
+            Glide.with(this@CreateOrUpdatePlaylistFragment)
+                .load(loadImageFromLocalStorage(requireContext(),playlist.uriImage))
+                .placeholder(R.drawable.ic_def_album_img)
+                .centerCrop()
+                .transform(RoundedCorners(dpToPx(4f, requireContext())))
+                .into(binding.playlistImage)
+
+            confirmBtn.text = getString(R.string.save)
+            confirmBtn.setOnClickListener {
+                viewModel.updatePlaylist(
+                    playlistTitle.editText?.text.toString(),
+                    playlistDescription.editText?.text.toString(),
+                    imageUri.toString()
+                )
+
+                findNavController().navigateUp()
+            }
+        }
+    }
+
+    private fun renderCreateState() {
+        binding.apply {
+
+            backBtn.setOnClickListener { backPressed() }
+
+            confirmBtn.text = getString(R.string.create)
+            confirmBtn.setOnClickListener {
                 val title = playlistTitle.editText?.text.toString()
                 viewModel.createPlaylist(
                     title,
@@ -121,7 +185,6 @@ class NewPlaylistFragment : Fragment() {
             }
 
         }
-
     }
 
     override fun onDestroyView() {
