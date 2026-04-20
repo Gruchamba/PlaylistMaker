@@ -104,21 +104,23 @@
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_add_to_playlist"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintEnd_toStartOf="@+id/playBtn"
+                app:layout_constraintEnd_toStartOf="@+id/playbackBtn"
                 app:layout_constraintStart_toStartOf="@+id/left_guideline_24"
                 app:layout_constraintTop_toBottomOf="@+id/artistName" />
 
-            <ImageView
-                android:id="@+id/playBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_play_btn"
+            <org.guru.playlistmaker.ui.player.fragment.playback.PlaybackButtonView
+                android:id="@+id/playbackBtn"
+                android:layout_width="84dp"
+                android:layout_height="84dp"
+                android:layout_gravity="center"
+                app:playImageResId="@drawable/ic_play_btn"
+                app:pauseImageResId="@drawable/ic_stop_btn"
                 android:elevation="8dp"
                 android:layout_marginTop="5dp"
                 android:background="?attr/whiteAndBlack25"
                 app:layout_constraintTop_toBottomOf="@+id/artistName"
                 app:layout_constraintEnd_toStartOf="@+id/favoriteBtn"
-                app:layout_constraintStart_toEndOf="@+id/playlistBtn" />
+                app:layout_constraintStart_toEndOf="@+id/playlistBtn"/>
 
             <ImageView
                 android:id="@+id/favoriteBtn"
@@ -131,7 +133,7 @@
                 android:src="@drawable/ic_not_favorite_track"
                 app:layout_constraintTop_toBottomOf="@+id/artistName"
                 app:layout_constraintEnd_toStartOf="@+id/right_guideline_24"
-                app:layout_constraintStart_toEndOf="@+id/playBtn" />
+                app:layout_constraintStart_toEndOf="@+id/playbackBtn" />
 
             <TextView
                 android:id="@+id/trackProgress"
@@ -142,7 +144,7 @@
                 style="@style/MediumText_14sp"
                 app:layout_constraintStart_toStartOf="@+id/left_guideline_24"
                 app:layout_constraintEnd_toEndOf="@+id/right_guideline_24"
-                app:layout_constraintTop_toBottomOf="@+id/playBtn" />
+                app:layout_constraintTop_toBottomOf="@+id/playbackBtn" />
 
             <TextView
                 android:id="@+id/durationLbl"
@@ -252,7 +254,8 @@
         android:orientation="vertical"
         app:behavior_hideable="true"
         app:behavior_peekHeight="240dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        tools:visibility="gone">
 
         <View
             android:layout_width="64dp"
