@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -15,13 +13,13 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.snackbar.Snackbar
 import org.guru.playlistmaker.R
 import org.guru.playlistmaker.databinding.FragmentPlayerBinding
 import org.guru.playlistmaker.domain.library.playlist.model.Playlist
 import org.guru.playlistmaker.domain.search.model.Track
 import org.guru.playlistmaker.ui.library.newPlaylist.fragment.CreateOrUpdatePlaylistFragment
 import org.guru.playlistmaker.ui.player.addInPlaylistAdapter.AddInPlaylistAdapter
+import org.guru.playlistmaker.ui.player.fragment.playback.PlaybackButtonView
 import org.guru.playlistmaker.ui.player.view_model.PlayerViewModel
 import org.guru.playlistmaker.ui.util.debounce
 import org.guru.playlistmaker.ui.util.dpToPx
@@ -95,8 +93,8 @@ class PlayerFragment : Fragment() {
 
         binding.apply {
             backBtn.setOnClickListener { findNavController().navigateUp() }
-            playBtn.isEnabled = !track.previewUrl.isNullOrEmpty()
-            playBtn.setOnClickListener { viewModel.onPlayButtonClicked() }
+            playbackBtn.isEnabled = !track.previewUrl.isNullOrEmpty()
+            playbackBtn.setOnClickListener { viewModel.onPlayButtonClicked() }
 
             favoriteBtn.setOnClickListener { viewModel.onFavoriteClicked() }
 
@@ -197,28 +195,25 @@ class PlayerFragment : Fragment() {
 
     private fun renderPlayState() {
         binding.apply {
-            playBtn.setImageResource(R.drawable.ic_stop_btn)
             trackProgress.text = simpleDateFormat.format(0)
         }
     }
 
     private fun renderPlayingState(playerPosition: Int) {
         binding.apply {
-            playBtn.setImageResource(R.drawable.ic_stop_btn)
             trackProgress.text = simpleDateFormat.format(playerPosition)
         }
     }
 
     private fun renderPauseState(playerPosition: Int) {
         binding.apply {
-            playBtn.setImageResource(R.drawable.ic_play_btn)
             trackProgress.text = simpleDateFormat.format(playerPosition)
         }
     }
 
     private fun renderPrepareState() {
         binding.apply {
-            playBtn.setImageResource(R.drawable.ic_play_btn)
+            playbackBtn.setState(PlaybackButtonView.State.PLAY)
             binding.trackProgress.text = ContextCompat.getString(
                 requireActivity(),
                 R.string.def_track_progress
