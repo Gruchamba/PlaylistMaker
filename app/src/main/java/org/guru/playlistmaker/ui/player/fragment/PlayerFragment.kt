@@ -1,10 +1,19 @@
 package org.guru.playlistmaker.ui.player.fragment
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
+import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -17,6 +26,7 @@ import org.guru.playlistmaker.R
 import org.guru.playlistmaker.databinding.FragmentPlayerBinding
 import org.guru.playlistmaker.domain.library.playlist.model.Playlist
 import org.guru.playlistmaker.domain.search.model.Track
+import org.guru.playlistmaker.service.MusicService
 import org.guru.playlistmaker.ui.library.newPlaylist.fragment.CreateOrUpdatePlaylistFragment
 import org.guru.playlistmaker.ui.player.addInPlaylistAdapter.AddInPlaylistAdapter
 import org.guru.playlistmaker.ui.player.fragment.playback.PlaybackButtonView
@@ -44,6 +54,33 @@ class PlayerFragment : Fragment() {
     private lateinit var playlistAdapter: AddInPlaylistAdapter
     private lateinit var onPlaylistClickDebounce: (Playlist) -> Unit
 
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // Если выдали разрешение — запускаем сервис.
+            bindMusicService()
+        } else {
+            // Иначе просто покажем ошибку
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.cant_start_foreground_service),
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as MusicService.MusicServiceBinder
+            viewModel.setAudioPlayerControl(binder.getService())
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            viewModel.removeAudioPlayerControl()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -58,6 +95,8 @@ class PlayerFragment : Fragment() {
         requireArguments().getSerializable(TRACK_KEY)?.apply {
             track = this as Track
         }
+
+        bindMusicService()
 
         Glide.with(this)
             .load(track.getCoverArtwork())
@@ -146,17 +185,29 @@ class PlayerFragment : Fragment() {
             playlistRecyclerView.adapter = playlistAdapter
 
         }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            bindMusicService()
+        }
     }
 
+    override fun onStart() {
+        viewModel.removeNotification()
+        super.onStart()
+    }
+
+    override fun onStop() {
+        viewModel.addNotification()
+        super.onStop()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        viewModel.removeNotification()
+        unbindMusicService()
         _binding = null
-    }
-
-    override fun onPause() {
-        super.onPause()
-        viewModel.pausePlayer()
     }
 
     private fun renderAddInPlaylistResult(state: AddInPlaylistState) {
@@ -225,6 +276,20 @@ class PlayerFragment : Fragment() {
     private fun renderLoadPlaylistsState(list: List<Playlist>) {
         playlistAdapter.playlists = list
         playlistAdapter.notifyDataSetChanged()
+    }
+
+    private fun bindMusicService() {
+        val intent = Intent(requireContext(), MusicService::class.java).apply {
+            putExtra(MusicService.ARTIST_NAME_KEY, track.artistName)
+            putExtra(MusicService.TRACK_NAME_KEY, track.trackName)
+            putExtra(MusicService.PREVIEW_URL_KEY, track.previewUrl)
+        }
+
+        requireContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+    }
+
+    private fun unbindMusicService() {
+        requireContext().unbindService(serviceConnection)
     }
 
     companion object {

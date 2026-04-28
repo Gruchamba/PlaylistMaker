@@ -5,19 +5,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.guru.playlistmaker.data.db.dao.FavoriteTrackDao
 import org.guru.playlistmaker.domain.library.favorites.FavoritesTrackInteractor
 import org.guru.playlistmaker.domain.library.playlist.PlaylistInteractor
 import org.guru.playlistmaker.domain.library.playlist.model.Playlist
-import org.guru.playlistmaker.domain.player.PlayerInteractor
+import org.guru.playlistmaker.domain.player.model.MusicServiceControl
 import org.guru.playlistmaker.domain.player.model.PlayerState
 import org.guru.playlistmaker.domain.search.model.Track
 import org.guru.playlistmaker.ui.player.fragment.AddInPlaylistState
 import org.guru.playlistmaker.ui.player.fragment.PlayerViewState
-import org.guru.playlistmaker.ui.player.fragment.PlayerViewState.*
+import org.guru.playlistmaker.ui.player.fragment.PlayerViewState.LoadPlaylists
 import org.guru.playlistmaker.ui.search.view_model.SingleLiveEvent
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -29,10 +27,8 @@ class PlayerViewModel(
 
     private companion object {
         val TAG: String = PlayerViewModel::class.java.name
-        const val DELAY = 300L
     }
 
-    private val playerInteractor: PlayerInteractor by inject()
     private val favoritesTrackInteractor: FavoritesTrackInteractor by inject()
     private val playlistInteractor: PlaylistInteractor by inject()
 
@@ -45,78 +41,51 @@ class PlayerViewModel(
     private val addInPlaylistState = SingleLiveEvent<AddInPlaylistState>()
     fun observeAddInPlaylistState(): LiveData<AddInPlaylistState> = addInPlaylistState
 
-    private var timerJob: Job? = null
+    private var musicServiceControl: MusicServiceControl? = null
+    fun setAudioPlayerControl(musicServiceControl: MusicServiceControl) {
+        this.musicServiceControl = musicServiceControl
+
+        viewModelScope.launch {
+            musicServiceControl.getPlayerViewState().collect {
+                playerStateLiveData.postValue(it)
+            }
+        }
+    }
 
     init {
-        preparePlayer()
         viewModelScope.launch {
             track.isFavorite = favoriteTrackDao.getAllFavoriteTracksIds().contains(track.trackId)
             favoriteStateLiveData.postValue(track.isFavorite)
         }
     }
 
-    private fun release() {
-        playerInteractor.release()
-        resetTimer()
-    }
-
     override fun onCleared() {
         super.onCleared()
-        release()
+        musicServiceControl = null
     }
 
     fun onPlayButtonClicked() {
-        when(playerInteractor.getPlayerState()) {
-            PlayerState.STATE_PLAYING -> pausePlayer()
-            PlayerState.STATE_PREPARED, PlayerState.STATE_PAUSED -> startPlayer()
+        when(musicServiceControl?.getPlayerState()) {
+            PlayerState.STATE_PLAYING -> musicServiceControl?.pausePlayer()
+            PlayerState.STATE_PREPARED, PlayerState.STATE_PAUSED -> musicServiceControl?.startPlayer()
             else -> { Log.e(TAG, "error player state ${playerStateLiveData.value}") }
         }
     }
 
+    fun addNotification() {
+        musicServiceControl?.addNotification()
+    }
+
+    fun removeNotification() {
+        musicServiceControl?.removeNotification()
+    }
+
+    fun removeAudioPlayerControl() {
+        musicServiceControl = null
+    }
+
     private fun renderState(state: PlayerViewState) {
         playerStateLiveData.postValue(state)
-    }
-
-    private fun preparePlayer() {
-        playerInteractor.preparePlayer(track.previewUrl!!)
-        renderState(Prepare)
-    }
-
-    private fun startPlayer() {
-        renderState(Play)
-        playerInteractor.startPlayer()
-        startTimerUpdate()
-    }
-
-    fun pausePlayer() {
-        renderState(Pause(playerInteractor.getCurrentTimePosition()))
-        playerInteractor.pausePlayer()
-        pauseTimer()
-    }
-
-    private fun startTimerUpdate() {
-        renderState(Playing(playerInteractor.getCurrentTimePosition()))
-
-        timerJob?.cancel()
-        timerJob = viewModelScope.launch {
-            while (playerInteractor.getPlayerState() == PlayerState.STATE_PLAYING) {
-                delay(DELAY)
-                renderState(Playing(playerInteractor.getCurrentTimePosition()))
-            }
-
-            if (playerInteractor.getPlayerState() == PlayerState.STATE_PREPARED)
-                renderState(Prepare)
-
-        }
-    }
-
-    private fun pauseTimer() {
-        timerJob?.cancel()
-    }
-
-    private fun resetTimer() {
-        timerJob?.cancel()
-        renderState(Playing(0))
     }
 
     fun onFavoriteClicked() {
