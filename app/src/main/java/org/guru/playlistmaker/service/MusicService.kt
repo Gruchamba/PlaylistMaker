@@ -171,8 +171,6 @@ class MusicService : Service(), KoinComponent, MusicServiceControl {
     }
 
     override fun removeNotification() {
-//        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-//        notificationManager.cancel(SERVICE_NOTIFICATION_ID)
         stopForeground(true)
     }
 
