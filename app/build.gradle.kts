@@ -29,6 +29,7 @@ android {
         }
         buildFeatures {
             viewBinding = true
+            compose = true
         }
     }
     compileOptions {
@@ -37,6 +38,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.9"
     }
 }
 
@@ -77,5 +81,11 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     // Kotlin Extensions для корутин
     implementation(libs.androidx.room.ktx)
+
+    // compose
+    implementation (libs.androidx.ui)
+    implementation (libs.androidx.material)
+    implementation (libs.androidx.activity.compose)
+    debugImplementation(libs.androidx.ui.tooling)
 
 }

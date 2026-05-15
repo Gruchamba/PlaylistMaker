@@ -35,9 +35,7 @@ class SettingsFragment : Fragment() {
         binding.apply {
 
             themeSwitcher.apply {
-                setOnCheckedChangeListener { _, checked ->
-                    viewModel.switchTheme(checked)
-                }
+                setOnCheckedChangeListener { _, checked -> viewModel.switchTheme(checked) }
             }
 
             viewModel.observeDarkTheme().observe(viewLifecycleOwner) {
@@ -45,7 +43,7 @@ class SettingsFragment : Fragment() {
             }
 
             shareAppBtn.setOnClickListener {
-                val shareIntent = Intent(Intent.ACTION_SEND).apply {  }
+                val shareIntent = Intent(Intent.ACTION_SEND)
                 shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.uri_to_course))
                 shareIntent.type = "text/plain"
                 startActivity(shareIntent)
